@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Noble Mystery</title>
-  <link rel="icon" type="image/png" href="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755">
+  <link rel="icon" type="image/png" href="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755" />
   <style>
     body {
       margin: 0;
@@ -41,26 +41,28 @@
       max-width: 1000px;
       justify-content: center;
       margin-bottom: 2rem;
+      flex-wrap: wrap;
     }
 
-    .box {
-      flex: 1;
+    .box, .tall-box, .short-box {
       background: #1e293b;
       padding: 1.5rem;
       border-radius: 1rem;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
       text-align: center;
       transition: transform 0.2s;
+      flex: 1;
+      min-width: 300px;
     }
 
-    .box:hover {
+    .box:hover, .tall-box:hover, .short-box:hover {
       transform: scale(1.02);
     }
 
-    .box h2 {
+    .box h2, .tall-box h2, .short-box h2 {
       font-size: 1.5rem;
-      color: #38bdf8;
-      margin: 0 0 1rem 0;
+      color: #22d3ee;
+      margin-bottom: 1rem;
     }
 
     .link-list {
@@ -77,6 +79,7 @@
       text-decoration: none;
       transition: background 0.2s, transform 0.2s;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      display: block;
     }
 
     .build-link:hover {
@@ -90,46 +93,49 @@
       margin-bottom: 2rem;
     }
 
-    .tall-box {
-      background: #1e293b;
-      padding: 2rem;
-      border-radius: 1.25rem;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
-      text-align: center;
-      transition: transform 0.2s;
-      min-height: 105px;
-      flex: 1;
+    img[alt="Deepwoken Image"] {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      z-index: 10;
+      width: 100%;
+      max-width: 80px;
     }
 
-    .tall-box:hover {
-      transform: scale(1.02);
-    }
+    /* Responsive per mobile */
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
 
-    .short-box {
-      background: #1e293b;
-      padding: 1.5rem;
-      border-radius: 1.25rem;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
-      text-align: center;
-      transition: transform 0.2s;
-      min-height: 75px;
-      flex: 1;
-    }
+      h1 {
+        font-size: 2rem;
+      }
 
-    .short-box:hover {
-      transform: scale(1.02);
-    }
+      .container {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: stretch;
+      }
 
-    .tall-box h2, .short-box h2 {
-      font-size: 1.75rem;
-      color: #22d3ee;
-      margin: 0 0 1.5rem 0;
-    }
+      .box, .tall-box, .short-box {
+        min-width: unset;
+        width: 100%;
+      }
 
-    .tall-box a.build-link, .short-box a.build-link {
-      font-size: 1.1rem;
-      display: inline-block;
-      padding: 1.25rem 2rem;
+      .build-link {
+        font-size: 1rem;
+        padding: 0.8rem 1rem;
+      }
+
+      img[alt="Deepwoken Image"] {
+        max-width: 60px;
+        bottom: 10px;
+        right: 10px;
+      }
     }
   </style>
 </head>
@@ -183,18 +189,7 @@
     </div>
   </div>
 
-<img src="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755"
-     alt="Deepwoken Image"
-     style="
-       position: fixed;
-       bottom: 20px;
-       right: 20px;
-       padding: 1.5rem;
-       border-radius: 1rem;
-       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-       z-index: 10;
-       width: 100%;
-       max-width: 100px;
-     ">
+  <img src="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755"
+       alt="Deepwoken Image" />
 </body>
 </html>
