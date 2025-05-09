@@ -16,12 +16,24 @@
       padding: 2rem;
     }
 
+    .title-box {
+      background: #1e293b;
+      padding: 1.5rem 2rem;
+      border-radius: 1.25rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+      margin-bottom: 2rem;
+      text-align: center;
+      width: 100%;
+      max-width: 1000px;
+    }
+
     h1 {
       font-size: 2.5rem;
-      margin-bottom: 2rem;
+      margin: 0;
       background: linear-gradient(to right, #3b82f6, #06b6d4);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      -webkit-text-stroke: 1px #ffffff88;
     }
 
     .container {
@@ -33,7 +45,7 @@
       margin-bottom: 2rem;
     }
 
-    .box {
+    .box, .large-box {
       flex: 1;
       background: #1e293b;
       padding: 1.5rem;
@@ -41,14 +53,12 @@
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
       text-align: center;
       transition: transform 0.2s;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start; /* Allinea il testo verso l'alto */
     }
 
-    .box h2 {
+    .box h2, .large-box h2 {
       font-size: 1.5rem;
       color: #38bdf8;
+      margin-top: 0;
       margin-bottom: 1rem;
     }
 
@@ -79,57 +89,12 @@
       margin-bottom: 2rem;
     }
 
-    .large-box {
-      background: #1e293b;
-      padding: 2rem;
-      border-radius: 1.25rem;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
-      text-align: center;
-      transition: transform 0.2s;
+    .double-container {
       display: flex;
-      flex-direction: column;
-      justify-content: flex-start; /* Allinea il testo verso l'alto */
-    }
-
-    .large-box h2 {
-      font-size: 1.75rem;
-      color: #22d3ee;
-      margin-bottom: 1.5rem;
-    }
-
-    .large-box a.build-link {
-      font-size: 1.1rem;
-      display: inline-block;
-      padding: 1.25rem 2rem;
-    }
-
-    .large-box:hover {
-      transform: scale(1.02);
-    }
-
-    /* Nuovi stili per i contenitori Ally ed Enemy */
-    .ally-enemy-container {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
+      gap: 2rem;
       max-width: 1000px;
+      width: 100%;
       margin-bottom: 2rem;
-    }
-
-    .ally-enemy-box {
-      flex: 1;
-      background: #1e293b;
-      padding: 1.5rem;
-      border-radius: 1rem;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start; /* Allinea il testo verso l'alto */
-    }
-
-    .ally-enemy-box:first-child {
-      margin-right: 1rem; /* Distanza tra le due box (Ally e Enemy) */
     }
 
     .fandom-box {
@@ -139,36 +104,23 @@
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
       text-align: center;
       transition: transform 0.2s;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start; /* Allinea il testo verso l'alto */
+      width: 100%;
+      max-width: 1000px;
     }
 
     .fandom-box h2 {
       font-size: 1.75rem;
       color: #22d3ee;
+      margin-top: 0;
       margin-bottom: 1.5rem;
-    }
-
-    .fandom-button {
-      background: #0f172a;
-      padding: 1rem 2rem;
-      border-radius: 0.75rem;
-      color: white;
-      text-decoration: none;
-      transition: background 0.2s;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    .fandom-button:hover {
-      background: #334155;
     }
   </style>
 </head>
 <body>
-  <h1>Build Deepwoken</h1>
+  <div class="title-box">
+    <h1>Build Deepwoken</h1>
+  </div>
 
-  <!-- Sezione PVP & PVE -->
   <div class="container">
     <div class="box">
       <h2>PVP</h2>
@@ -187,41 +139,29 @@
     </div>
   </div>
 
-  <!-- Sezione Builder Creator e Spell Modifier con stessa larghezza -->
   <div class="container">
     <div class="box">
       <h2>Builder Creator</h2>
-      <a href="https://deepwoken.co/builder" class="build-link" target="_blank">
-        Vai al Deepwoken Builder
-      </a>
+      <a href="https://deepwoken.co/builder" class="build-link" target="_blank">Vai al Deepwoken Builder</a>
     </div>
     <div class="box">
       <h2>Spell Modifier</h2>
-      <a href="https://docs.google.com/spreadsheets/d/1IE3KIyizxEgHfTsasO0hCGvch6yNofdgNlRR__jA7jo/edit?gid=0#gid=0" class="build-link" target="_blank">
-        Vai al Google Sheet
-      </a>
+      <a href="https://docs.google.com/spreadsheets/d/1IE3KIyizxEgHfTsasO0hCGvch6yNofdgNlRR__jA7jo/edit?gid=0#gid=0" class="build-link" target="_blank">Vai al Google Sheet</a>
     </div>
   </div>
 
-  <!-- Sezione Ally e Enemy -->
-  <div class="ally-enemy-container">
-    <div class="ally-enemy-box">
+  <div class="double-container">
+    <div class="box">
       <h2>Ally</h2>
     </div>
-    <div class="ally-enemy-box">
+    <div class="box">
       <h2>Enemy</h2>
     </div>
   </div>
 
-  <!-- Sezione Deepwoken Fandom -->
-  <div class="section">
-    <div class="fandom-box">
-      <h2>Deepwoken Fandom</h2>
-      <a href="https://deepwoken.fandom.com/" class="fandom-button" target="_blank">
-        Vai al Fandom
-      </a>
-    </div>
+  <div class="fandom-box">
+    <h2>Deepwoken Fandom</h2>
+    <a href="https://deepwoken.fandom.com/wiki/Deepwoken_Wiki" class="build-link" target="_blank">Fandom</a>
   </div>
-
 </body>
 </html>
