@@ -16,20 +16,21 @@
       padding: 2rem;
     }
 
-    .main-title {
+    .header-box {
       background: #1e293b;
-      padding: 1rem 2rem;
+      padding: 1.5rem 2rem;
       border-radius: 1rem;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
       margin-bottom: 2rem;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
     }
 
-    .main-title h1 {
+    h1 {
       font-size: 2.5rem;
       margin: 0;
       background: linear-gradient(to right, #3b82f6, #06b6d4);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      text-align: center;
     }
 
     .container {
@@ -41,7 +42,7 @@
       margin-bottom: 2rem;
     }
 
-    .box {
+    .box, .half-box {
       flex: 1;
       background: #1e293b;
       padding: 1.5rem;
@@ -51,7 +52,7 @@
       transition: transform 0.2s;
     }
 
-    .box h2 {
+    .box h2, .half-box h2, .large-box h2 {
       font-size: 1.5rem;
       color: #38bdf8;
       margin-top: 0;
@@ -79,21 +80,6 @@
       transform: scale(1.02);
     }
 
-    .section {
-      width: 100%;
-      max-width: 1000px;
-      margin-bottom: 2rem;
-    }
-
-    .large-container {
-      display: flex;
-      gap: 2rem;
-      width: 100%;
-      max-width: 1000px;
-      justify-content: center;
-      margin-bottom: 2rem;
-    }
-
     .large-box {
       flex: 1;
       background: #1e293b;
@@ -105,47 +91,21 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-height: 280px; /* Altezza aumentata */
+      min-height: 280px; /* Altezza aumentata solo per queste box */
     }
 
-    .large-box h2 {
-      font-size: 1.5rem;
-      color: #22d3ee;
-      margin-top: 0;
-      margin-bottom: 1rem;
-    }
-
-    .large-box a.build-link {
-      font-size: 1.1rem;
-      display: inline-block;
-      padding: 1.25rem 2rem;
-      margin-top: auto;
-    }
-
-    .large-box:hover {
-      transform: scale(1.02);
-    }
-
-    .half-box {
-      flex: 1;
-      background: #1e293b;
-      padding: 1.5rem;
-      border-radius: 1rem;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-      text-align: center;
-      transition: transform 0.2s;
-    }
-
-    .half-box h2 {
-      font-size: 1.5rem;
-      color: #38bdf8;
-      margin-top: 0;
-      margin-bottom: 1rem;
+    .section {
+      width: 100%;
+      max-width: 1000px;
+      margin-bottom: 2rem;
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
     }
   </style>
 </head>
 <body>
-  <div class="main-title">
+  <div class="header-box">
     <h1>Build Deepwoken</h1>
   </div>
 
@@ -161,18 +121,18 @@
     <div class="box">
       <h2>PVE</h2>
       <div class="link-list">
-        <a href="https://deepwoken.co/builder?id=4pVEdef4" class="build-link" target="_blank">Tanky Spear</a>
-        <a href="https://deepwoken.co/builder?id=5qVEghi5" class="build-link" target="_blank">Heavy Weapon</a>
+        <a href="https://deepwoken.co/builder?id=4pVEdef4" class="build-link" target="_blank">Build 1 - Tanky Spear</a>
+        <a href="https://deepwoken.co/builder?id=5qVEghi5" class="build-link" target="_blank">Build 2 - Heavy Weapon</a>
       </div>
     </div>
   </div>
 
   <div class="container">
-    <div class="box">
+    <div class="large-box">
       <h2>Builder Creator</h2>
       <a href="https://deepwoken.co/builder" class="build-link" target="_blank">Vai al Deepwoken Builder</a>
     </div>
-    <div class="box">
+    <div class="large-box">
       <h2>Spell Modifier</h2>
       <a href="https://docs.google.com/spreadsheets/d/1IE3KIyizxEgHfTsasO0hCGvch6yNofdgNlRR__jA7jo/edit?gid=0#gid=0" class="build-link" target="_blank">Vai al Google Sheet</a>
     </div>
