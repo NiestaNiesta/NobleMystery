@@ -41,7 +41,7 @@
       margin-bottom: 2rem;
     }
 
-    .box, .half-box {
+    .box {
       flex: 1;
       background: #1e293b;
       padding: 1.5rem;
@@ -51,11 +51,7 @@
       transition: transform 0.2s;
     }
 
-    .half-box {
-      max-width: 49%;
-    }
-
-    .box h2, .large-box h2 {
+    .box h2 {
       font-size: 1.5rem;
       color: #38bdf8;
       margin-top: 0;
@@ -89,17 +85,26 @@
       margin-bottom: 2rem;
     }
 
+    .large-container {
+      display: flex;
+      gap: 2rem;
+      width: 100%;
+      max-width: 1000px;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
     .large-box {
+      flex: 1;
       background: #1e293b;
       padding: 1.5rem;
-      border-radius: 1.25rem;
+      border-radius: 1rem;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
       text-align: center;
       transition: transform 0.2s;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-height: 180px;
     }
 
     .large-box h2 {
@@ -118,6 +123,23 @@
 
     .large-box:hover {
       transform: scale(1.02);
+    }
+
+    .half-box {
+      flex: 1;
+      background: #1e293b;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .half-box h2 {
+      font-size: 1.5rem;
+      color: #38bdf8;
+      margin-top: 0;
+      margin-bottom: 1rem;
     }
   </style>
 </head>
@@ -145,11 +167,11 @@
   </div>
 
   <div class="container">
-    <div class="large-box">
+    <div class="box">
       <h2>Builder Creator</h2>
       <a href="https://deepwoken.co/builder" class="build-link" target="_blank">Vai al Deepwoken Builder</a>
     </div>
-    <div class="large-box">
+    <div class="box">
       <h2>Spell Modifier</h2>
       <a href="https://docs.google.com/spreadsheets/d/1IE3KIyizxEgHfTsasO0hCGvch6yNofdgNlRR__jA7jo/edit?gid=0#gid=0" class="build-link" target="_blank">Vai al Google Sheet</a>
     </div>
