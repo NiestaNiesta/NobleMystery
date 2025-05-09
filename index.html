@@ -138,7 +138,211 @@
 
     .image-box img {
       width: 100%;
-      max-width: 60px; /* Imposta una larghezza massima per l'immagine */
+      max-width: 100px; /* Imposta una larghezza massima per l'immagine */
+      border-radius: 1rem;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="title-box">
+    <h1>Build Deepwoken</h1>
+  </div>
+
+  <div class="container">
+    <div class="box">
+      <h2>PVP</h2>
+      <div class="link-list">
+        <a href="#" class="build-link">Katana - By Niesta</a>
+        <a href="#" class="build-link">Umbrite - By Niesta</a>
+        <a href="#" class="build-link">HeroWinds Arc - By Niesta</a>
+      </div>
+    </div>
+    <div class="box">
+      <h2>PVE</h2>
+      <div class="link-list">
+        <a href="#" class="build-link">Tanky Spear</a>
+        <a href="#" class="build-link">Heavy Weapon</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="tall-box">
+      <h2>Builder Creator</h2>
+      <a href="https://deepwoken.co/builder" class="build-link" target="_blank">Vai al Deepwoken Builder</a>
+    </div>
+    <div class="tall-box">
+      <h2>Spell Modifier</h2>
+      <a href="https://docs.google.com/spreadsheets/d/1IE3KIyizxEgHfTsasO0hCGvch6yNofdgNlRR__jA7jo/edit?gid=0#gid=0" class="build-link" target="_blank">Vai al Google Sheet</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="box">
+      <h2>Ally</h2>
+    </div>
+    <div class="box">
+      <h2>Enemy</h2>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="short-box">
+      <h2>Deepwoken Fandom</h2>
+      <a href="https://deepwoken.fandom.com/wiki/Deepwoken_Wiki" class="build-link" target="_blank">Fandom</a>
+    </div>
+  </div>
+
+  <!-- Box dell'immagine fissa in basso a destra -->
+  <div class="image-box">
+    <img src="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755" alt="Deepwoken Image">
+  </div>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Build Deepwoken</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at center, rgba(15, 23, 42, 1) 40%, rgba(0, 0, 53) 100%);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .title-box {
+      background: #1e293b;
+      padding: 1rem 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin: 0;
+      background: linear-gradient(to right, #3b82f6, #06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      gap: 2rem;
+      width: 100%;
+      max-width: 1000px;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    .box {
+      flex: 1;
+      background: #1e293b;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .box h2 {
+      font-size: 1.5rem;
+      color: #38bdf8;
+      margin: 0 0 1rem 0;
+    }
+
+    .link-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .build-link {
+      background: #0f172a;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      color: white;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .build-link:hover {
+      background: #334155;
+      transform: scale(1.02);
+    }
+
+    .section {
+      width: 100%;
+      max-width: 1000px;
+      margin-bottom: 2rem;
+    }
+
+    .tall-box {
+      background: #1e293b;
+      padding: 2rem;
+      border-radius: 1.25rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+      text-align: center;
+      transition: transform 0.2s;
+      min-height: 105px; /* Altezza ridotta */
+      flex: 1;
+    }
+
+    .short-box {
+      background: #1e293b;
+      padding: 1.5rem;
+      border-radius: 1.25rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+      text-align: center;
+      transition: transform 0.2s;
+      min-height: 75px; /* Altezza ridotta */
+      flex: 1;
+    }
+
+    .tall-box h2, .short-box h2 {
+      font-size: 1.75rem;
+      color: #22d3ee;
+      margin: 0 0 1.5rem 0;
+    }
+
+    .tall-box a.build-link, .short-box a.build-link {
+      font-size: 1.1rem;
+      display: inline-block;
+      padding: 1.25rem 2rem;
+    }
+
+    .tall-box:hover, .short-box:hover {
+      transform: scale(1.02);
+    }
+
+    /* Stile per l'immagine fissa in basso a destra */
+    .image-box {
+      position: fixed;
+      bottom: 20px; /* Aggiusta la distanza dal basso */
+      right: 20px; /* Aggiusta la distanza da destra */
+      background: #1e293b;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      z-index: 10; /* Garantisce che l'immagine stia sopra gli altri elementi */
+    }
+
+    .image-box img {
+      width: 100%;
+      max-width: 100px; /* Imposta una larghezza massima per l'immagine */
       border-radius: 1rem;
     }
 
