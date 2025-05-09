@@ -52,6 +52,10 @@
       transition: transform 0.2s;
     }
 
+    .box:hover {
+      transform: scale(1.02);
+    }
+
     .box h2 {
       font-size: 1.5rem;
       color: #38bdf8;
@@ -92,8 +96,12 @@
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
       text-align: center;
       transition: transform 0.2s;
-      min-height: 105px; /* Altezza ridotta */
+      min-height: 105px;
       flex: 1;
+    }
+
+    .tall-box:hover {
+      transform: scale(1.02);
     }
 
     .short-box {
@@ -103,8 +111,12 @@
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
       text-align: center;
       transition: transform 0.2s;
-      min-height: 75px; /* Altezza ridotta */
+      min-height: 75px;
       flex: 1;
+    }
+
+    .short-box:hover {
+      transform: scale(1.02);
     }
 
     .tall-box h2, .short-box h2 {
@@ -118,31 +130,6 @@
       display: inline-block;
       padding: 1.25rem 2rem;
     }
-
-    .tall-box:hover, .short-box:hover {
-      transform: scale(1.02);
-    }
-
-    /* Stile per l'immagine fissa in basso a destra */
-    .image-box {
-      display: none;
-      position: fixed;
-      bottom: 20px; /* Aggiusta la distanza dal basso */
-      right: 20px; /* Aggiusta la distanza da destra */
-      background: #1e293b;
-      padding: 1.5rem;
-      border-radius: 1rem;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-      text-align: center;
-      z-index: 10; /* Garantisce che l'immagine stia sopra gli altri elementi */
-    }
-
-    .image-box img {
-      width: 100%;
-      max-width: 100px; /* Imposta una larghezza massima per l'immagine */
-      border-radius: 1rem;
-    }
-
   </style>
 </head>
 <body>
@@ -195,10 +182,20 @@
     </div>
   </div>
 
-  <!-- Box dell'immagine fissa in basso a destra -->
-  <div class="image-box">
-    <img src="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755" alt="Deepwoken Image">
-  </div>
-
+  <!-- Immagine fissa in basso a destra -->
+  <img src="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755"
+       alt="Deepwoken Image"
+       style="
+         position: fixed;
+         bottom: 20px;
+         right: 20px;
+         background: #1e293b;
+         padding: 1.5rem;
+         border-radius: 1rem;
+         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+         z-index: 10;
+         width: 100%;
+         max-width: 100px;
+       ">
 </body>
 </html>
