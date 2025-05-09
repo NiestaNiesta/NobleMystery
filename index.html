@@ -92,7 +92,7 @@
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
       text-align: center;
       transition: transform 0.2s;
-      min-height: 110px; /* Altezza ulteriormente ridotta */
+      min-height: 105px; /* Altezza ridotta */
       flex: 1;
     }
 
@@ -103,7 +103,7 @@
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
       text-align: center;
       transition: transform 0.2s;
-      min-height: 80px; /* Altezza ulteriormente ridotta */
+      min-height: 75px; /* Altezza ridotta */
       flex: 1;
     }
 
@@ -121,6 +121,21 @@
 
     .tall-box:hover, .short-box:hover {
       transform: scale(1.02);
+    }
+
+    .image-box {
+      background: #1e293b;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .image-box img {
+      width: 100%;
+      max-width: 755px;
+      border-radius: 1rem;
     }
 
   </style>
@@ -146,6 +161,11 @@
         <a href="#" class="build-link">Heavy Weapon</a>
       </div>
     </div>
+  </div>
+
+  <!-- Nuovo Box per l'immagine -->
+  <div class="image-box">
+    <img src="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755" alt="Deepwoken Image">
   </div>
 
   <div class="container">
