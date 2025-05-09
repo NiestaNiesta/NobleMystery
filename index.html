@@ -16,12 +16,12 @@
       padding: 2rem;
     }
 
-    .header-box {
+    .title-box {
       background: #1e293b;
-      padding: 1.5rem 2rem;
+      padding: 1rem 2rem;
       border-radius: 1rem;
-      margin-bottom: 2rem;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      margin-bottom: 2rem;
     }
 
     h1 {
@@ -42,7 +42,7 @@
       margin-bottom: 2rem;
     }
 
-    .box, .half-box {
+    .box {
       flex: 1;
       background: #1e293b;
       padding: 1.5rem;
@@ -52,11 +52,10 @@
       transition: transform 0.2s;
     }
 
-    .box h2, .half-box h2, .large-box h2 {
+    .box h2 {
       font-size: 1.5rem;
       color: #38bdf8;
-      margin-top: 0;
-      margin-bottom: 1rem;
+      margin: 0 0 1rem 0;
     }
 
     .link-list {
@@ -80,32 +79,51 @@
       transform: scale(1.02);
     }
 
-    .large-box {
-      flex: 1;
-      background: #1e293b;
-      padding: 1.5rem;
-      border-radius: 1rem;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
-      text-align: center;
-      transition: transform 0.2s;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 280px; /* Altezza aumentata solo per queste box */
-    }
-
     .section {
       width: 100%;
       max-width: 1000px;
       margin-bottom: 2rem;
-      display: flex;
-      gap: 2rem;
-      justify-content: center;
+    }
+
+    .tall-box {
+      background: #1e293b;
+      padding: 2rem;
+      border-radius: 1.25rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+      text-align: center;
+      transition: transform 0.2s;
+      min-height: 280px;
+    }
+
+    .short-box {
+      background: #1e293b;
+      padding: 1.5rem;
+      border-radius: 1.25rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+      text-align: center;
+      transition: transform 0.2s;
+      min-height: 160px;
+    }
+
+    .tall-box h2, .short-box h2 {
+      font-size: 1.75rem;
+      color: #22d3ee;
+      margin: 0 0 1.5rem 0;
+    }
+
+    .tall-box a.build-link, .short-box a.build-link {
+      font-size: 1.1rem;
+      display: inline-block;
+      padding: 1.25rem 2rem;
+    }
+
+    .tall-box:hover, .short-box:hover {
+      transform: scale(1.02);
     }
   </style>
 </head>
 <body>
-  <div class="header-box">
+  <div class="title-box">
     <h1>Build Deepwoken</h1>
   </div>
 
@@ -113,42 +131,42 @@
     <div class="box">
       <h2>PVP</h2>
       <div class="link-list">
-        <a href="https://deepwoken.co/builder?id=1eFFnhn1" class="build-link" target="_blank">Katana - By Niesta</a>
-        <a href="https://deepwoken.co/builder?id=xN3FYG5C" class="build-link" target="_blank">Umbrite - By Niesta</a>
-        <a href="https://deepwoken.co/builder?id=0V23NHqz" class="build-link" target="_blank">HeroWinds Arc - By Niesta</a>
+        <a href="#" class="build-link">Katana - By Niesta</a>
+        <a href="#" class="build-link">Umbrite - By Niesta</a>
+        <a href="#" class="build-link">HeroWinds Arc - By Niesta</a>
       </div>
     </div>
     <div class="box">
       <h2>PVE</h2>
       <div class="link-list">
-        <a href="https://deepwoken.co/builder?id=4pVEdef4" class="build-link" target="_blank">Build 1 - Tanky Spear</a>
-        <a href="https://deepwoken.co/builder?id=5qVEghi5" class="build-link" target="_blank">Build 2 - Heavy Weapon</a>
+        <a href="#" class="build-link">Tanky Spear</a>
+        <a href="#" class="build-link">Heavy Weapon</a>
       </div>
     </div>
   </div>
 
   <div class="container">
-    <div class="large-box">
+    <div class="tall-box">
       <h2>Builder Creator</h2>
       <a href="https://deepwoken.co/builder" class="build-link" target="_blank">Vai al Deepwoken Builder</a>
     </div>
-    <div class="large-box">
+    <div class="tall-box">
       <h2>Spell Modifier</h2>
       <a href="https://docs.google.com/spreadsheets/d/1IE3KIyizxEgHfTsasO0hCGvch6yNofdgNlRR__jA7jo/edit?gid=0#gid=0" class="build-link" target="_blank">Vai al Google Sheet</a>
     </div>
   </div>
 
   <div class="container">
-    <div class="half-box">
+    <div class="box">
       <h2>Ally</h2>
     </div>
-    <div class="half-box">
+    <div class="box">
       <h2>Enemy</h2>
     </div>
   </div>
 
   <div class="section">
-    <div class="large-box">
+    <div class="short-box">
       <h2>Deepwoken Fandom</h2>
       <a href="https://deepwoken.fandom.com/wiki/Deepwoken_Wiki" class="build-link" target="_blank">Fandom</a>
     </div>
