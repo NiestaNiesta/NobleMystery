@@ -16,24 +16,20 @@
       padding: 2rem;
     }
 
-    .title-box {
+    .main-title {
       background: #1e293b;
-      padding: 1.5rem 2rem;
-      border-radius: 1.25rem;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+      padding: 1rem 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
       margin-bottom: 2rem;
-      text-align: center;
-      width: 100%;
-      max-width: 1000px;
     }
 
-    h1 {
+    .main-title h1 {
       font-size: 2.5rem;
       margin: 0;
       background: linear-gradient(to right, #3b82f6, #06b6d4);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      -webkit-text-stroke: 1px #ffffff88;
     }
 
     .container {
@@ -45,7 +41,7 @@
       margin-bottom: 2rem;
     }
 
-    .box, .large-box {
+    .box, .half-box {
       flex: 1;
       background: #1e293b;
       padding: 1.5rem;
@@ -53,6 +49,10 @@
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
       text-align: center;
       transition: transform 0.2s;
+    }
+
+    .half-box {
+      max-width: 49%;
     }
 
     .box h2, .large-box h2 {
@@ -89,35 +89,40 @@
       margin-bottom: 2rem;
     }
 
-    .double-container {
-      display: flex;
-      gap: 2rem;
-      max-width: 1000px;
-      width: 100%;
-      margin-bottom: 2rem;
-    }
-
-    .fandom-box {
+    .large-box {
       background: #1e293b;
-      padding: 2rem;
+      padding: 1.5rem;
       border-radius: 1.25rem;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
       text-align: center;
       transition: transform 0.2s;
-      width: 100%;
-      max-width: 1000px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 180px;
     }
 
-    .fandom-box h2 {
-      font-size: 1.75rem;
+    .large-box h2 {
+      font-size: 1.5rem;
       color: #22d3ee;
       margin-top: 0;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .large-box a.build-link {
+      font-size: 1.1rem;
+      display: inline-block;
+      padding: 1.25rem 2rem;
+      margin-top: auto;
+    }
+
+    .large-box:hover {
+      transform: scale(1.02);
     }
   </style>
 </head>
 <body>
-  <div class="title-box">
+  <div class="main-title">
     <h1>Build Deepwoken</h1>
   </div>
 
@@ -133,35 +138,37 @@
     <div class="box">
       <h2>PVE</h2>
       <div class="link-list">
-        <a href="https://deepwoken.co/builder?id=4pVEdef4" class="build-link" target="_blank">Build 1 - Tanky Spear</a>
-        <a href="https://deepwoken.co/builder?id=5qVEghi5" class="build-link" target="_blank">Build 2 - Heavy Weapon</a>
+        <a href="https://deepwoken.co/builder?id=4pVEdef4" class="build-link" target="_blank">Tanky Spear</a>
+        <a href="https://deepwoken.co/builder?id=5qVEghi5" class="build-link" target="_blank">Heavy Weapon</a>
       </div>
     </div>
   </div>
 
   <div class="container">
-    <div class="box">
+    <div class="large-box">
       <h2>Builder Creator</h2>
       <a href="https://deepwoken.co/builder" class="build-link" target="_blank">Vai al Deepwoken Builder</a>
     </div>
-    <div class="box">
+    <div class="large-box">
       <h2>Spell Modifier</h2>
       <a href="https://docs.google.com/spreadsheets/d/1IE3KIyizxEgHfTsasO0hCGvch6yNofdgNlRR__jA7jo/edit?gid=0#gid=0" class="build-link" target="_blank">Vai al Google Sheet</a>
     </div>
   </div>
 
-  <div class="double-container">
-    <div class="box">
+  <div class="container">
+    <div class="half-box">
       <h2>Ally</h2>
     </div>
-    <div class="box">
+    <div class="half-box">
       <h2>Enemy</h2>
     </div>
   </div>
 
-  <div class="fandom-box">
-    <h2>Deepwoken Fandom</h2>
-    <a href="https://deepwoken.fandom.com/wiki/Deepwoken_Wiki" class="build-link" target="_blank">Fandom</a>
+  <div class="section">
+    <div class="large-box">
+      <h2>Deepwoken Fandom</h2>
+      <a href="https://deepwoken.fandom.com/wiki/Deepwoken_Wiki" class="build-link" target="_blank">Fandom</a>
+    </div>
   </div>
 </body>
 </html>
