@@ -117,7 +117,25 @@
       max-width: 80px;
     }
 
-    /* Responsive per mobile */
+    .search-filter {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .search-input, .filter-select {
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      background: #0f172a;
+      color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
     @media (max-width: 768px) {
       body {
         padding: 1rem;
@@ -159,21 +177,36 @@
   <div class="container">
     <div class="box">
       <h2>PVP</h2>
+      <div class="search-filter">
+        <input type="text" placeholder="Cerca build..." class="search-input" data-type="pvp" />
+        <select class="filter-select" data-type="pvp">
+          <option value="">Tutti</option>
+          <option value="Niesta">By Niesta</option>
+          <option value="En3rgy">By En3rgy</option>
+        </select>
+      </div>
       <div class="link-list">
         <a href="https://deepwoken.co/builder?id=1eFFnhn1" class="build-link">Katana - By Niesta</a>
         <a href="https://deepwoken.co/builder?id=N9IhoPRj" class="build-link">Umbrite - By Niesta</a>
         <a href="https://deepwoken.co/builder?id=0V23NHqz" class="build-link">HeroWinds Arc - By Niesta</a>
         <a href="https://deepwoken.co/builder?id=vsGFXbBx" class="build-link">SaintSworn - By Niesta</a>
         <a href="https://deepwoken.co/builder?id=e1IG5fBO" class="build-link">Imperator's Edge - By En3rgy</a>
-        <!-- Aggiungi altre build qui -->
       </div>
     </div>
+
     <div class="box">
       <h2>PVE</h2>
+      <div class="search-filter">
+        <input type="text" placeholder="Cerca build..." class="search-input" data-type="pve" />
+        <select class="filter-select" data-type="pve">
+          <option value="">Tutti</option>
+          <option value="Niesta">By Niesta</option>
+          <option value="En3rgy">By En3rgy</option>
+        </select>
+      </div>
       <div class="link-list">
-        <a href="#" class="build-link">Tanky Spear</a>
-        <a href="#" class="build-link">Heavy Weapon</a>
-        <!-- Aggiungi altre build qui -->
+        <a href="#" class="build-link">Tanky Spear - By Niesta</a>
+        <a href="#" class="build-link">Heavy Weapon - By En3rgy</a>
       </div>
     </div>
   </div>
@@ -205,7 +238,29 @@
     </div>
   </div>
 
-  <img src="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755"
-       alt="Deepwoken Image" />
+  <img src="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755" alt="Deepwoken Image" />
+
+  <script>
+    function filterLinks(type) {
+      const input = document.querySelector(`.search-input[data-type="${type}"]`).value.toLowerCase();
+      const filter = document.querySelector(`.filter-select[data-type="${type}"]`).value.toLowerCase();
+      const box = document.querySelector(`.box:has(.search-input[data-type="${type}"])`);
+      const links = box.querySelectorAll('.build-link');
+
+      links.forEach(link => {
+        const text = link.textContent.toLowerCase();
+        const matchesSearch = text.includes(input);
+        const matchesFilter = !filter || text.includes(`by ${filter}`);
+        link.style.display = (matchesSearch && matchesFilter) ? 'block' : 'none';
+      });
+    }
+
+    document.querySelectorAll('.search-input, .filter-select').forEach(element => {
+      element.addEventListener('input', () => {
+        const type = element.getAttribute('data-type');
+        filterLinks(type);
+      });
+    });
+  </script>
 </body>
 </html>
