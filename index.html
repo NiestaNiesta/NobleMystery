@@ -36,9 +36,9 @@
 
     .container {
       display: flex;
-      gap: 2.5rem;
+      gap: 3rem;
       width: 100%;
-      max-width: 1000px;
+      max-width: 1200px;
       justify-content: center;
       margin-bottom: 2rem;
       flex-wrap: wrap;
@@ -52,7 +52,12 @@
       text-align: center;
       transition: transform 0.2s;
       flex: 1;
-      min-width: 320px;
+      min-width: 420px;
+      width: 420px;
+    }
+
+    .box:hover, .tall-box:hover, .short-box:hover {
+      transform: scale(1.04);
     }
 
     .box h2, .tall-box h2, .short-box h2 {
@@ -92,12 +97,12 @@
 
     .build-link:hover {
       background: #334155;
-      transform: scale(1.02); /* Effetto più delicato */
+      transform: scale(1.01);
     }
 
     .section {
       width: 100%;
-      max-width: 1000px;
+      max-width: 1200px;
       margin-bottom: 2rem;
     }
 
@@ -242,29 +247,24 @@
   <img src="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755" alt="Deepwoken Image" />
 
   <script>
-    // Effetto hover per le box
-    const boxes = document.querySelectorAll('.box, .tall-box, .short-box');
+    function filterLinks(type) {
+      const input = document.querySelector(`.search-input[data-type="${type}"]`).value.toLowerCase();
+      const filter = document.querySelector(`.filter-select[data-type="${type}"]`).value.toLowerCase();
+      const box = document.querySelector(`.box:has(.search-input[data-type="${type}"])`);
+      const links = box.querySelectorAll('.build-link');
 
-    boxes.forEach(box => {
-      box.addEventListener('mouseenter', () => {
-        box.style.transform = 'scale(1.05)';
+      links.forEach(link => {
+        const text = link.textContent.toLowerCase();
+        const matchesSearch = text.includes(input);
+        const matchesFilter = !filter || text.includes(`by ${filter}`);
+        link.style.display = (matchesSearch && matchesFilter) ? 'block' : 'none';
       });
+    }
 
-      box.addEventListener('mouseleave', () => {
-        box.style.transform = 'scale(1)';
-      });
-    });
-
-    // Effetto hover per i link
-    const links = document.querySelectorAll('.build-link');
-
-    links.forEach(link => {
-      link.addEventListener('mouseenter', () => {
-        link.style.transform = 'scale(1.02)';
-      });
-
-      link.addEventListener('mouseleave', () => {
-        link.style.transform = 'scale(1)';
+    document.querySelectorAll('.search-input, .filter-select').forEach(element => {
+      element.addEventListener('input', () => {
+        const type = element.getAttribute('data-type');
+        filterLinks(type);
       });
     });
   </script>
