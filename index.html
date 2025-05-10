@@ -36,7 +36,7 @@
 
     .container {
       display: flex;
-      gap: 2rem;
+      gap: 2.5rem; /* Aumentato il gap tra le box */
       width: 100%;
       max-width: 1000px;
       justify-content: center;
@@ -46,16 +46,15 @@
 
     .box, .tall-box, .short-box {
       background: #1e293b;
-      padding: 1.5rem;
+      padding: 1.8rem; /* Aumentato il padding per ingrandire le box */
       border-radius: 1rem;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
       text-align: center;
-      transition: transform 0.3s; /* Aumento della velocità di transizione */
+      transition: transform 0.3s;
       flex: 1;
-      min-width: 300px;
+      min-width: 320px; /* Aumentato il min-width per ingrandire leggermente le box */
     }
 
-    /* Ingrandisce la box quando il cursore passa sopra */
     .box:hover, .tall-box:hover, .short-box:hover {
       transform: scale(1.05); /* Ingrandimento moderato */
     }
@@ -153,7 +152,7 @@
 
       .container {
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 2rem; /* Aumentato il gap per mobile */
         align-items: stretch;
       }
 
