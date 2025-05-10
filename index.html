@@ -50,13 +50,24 @@
       border-radius: 1rem;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
       text-align: center;
-      transition: transform 0.2s;
+      transition: transform 0.2s, filter 0.3s;
       flex: 1;
       min-width: 300px;
     }
 
-    .box:hover, .tall-box:hover, .short-box:hover {
-      transform: scale(1.02);
+    /* Solleva la box e sfoca le altre quando il cursore passa sopra */
+    .container .box:hover,
+    .container .tall-box:hover,
+    .container .short-box:hover {
+      transform: translateY(-10px);
+      filter: none;
+    }
+
+    .container .box,
+    .container .tall-box,
+    .container .short-box {
+      filter: blur(4px);
+      transition: filter 0.3s;
     }
 
     .box h2, .tall-box h2, .short-box h2 {
@@ -136,10 +147,9 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
 
-    /* Annulla il cambiamento della freccetta quando il selettore è in focus */
     .filter-select:focus {
       outline: none;
-      border-color: #0f172a; /* Colore del bordo attuale */
+      border-color: #0f172a;
     }
 
     @media (max-width: 768px) {
@@ -247,24 +257,28 @@
   <img src="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755" alt="Deepwoken Image" />
 
   <script>
-    function filterLinks(type) {
-      const input = document.querySelector(.search-input[data-type="${type}"]).value.toLowerCase();
-      const filter = document.querySelector(.filter-select[data-type="${type}"]).value.toLowerCase();
-      const box = document.querySelector(.box:has(.search-input[data-type="${type}"]));
-      const links = box.querySelectorAll('.build-link');
+    // Aggiungi la funzione che solleva e sfoca le box
+    const boxes = document.querySelectorAll('.box, .tall-box, .short-box');
 
-      links.forEach(link => {
-        const text = link.textContent.toLowerCase();
-        const matchesSearch = text.includes(input);
-        const matchesFilter = !filter || text.includes(by ${filter});
-        link.style.display = (matchesSearch && matchesFilter) ? 'block' : 'none';
+    boxes.forEach(box => {
+      box.addEventListener('mouseenter', () => {
+        // Solleva la box attiva
+        box.style.transform = 'translateY(-10px)';
+        // Sfoca tutte le altre box
+        boxes.forEach(otherBox => {
+          if (otherBox !== box) {
+            otherBox.style.filter = 'blur(4px)';
+          }
+        });
       });
-    }
 
-    document.querySelectorAll('.search-input, .filter-select').forEach(element => {
-      element.addEventListener('input', () => {
-        const type = element.getAttribute('data-type');
-        filterLinks(type);
+      box.addEventListener('mouseleave', () => {
+        // Ripristina la posizione della box attiva
+        box.style.transform = 'translateY(0)';
+        // Rimuovi la sfocatura da tutte le box
+        boxes.forEach(otherBox => {
+          otherBox.style.filter = 'none';
+        });
       });
     });
   </script>
