@@ -87,8 +87,190 @@
       background-color: #2563eb;
     }
 
-    /* Tutto il resto dello stile rimane invariato... */
-    /* ... (il tuo codice CSS originale esistente) */
+    /* Il resto del tuo stile rimane invariato */
+    .title-box {
+      background: #1e293b;
+      padding: 1rem 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin: 0;
+      background: linear-gradient(to right, #3b82f6, #06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+    }
+
+    .container {
+      display: flex;
+      gap: 3rem;
+      width: 100%;
+      max-width: 1200px;
+      justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .box, .tall-box, .short-box {
+      background: #1e293b;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      transition: transform 0.2s;
+      flex: 1;
+      min-width: 350px;
+      max-width: 400px;
+      width: 400px;
+    }
+
+    .box:hover, .tall-box:hover, .short-box:hover {
+      transform: scale(1.05);
+    }
+
+    .box h2, .tall-box h2, .short-box h2 {
+      font-size: 1.5rem;
+      color: #22d3ee;
+      margin-bottom: 1rem;
+    }
+
+    .link-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-height: 250px;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+    }
+
+    .link-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .link-list::-webkit-scrollbar-thumb {
+      background-color: #475569;
+      border-radius: 6px;
+    }
+
+    .build-link {
+      background: #0f172a;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      color: white;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      display: block;
+    }
+
+    .build-link:hover {
+      background: #334155;
+      transform: scale(1.02);
+    }
+
+    .section {
+      width: 100%;
+      max-width: 1000px;
+      margin-bottom: 2rem;
+    }
+
+    img[alt="Deepwoken Image"] {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      z-index: 10;
+      width: 100%;
+      max-width: 80px;
+    }
+
+    .search-filter {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .search-input, .filter-select {
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      background: #0f172a;
+      color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: #0f172a;
+    }
+
+    .fandom-box {
+      background: #1e293b;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      width: 70%;
+      max-width: 800px;
+      margin: 0 auto 2rem auto;
+      transition: transform 0.2s;
+    }
+
+    .fandom-box:hover {
+      transform: scale(1.05);
+    }
+
+    .fandom-box h2 {
+      font-size: 1.5rem;
+      color: #22d3ee;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .container {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: stretch;
+      }
+
+      .box, .tall-box, .short-box {
+        min-width: unset;
+        width: 100%;
+      }
+
+      .build-link {
+        font-size: 1rem;
+        padding: 0.8rem 1rem;
+      }
+
+      img[alt="Deepwoken Image"] {
+        max-width: 60px;
+        bottom: 10px;
+        right: 10px;
+      }
+
+      .fandom-box {
+        width: 90%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -104,15 +286,34 @@
     </div>
   </div>
 
-  <!-- Il resto del tuo contenuto HTML rimane invariato -->
-  <!-- Puoi incollare tutto il contenuto delle box PVP/PVE e sezioni builder/fandom sotto -->
-
-  <!-- esempio: -->
   <div class="title-box">
     <h1>Deepwoken</h1>
   </div>
 
-  <!-- ... le tue sezioni e container come nel file originale -->
+  <div class="container">
+    <div class="box">
+      <h2>PVP Build</h2>
+      <div class="link-list">
+        <a href="#" class="build-link">Build 1</a>
+        <a href="#" class="build-link">Build 2</a>
+      </div>
+    </div>
+
+    <div class="box">
+      <h2>PVE Build</h2>
+      <div class="link-list">
+        <a href="#" class="build-link">Build A</a>
+        <a href="#" class="build-link">Build B</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="fandom-box">
+      <h2>Fandom & Community</h2>
+      <p>Collegamenti e informazioni sulla community di Deepwoken.</p>
+    </div>
+  </div>
 
   <script>
     function toggleChat() {
