@@ -6,10 +6,6 @@
   <title>Noble Mystery</title>
   <link rel="icon" type="image/png" href="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755" />
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
@@ -19,7 +15,6 @@
       flex-direction: column;
       align-items: center;
       padding: 2rem;
-      overflow-x: hidden;
     }
 
     .title-box {
@@ -70,34 +65,6 @@
       margin-bottom: 1rem;
     }
 
-    .filter-search-container {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 1rem;
-    }
-
-    .search-bar {
-      padding: 0.5rem;
-      border-radius: 0.5rem;
-      border: none;
-      width: 200px;
-    }
-
-    .filter-btn {
-      background: #0f172a;
-      color: white;
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 0.5rem;
-      cursor: pointer;
-    }
-
-    .filter-btn.active {
-      background: #334155;
-    }
-
     .link-list {
       display: flex;
       flex-direction: column;
@@ -123,12 +90,19 @@
       color: white;
       text-decoration: none;
       transition: background 0.2s, transform 0.2s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
       display: block;
     }
 
     .build-link:hover {
       background: #334155;
       transform: scale(1.02);
+    }
+
+    .section {
+      width: 100%;
+      max-width: 1000px;
+      margin-bottom: 2rem;
     }
 
     img[alt="Deepwoken Image"] {
@@ -168,10 +142,6 @@
         padding: 0.8rem 1rem;
       }
 
-      .search-bar {
-        width: 100%;
-      }
-
       img[alt="Deepwoken Image"] {
         max-width: 60px;
         bottom: 10px;
@@ -188,12 +158,13 @@
   <div class="container">
     <div class="box">
       <h2>PVP</h2>
-      <div class="filter-search-container">
-        <input type="text" placeholder="Cerca build..." class="search-bar" id="searchPVP">
-        <button class="filter-btn" data-author="Niesta" data-target="pvp">By Niesta</button>
-        <button class="filter-btn" data-author="En3rgy" data-target="pvp">By En3rgy</button>
-      </div>
-      <div class="link-list" id="listPVP">
+      <input type="text" placeholder="Cerca build..." oninput="filterBuilds('pvp', this.value)">
+      <select onchange="filterByAuthor('pvp', this.value)">
+        <option value="">Tutti</option>
+        <option value="Niesta">By Niesta</option>
+        <option value="En3rgy">By En3rgy</option>
+      </select>
+      <div class="link-list" id="pvp">
         <a href="https://deepwoken.co/builder?id=1eFFnhn1" class="build-link">Katana - By Niesta</a>
         <a href="https://deepwoken.co/builder?id=N9IhoPRj" class="build-link">Umbrite - By Niesta</a>
         <a href="https://deepwoken.co/builder?id=0V23NHqz" class="build-link">HeroWinds Arc - By Niesta</a>
@@ -201,15 +172,15 @@
         <a href="https://deepwoken.co/builder?id=e1IG5fBO" class="build-link">Imperator's Edge - By En3rgy</a>
       </div>
     </div>
-
     <div class="box">
       <h2>PVE</h2>
-      <div class="filter-search-container">
-        <input type="text" placeholder="Cerca build..." class="search-bar" id="searchPVE">
-        <button class="filter-btn" data-author="Niesta" data-target="pve">By Niesta</button>
-        <button class="filter-btn" data-author="En3rgy" data-target="pve">By En3rgy</button>
-      </div>
-      <div class="link-list" id="listPVE">
+      <input type="text" placeholder="Cerca build..." oninput="filterBuilds('pve', this.value)">
+      <select onchange="filterByAuthor('pve', this.value)">
+        <option value="">Tutti</option>
+        <option value="Niesta">By Niesta</option>
+        <option value="En3rgy">By En3rgy</option>
+      </select>
+      <div class="link-list" id="pve">
         <a href="#" class="build-link">Tanky Spear - By Niesta</a>
         <a href="#" class="build-link">Heavy Weapon - By En3rgy</a>
       </div>
@@ -236,39 +207,35 @@
     </div>
   </div>
 
-  <div class="container">
+  <div class="section">
     <div class="short-box">
       <h2>Deepwoken Fandom</h2>
       <a href="https://deepwoken.fandom.com/wiki/Deepwoken_Wiki" class="build-link" target="_blank">Fandom</a>
     </div>
   </div>
 
-  <img src="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755" alt="Deepwoken Image" />
+  <img src="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755"
+       alt="Deepwoken Image" />
 
   <script>
-    document.querySelectorAll('.search-bar').forEach(bar => {
-      bar.addEventListener('input', function () {
-        const target = this.id.includes('PVP') ? 'listPVP' : 'listPVE';
-        const query = this.value.toLowerCase();
-        document.querySelectorAll(`#${target} .build-link`).forEach(link => {
-          link.style.display = link.textContent.toLowerCase().includes(query) ? 'block' : 'none';
-        });
+    function filterBuilds(sectionId, query) {
+      const list = document.getElementById(sectionId);
+      const items = list.querySelectorAll('.build-link');
+      query = query.toLowerCase();
+      items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(query) ? 'block' : 'none';
       });
-    });
+    }
 
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', function () {
-        const author = this.dataset.author.toLowerCase();
-        const target = this.dataset.target === 'pvp' ? 'listPVP' : 'listPVE';
-
-        document.querySelectorAll(`#${target} .build-link`).forEach(link => {
-          link.style.display = link.textContent.toLowerCase().includes(author) ? 'block' : 'none';
-        });
-
-        document.querySelectorAll(`.filter-btn[data-target="${this.dataset.target}"]`).forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
+    function filterByAuthor(sectionId, author) {
+      const list = document.getElementById(sectionId);
+      const items = list.querySelectorAll('.build-link');
+      items.forEach(item => {
+        const text = item.textContent;
+        item.style.display = author === '' || text.includes(`By ${author}`) ? 'block' : 'none';
       });
-    });
+    }
   </script>
 </body>
 </html>
