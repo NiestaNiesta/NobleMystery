@@ -57,7 +57,7 @@
 
     /* Ingrandisce la box quando il cursore passa sopra */
     .box:hover, .tall-box:hover, .short-box:hover {
-      transform: scale(1.05); /* Aumento della scala per ingrandire di più */
+      transform: scale(1.05); /* Ingrandimento moderato */
     }
 
     .box h2, .tall-box h2, .short-box h2 {
@@ -97,7 +97,7 @@
 
     .build-link:hover {
       background: #334155;
-      transform: scale(1.02);
+      transform: scale(1.05); /* Aggiunge lo stesso effetto di ingrandimento ai link */
     }
 
     .section {
@@ -253,12 +253,25 @@
     boxes.forEach(box => {
       box.addEventListener('mouseenter', () => {
         // Ingrandisce la box attiva
-        box.style.transform = 'scale(1.1)';  // Maggiore ingrandimento
+        box.style.transform = 'scale(1.05)';  // Ingrandimento moderato
       });
 
       box.addEventListener('mouseleave', () => {
         // Ripristina la dimensione originale della box
         box.style.transform = 'scale(1)';
+      });
+    });
+
+    // Ingrandisce anche i link all'interno delle box
+    const links = document.querySelectorAll('.build-link');
+
+    links.forEach(link => {
+      link.addEventListener('mouseenter', () => {
+        link.style.transform = 'scale(1.05)';
+      });
+
+      link.addEventListener('mouseleave', () => {
+        link.style.transform = 'scale(1)';
       });
     });
   </script>
