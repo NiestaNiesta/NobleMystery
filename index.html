@@ -36,7 +36,7 @@
 
     .container {
       display: flex;
-      gap: 2.5rem; /* Aumentato il gap tra le box */
+      gap: 2.5rem;
       width: 100%;
       max-width: 1000px;
       justify-content: center;
@@ -46,17 +46,13 @@
 
     .box, .tall-box, .short-box {
       background: #1e293b;
-      padding: 1.8rem; /* Aumentato il padding per ingrandire le box */
+      padding: 2rem;
       border-radius: 1rem;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
       text-align: center;
-      transition: transform 0.3s;
+      transition: transform 0.2s;
       flex: 1;
-      min-width: 320px; /* Aumentato il min-width per ingrandire leggermente le box */
-    }
-
-    .box:hover, .tall-box:hover, .short-box:hover {
-      transform: scale(1.05); /* Ingrandimento moderato */
+      min-width: 320px;
     }
 
     .box h2, .tall-box h2, .short-box h2 {
@@ -96,7 +92,7 @@
 
     .build-link:hover {
       background: #334155;
-      transform: scale(1.05); /* Aggiunge lo stesso effetto di ingrandimento ai link */
+      transform: scale(1.02); /* Effetto più delicato */
     }
 
     .section {
@@ -152,7 +148,7 @@
 
       .container {
         flex-direction: column;
-        gap: 2rem; /* Aumentato il gap per mobile */
+        gap: 1.5rem;
         align-items: stretch;
       }
 
@@ -246,27 +242,25 @@
   <img src="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755" alt="Deepwoken Image" />
 
   <script>
-    // Funzione che ingrandisce la box quando il cursore passa sopra
+    // Effetto hover per le box
     const boxes = document.querySelectorAll('.box, .tall-box, .short-box');
 
     boxes.forEach(box => {
       box.addEventListener('mouseenter', () => {
-        // Ingrandisce la box attiva
-        box.style.transform = 'scale(1.05)';  // Ingrandimento moderato
+        box.style.transform = 'scale(1.05)';
       });
 
       box.addEventListener('mouseleave', () => {
-        // Ripristina la dimensione originale della box
         box.style.transform = 'scale(1)';
       });
     });
 
-    // Ingrandisce anche i link all'interno delle box
+    // Effetto hover per i link
     const links = document.querySelectorAll('.build-link');
 
     links.forEach(link => {
       link.addEventListener('mouseenter', () => {
-        link.style.transform = 'scale(1.05)';
+        link.style.transform = 'scale(1.02)';
       });
 
       link.addEventListener('mouseleave', () => {
