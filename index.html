@@ -120,10 +120,9 @@
     .search-filter {
       display: flex;
       justify-content: space-between; /* separa gli elementi */
-      align-items: right;
+      align-items: center;
       gap: 1rem;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
+      width: 100%;
     }
 
     .search-input, .filter-select {
@@ -139,13 +138,11 @@
     }
 
     .search-input {
-      flex: 1 1 60%; /* Aumenta la larghezza dell'input */
-      min-width: 150px;
+      flex-grow: 1; /* Prende il massimo spazio possibile */
     }
 
     .filter-select {
-      flex: 1 1 30%; /* Rende il filtro più piccolo */
-      min-width: 120px;
+      width: 25%; /* Imposta larghezza fissa per il filtro */
     }
 
     @media (max-width: 768px) {
@@ -187,6 +184,7 @@
       .search-input,
       .filter-select {
         width: 100%;
+        margin-bottom: 1rem;
       }
     }
   </style>
