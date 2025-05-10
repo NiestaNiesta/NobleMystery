@@ -143,6 +143,18 @@
       border-color: #0f172a;
     }
 
+    /* Stile per la "Fandom Box" */
+    .fandom-box {
+      background: #1e293b;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      width: 70%; /* Aumentata la larghezza */
+      max-width: 800px; /* Limite massimo di larghezza */
+      margin: 2rem auto; /* Centrare la box */
+    }
+
     @media (max-width: 768px) {
       body {
         padding: 1rem;
@@ -172,6 +184,10 @@
         max-width: 60px;
         bottom: 10px;
         right: 10px;
+      }
+
+      .fandom-box {
+        width: 90%; /* Ridotto su schermi piccoli */
       }
     }
   </style>
@@ -239,7 +255,7 @@
   </div>
 
   <div class="section">
-    <div class="short-box">
+    <div class="fandom-box">
       <h2>Deepwoken Fandom</h2>
       <a href="https://deepwoken.fandom.com/wiki/Deepwoken_Wiki" class="build-link" target="_blank">Fandom</a>
     </div>
