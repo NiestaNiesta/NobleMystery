@@ -6,6 +6,10 @@
   <title>Noble Mystery</title>
   <link rel="icon" type="image/png" href="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755" />
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
@@ -15,6 +19,7 @@
       flex-direction: column;
       align-items: center;
       padding: 2rem;
+      overflow-x: hidden;
     }
 
     .title-box {
@@ -65,6 +70,34 @@
       margin-bottom: 1rem;
     }
 
+    .filter-search-container {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .search-bar {
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      border: none;
+      width: 200px;
+    }
+
+    .filter-btn {
+      background: #0f172a;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+
+    .filter-btn.active {
+      background: #334155;
+    }
+
     .link-list {
       display: flex;
       flex-direction: column;
@@ -90,19 +123,12 @@
       color: white;
       text-decoration: none;
       transition: background 0.2s, transform 0.2s;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
       display: block;
     }
 
     .build-link:hover {
       background: #334155;
       transform: scale(1.02);
-    }
-
-    .section {
-      width: 100%;
-      max-width: 1000px;
-      margin-bottom: 2rem;
     }
 
     img[alt="Deepwoken Image"] {
@@ -115,25 +141,6 @@
       z-index: 10;
       width: 100%;
       max-width: 80px;
-    }
-
-    .search-filter {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .search-input, .filter-select {
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
-      border: none;
-      outline: none;
-      font-size: 1rem;
-      background: #0f172a;
-      color: white;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
 
     @media (max-width: 768px) {
@@ -161,6 +168,10 @@
         padding: 0.8rem 1rem;
       }
 
+      .search-bar {
+        width: 100%;
+      }
+
       img[alt="Deepwoken Image"] {
         max-width: 60px;
         bottom: 10px;
@@ -177,15 +188,12 @@
   <div class="container">
     <div class="box">
       <h2>PVP</h2>
-      <div class="search-filter">
-        <input type="text" placeholder="Cerca build..." class="search-input" data-type="pvp" />
-        <select class="filter-select" data-type="pvp">
-          <option value="">Tutti</option>
-          <option value="Niesta">By Niesta</option>
-          <option value="En3rgy">By En3rgy</option>
-        </select>
+      <div class="filter-search-container">
+        <input type="text" placeholder="Cerca build..." class="search-bar" id="searchPVP">
+        <button class="filter-btn" data-author="Niesta" data-target="pvp">By Niesta</button>
+        <button class="filter-btn" data-author="En3rgy" data-target="pvp">By En3rgy</button>
       </div>
-      <div class="link-list">
+      <div class="link-list" id="listPVP">
         <a href="https://deepwoken.co/builder?id=1eFFnhn1" class="build-link">Katana - By Niesta</a>
         <a href="https://deepwoken.co/builder?id=N9IhoPRj" class="build-link">Umbrite - By Niesta</a>
         <a href="https://deepwoken.co/builder?id=0V23NHqz" class="build-link">HeroWinds Arc - By Niesta</a>
@@ -196,15 +204,12 @@
 
     <div class="box">
       <h2>PVE</h2>
-      <div class="search-filter">
-        <input type="text" placeholder="Cerca build..." class="search-input" data-type="pve" />
-        <select class="filter-select" data-type="pve">
-          <option value="">Tutti</option>
-          <option value="Niesta">By Niesta</option>
-          <option value="En3rgy">By En3rgy</option>
-        </select>
+      <div class="filter-search-container">
+        <input type="text" placeholder="Cerca build..." class="search-bar" id="searchPVE">
+        <button class="filter-btn" data-author="Niesta" data-target="pve">By Niesta</button>
+        <button class="filter-btn" data-author="En3rgy" data-target="pve">By En3rgy</button>
       </div>
-      <div class="link-list">
+      <div class="link-list" id="listPVE">
         <a href="#" class="build-link">Tanky Spear - By Niesta</a>
         <a href="#" class="build-link">Heavy Weapon - By En3rgy</a>
       </div>
@@ -231,7 +236,7 @@
     </div>
   </div>
 
-  <div class="section">
+  <div class="container">
     <div class="short-box">
       <h2>Deepwoken Fandom</h2>
       <a href="https://deepwoken.fandom.com/wiki/Deepwoken_Wiki" class="build-link" target="_blank">Fandom</a>
@@ -241,24 +246,27 @@
   <img src="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755" alt="Deepwoken Image" />
 
   <script>
-    function filterLinks(type) {
-      const input = document.querySelector(`.search-input[data-type="${type}"]`).value.toLowerCase();
-      const filter = document.querySelector(`.filter-select[data-type="${type}"]`).value.toLowerCase();
-      const box = document.querySelector(`.box:has(.search-input[data-type="${type}"])`);
-      const links = box.querySelectorAll('.build-link');
-
-      links.forEach(link => {
-        const text = link.textContent.toLowerCase();
-        const matchesSearch = text.includes(input);
-        const matchesFilter = !filter || text.includes(`by ${filter}`);
-        link.style.display = (matchesSearch && matchesFilter) ? 'block' : 'none';
+    document.querySelectorAll('.search-bar').forEach(bar => {
+      bar.addEventListener('input', function () {
+        const target = this.id.includes('PVP') ? 'listPVP' : 'listPVE';
+        const query = this.value.toLowerCase();
+        document.querySelectorAll(`#${target} .build-link`).forEach(link => {
+          link.style.display = link.textContent.toLowerCase().includes(query) ? 'block' : 'none';
+        });
       });
-    }
+    });
 
-    document.querySelectorAll('.search-input, .filter-select').forEach(element => {
-      element.addEventListener('input', () => {
-        const type = element.getAttribute('data-type');
-        filterLinks(type);
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const author = this.dataset.author.toLowerCase();
+        const target = this.dataset.target === 'pvp' ? 'listPVP' : 'listPVE';
+
+        document.querySelectorAll(`#${target} .build-link`).forEach(link => {
+          link.style.display = link.textContent.toLowerCase().includes(author) ? 'block' : 'none';
+        });
+
+        document.querySelectorAll(`.filter-btn[data-target="${this.dataset.target}"]`).forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
       });
     });
   </script>
