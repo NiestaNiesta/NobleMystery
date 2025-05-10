@@ -123,7 +123,7 @@
       align-items: center;
       gap: 1rem;
       margin-bottom: 1rem;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
     }
 
     .search-input, .filter-select {
@@ -138,21 +138,15 @@
       appearance: none; /* rimuove lo stile di default dei select */
     }
 
+    .search-input {
+      flex: 1 1 60%;
+      min-width: 150px;
+    }
 
-@media (max-width: 768px) {
-  .search-filter {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .search-input,
-  .filter-select {
-    width: 100%;
-    background: #0f172a; /* assicurati che anche qui sia presente */
-  }
-}
-
-
+    .filter-select {
+      flex: 1 1 30%;
+      min-width: 120px;
+    }
 
     @media (max-width: 768px) {
       body {
@@ -179,21 +173,20 @@
         padding: 0.8rem 1rem;
       }
 
-      .search-filter {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0.75rem;
-      }
-
-      .search-input, .filter-select {
-        width: 100%;
-        font-size: 1.1rem;
-      }
-
       img[alt="Deepwoken Image"] {
         max-width: 60px;
         bottom: 10px;
         right: 10px;
+      }
+
+      .search-filter {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .search-input,
+      .filter-select {
+        width: 100%;
       }
     }
   </style>
