@@ -152,7 +152,18 @@
       text-align: center;
       width: 70%; /* Aumentata la larghezza */
       max-width: 800px; /* Limite massimo di larghezza */
-      margin: 2rem auto; /* Centrare la box */
+      margin: 0 auto 2rem auto; /* Centrare la box e alzare la box */
+      transition: transform 0.2s;
+    }
+
+    .fandom-box:hover {
+      transform: scale(1.05); /* Effetto hover per la fandom box */
+    }
+
+    .fandom-box h2 {
+      font-size: 1.5rem;
+      color: #22d3ee;
+      margin-bottom: 1rem;
     }
 
     @media (max-width: 768px) {
