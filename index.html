@@ -178,124 +178,77 @@
       font-weight: bold;
       text-decoration: none;
       transition: background 0.2s;
+      cursor: pointer;
     }
 
     .ia-builder-btn:hover {
       background: #2563eb;
     }
 
-    /* Nuovo stile per il riquadro a destra */
-    .chatbox-container {
+    /* Stile per il popup */
+    .popup {
+      display: none; /* Inizialmente nascosto */
       position: fixed;
-      top: 0;
-      right: -300px;
-      width: 300px;
-      height: 100%;
-      background-color: #1e293b;
-      box-shadow: -4px 0 10px rgba(0, 0, 0, 0.3);
-      transition: right 0.3s ease;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #1e293b;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
       z-index: 100;
-    }
-
-    .chatbox-container.open {
-      right: 0;
-    }
-
-    .chatbox-header {
-      background-color: #3b82f6;
-      padding: 1rem;
       color: white;
-      font-weight: bold;
       text-align: center;
-      border-radius: 1rem 1rem 0 0;
     }
 
-    .chatbox-content {
-      padding: 1rem;
-      overflow-y: auto;
-      height: calc(100% - 50px); /* Sotto la barra di intestazione */
+    .popup-content h2 {
+      font-size: 1.5rem;
+      color: #22d3ee;
     }
 
-    .chatbox-input {
-      width: 100%;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      border: none;
-      margin-top: 1rem;
-      background-color: #0f172a;
-      color: white;
+    .popup-content p {
+      font-size: 1rem;
+      margin-bottom: 1rem;
     }
 
-    /* Bottone per aprire/chiudere il riquadro */
-    .toggle-chatbox-btn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      padding: 10px 20px;
+    .close-popup {
       background: #3b82f6;
       color: white;
+      padding: 10px 20px;
       border-radius: 6px;
       font-weight: bold;
-      text-decoration: none;
+      border: none;
+      cursor: pointer;
       transition: background 0.2s;
-      z-index: 101;
     }
 
-    .toggle-chatbox-btn:hover {
+    .close-popup:hover {
       background: #2563eb;
     }
 
-    @media (max-width: 768px) {
-      body {
-        padding: 1rem;
-      }
-
-      h1 {
-        font-size: 2rem;
-      }
-
-      .container {
-        flex-direction: column;
-        gap: 1.5rem;
-        align-items: stretch;
-      }
-
-      .box, .tall-box, .short-box {
-        min-width: unset;
-        width: 100%;
-      }
-
-      .build-link {
-        font-size: 1rem;
-        padding: 0.8rem 1rem;
-      }
-
-      img[alt="Deepwoken Image"] {
-        max-width: 60px;
-        bottom: 10px;
-        right: 10px;
-      }
-
-      .fandom-box {
-        width: 90%; /* Ridotto su schermi piccoli */
-      }
+    /* Blocco sfocato dello sfondo quando il popup è visibile */
+    .body-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 50;
     }
   </style>
 </head>
 <body>
-  <!-- Bottone per aprire/chiudere il riquadro chat -->
-  <a href="javascript:void(0);" class="toggle-chatbox-btn" id="toggleChatboxBtn">Chat IA</a>
+  <a href="javascript:void(0);" class="ia-builder-btn" id="iaBuilderBtn">IA Builder</a>
 
-  <!-- Riquadro chat a destra -->
-  <div class="chatbox-container" id="chatboxContainer">
-    <div class="chatbox-header">Chat con IA</div>
-    <div class="chatbox-content">
-      <!-- Qui ci sarà la chat, ad esempio una casella di testo -->
-      <textarea class="chatbox-input" placeholder="Scrivi un messaggio..."></textarea>
+  <!-- Popup che si mostra al clic del bottone -->
+  <div id="popup" class="popup">
+    <div class="popup-content">
+      <h2>IA Builder</h2>
+      <p>Questo è un esempio di popup che appare al clic del bottone.</p>
+      <button id="closePopup" class="close-popup">Chiudi</button>
     </div>
   </div>
-
-  <a href="https://example.com/ia-builder" class="ia-builder-btn">IA Builder</a>
 
   <div class="title-box">
     <h1>Deepwoken</h1>
@@ -332,41 +285,60 @@
         </select>
       </div>
       <div class="link-list">
-        <a href="https://deepwoken.co/builder?id=1eFFnhn1" class="build-link">Katana - By Niesta</a>
-        <a href="https://deepwoken.co/builder?id=0F9nG1rX" class="build-link">Deeplord - By Niesta</a>
+        <a href="#" class="build-link">Tanky Spear - By Niesta</a>
+        <a href="#" class="build-link">Heavy Weapon - By En3rgy</a>
       </div>
     </div>
   </div>
 
-  <script>
-    // Funzione per aprire/chiudere il riquadro della chat
-    const toggleChatboxBtn = document.getElementById('toggleChatboxBtn');
-    const chatboxContainer = document.getElementById('chatboxContainer');
+  <div class="container">
+    <div class="tall-box">
+      <h2>Builder Creator</h2>
+      <a href="https://deepwoken.co/builder" class="build-link" target="_blank">Vai al Deepwoken Builder</a>
+    </div>
+    <div class="tall-box">
+      <h2>Spell Modifier</h2>
+      <a href="https://docs.google.com/spreadsheets/d/1IE3KIyizxEgHfTsasO0hCGvch6yNofdgNlRR__jA7jo/edit?gid=0#gid=0" class="build-link" target="_blank">Vai al Google Sheet</a>
+    </div>
+  </div>
 
-    toggleChatboxBtn.addEventListener('click', () => {
-      chatboxContainer.classList.toggle('open'); // Toggle della classe "open"
+  <div class="container">
+    <div class="box">
+      <h2>Ally</h2>
+    </div>
+    <div class="box">
+      <h2>Enemy</h2>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="fandom-box">
+      <h2>Deepwoken Fandom</h2>
+      <a href="https://deepwoken.fandom.com/wiki/Deepwoken_Wiki" class="build-link" target="_blank">Fandom</a>
+    </div>
+  </div>
+
+  <img src="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755" alt="Deepwoken Image" />
+
+  <script>
+    // Funzione per mostrare il popup
+    document.getElementById('iaBuilderBtn').addEventListener('click', function() {
+      document.getElementById('popup').style.display = 'block';
+      const overlay = document.createElement('div');
+      overlay.classList.add('body-overlay');
+      document.body.appendChild(overlay);
     });
 
-    // Funzione esistente per filtrare le build
-    function filterLinks(type) {
-      const input = document.querySelector(`.search-input[data-type="${type}"]`).value.toLowerCase();
-      const filter = document.querySelector(`.filter-select[data-type="${type}"]`).value.toLowerCase();
-      const box = document.querySelector(`.box:has(.search-input[data-type="${type}"])`);
-      const links = box.querySelectorAll('.build-link');
+    // Funzione per chiudere il popup
+    document.getElementById('closePopup').addEventListener('click', function() {
+      document.getElementById('popup').style.display = 'none';
+      document.querySelector('.body-overlay').remove();
+    });
 
-      links.forEach(link => {
-        const text = link.textContent.toLowerCase();
-        const matchesSearch = text.includes(input);
-        const matchesFilter = !filter || text.includes(`by ${filter}`);
-        link.style.display = (matchesSearch && matchesFilter) ? 'block' : 'none';
-      });
-    }
-
-    document.querySelectorAll('.search-input, .filter-select').forEach(element => {
-      element.addEventListener('input', () => {
-        const type = element.getAttribute('data-type');
-        filterLinks(type);
-      });
+    // Chiudere il popup se l'utente clicca fuori dal contenuto
+    document.querySelector('.body-overlay').addEventListener('click', function() {
+      document.getElementById('popup').style.display = 'none';
+      this.remove();
     });
   </script>
 </body>
