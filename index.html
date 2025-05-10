@@ -44,25 +44,28 @@
       flex-wrap: wrap;
     }
 
+    /* Personalizzazione dei box */
     .box, .tall-box, .short-box {
-      background: #1e293b;
-      padding: 1.5rem;
-      border-radius: 1rem;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      background: #2b2d42; /* Colore di sfondo */
+      padding: 2rem;
+      border-radius: 1.5rem; /* Angoli arrotondati */
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Ombra più forte */
       text-align: center;
-      transition: transform 0.2s;
+      transition: transform 0.3s, background-color 0.3s;
       flex: 1;
       min-width: 300px;
     }
 
+    /* Effetto hover per tutti i box */
     .box:hover, .tall-box:hover, .short-box:hover {
-      transform: scale(1.02);
+      transform: scale(1.05); /* Ingrandisce il box */
+      background: #3b3f59; /* Cambia il colore di sfondo al passaggio del mouse */
     }
 
     .box h2, .tall-box h2, .short-box h2 {
-      font-size: 1.5rem;
-      color: #22d3ee;
-      margin-bottom: 1rem;
+      font-size: 1.8rem; /* Aumenta la dimensione del titolo */
+      color: #f2a365; /* Colore del titolo */
+      text-transform: uppercase; /* Rende il testo maiuscolo */
     }
 
     .link-list {
