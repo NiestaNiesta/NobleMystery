@@ -50,24 +50,14 @@
       border-radius: 1rem;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
       text-align: center;
-      transition: transform 0.2s, filter 0.3s;
+      transition: transform 0.3s; /* Aumento della velocità di transizione */
       flex: 1;
       min-width: 300px;
     }
 
-    /* Solleva la box e sfoca le altre quando il cursore passa sopra */
-    .container .box:hover,
-    .container .tall-box:hover,
-    .container .short-box:hover {
-      transform: translateY(-10px);
-      filter: none;
-    }
-
-    .container .box,
-    .container .tall-box,
-    .container .short-box {
-      filter: blur(4px);
-      transition: filter 0.3s;
+    /* Ingrandisce la box quando il cursore passa sopra */
+    .box:hover, .tall-box:hover, .short-box:hover {
+      transform: scale(1.05); /* Aumento della scala per ingrandire di più */
     }
 
     .box h2, .tall-box h2, .short-box h2 {
@@ -257,28 +247,18 @@
   <img src="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755" alt="Deepwoken Image" />
 
   <script>
-    // Aggiungi la funzione che solleva e sfoca le box
+    // Funzione che ingrandisce la box quando il cursore passa sopra
     const boxes = document.querySelectorAll('.box, .tall-box, .short-box');
 
     boxes.forEach(box => {
       box.addEventListener('mouseenter', () => {
-        // Solleva la box attiva
-        box.style.transform = 'translateY(-10px)';
-        // Sfoca tutte le altre box
-        boxes.forEach(otherBox => {
-          if (otherBox !== box) {
-            otherBox.style.filter = 'blur(4px)';
-          }
-        });
+        // Ingrandisce la box attiva
+        box.style.transform = 'scale(1.1)';  // Maggiore ingrandimento
       });
 
       box.addEventListener('mouseleave', () => {
-        // Ripristina la posizione della box attiva
-        box.style.transform = 'translateY(0)';
-        // Rimuovi la sfocatura da tutte le box
-        boxes.forEach(otherBox => {
-          otherBox.style.filter = 'none';
-        });
+        // Ripristina la dimensione originale della box
+        box.style.transform = 'scale(1)';
       });
     });
   </script>
