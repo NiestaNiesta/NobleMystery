@@ -17,77 +17,6 @@
       padding: 2rem;
     }
 
-    .chat-toggle-btn {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background-color: #3b82f6;
-      color: white;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      z-index: 999;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    }
-
-    .chat-container {
-      display: none;
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 320px;
-      background: #1e1e1e;
-      border-radius: 12px;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-      padding: 1rem;
-      z-index: 998;
-    }
-
-    .chat-container h2 {
-      font-size: 1.2rem;
-      margin: 0 0 0.5rem 0;
-      text-align: center;
-      background: linear-gradient(to right, #3b82f6, #06b6d4);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    #chat-box {
-      height: 200px;
-      overflow-y: auto;
-      background: #2a2a2a;
-      padding: 0.5rem;
-      border-radius: 8px;
-      margin-bottom: 0.5rem;
-      font-size: 0.9rem;
-    }
-
-    #user-input {
-      width: 70%;
-      padding: 0.5rem;
-      border-radius: 6px;
-      border: none;
-      background-color: #0f172a;
-      color: white;
-    }
-
-    .chat-container button {
-      padding: 0.5rem 0.75rem;
-      border: none;
-      background-color: #3b82f6;
-      color: white;
-      border-radius: 6px;
-      margin-left: 0.5rem;
-      cursor: pointer;
-    }
-
-    .chat-container button:hover {
-      background-color: #2563eb;
-    }
-
-    /* Il resto del tuo stile rimane invariato */
     .title-box {
       background: #1e293b;
       padding: 1rem 2rem;
@@ -123,13 +52,13 @@
       text-align: center;
       transition: transform 0.2s;
       flex: 1;
-      min-width: 350px;
-      max-width: 400px;
-      width: 400px;
+      min-width: 350px; /* Aumentata la larghezza minima */
+      max-width: 400px; /* Box più larga */
+      width: 400px; /* Larghezza fissa per la box */
     }
 
     .box:hover, .tall-box:hover, .short-box:hover {
-      transform: scale(1.05);
+      transform: scale(1.05); /* Effetto di ingrandimento più morbido */
     }
 
     .box h2, .tall-box h2, .short-box h2 {
@@ -169,7 +98,7 @@
 
     .build-link:hover {
       background: #334155;
-      transform: scale(1.02);
+      transform: scale(1.02); /* Ingrossamento più contenuto per i link */
     }
 
     .section {
@@ -214,26 +143,45 @@
       border-color: #0f172a;
     }
 
-    .fandom-box, .ally-box, .enemy-box, .builder-box, .spell-box {
+    /* Stile per la "Fandom Box" */
+    .fandom-box {
       background: #1e293b;
       padding: 2rem;
       border-radius: 1rem;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
       text-align: center;
-      width: 70%;
-      max-width: 800px;
-      margin: 0 auto 2rem auto;
+      width: 70%; /* Aumentata la larghezza */
+      max-width: 800px; /* Limite massimo di larghezza */
+      margin: 0 auto 2rem auto; /* Centrare la box e alzare la box */
       transition: transform 0.2s;
     }
 
-    .fandom-box:hover, .ally-box:hover, .enemy-box:hover, .builder-box:hover, .spell-box:hover {
-      transform: scale(1.05);
+    .fandom-box:hover {
+      transform: scale(1.05); /* Effetto hover per la fandom box */
     }
 
-    .fandom-box h2, .ally-box h2, .enemy-box h2, .builder-box h2, .spell-box h2 {
+    .fandom-box h2 {
       font-size: 1.5rem;
       color: #22d3ee;
       margin-bottom: 1rem;
+    }
+
+    /* Bottone IA Builder */
+    .ia-builder-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background: #3b82f6;
+      color: white;
+      border-radius: 6px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .ia-builder-btn:hover {
+      background: #2563eb;
     }
 
     @media (max-width: 768px) {
@@ -268,23 +216,13 @@
       }
 
       .fandom-box {
-        width: 90%;
+        width: 90%; /* Ridotto su schermi piccoli */
       }
     }
   </style>
 </head>
 <body>
-
-  <button class="chat-toggle-btn" onclick="toggleChat()">Chat IA</button>
-
-  <div class="chat-container" id="chat">
-    <h2>Chat con IA</h2>
-    <div id="chat-box"></div>
-    <div style="display: flex;">
-      <input type="text" id="user-input" placeholder="Scrivi qui..." />
-      <button onclick="sendMessage()">Invia</button>
-    </div>
-  </div>
+  <a href="https://example.com/ia-builder" class="ia-builder-btn">IA Builder</a>
 
   <div class="title-box">
     <h1>Deepwoken</h1>
@@ -292,80 +230,91 @@
 
   <div class="container">
     <div class="box">
-      <h2>PVP Build</h2>
+      <h2>PVP</h2>
+      <div class="search-filter">
+        <input type="text" placeholder="Cerca build..." class="search-input" data-type="pvp" />
+        <select class="filter-select" data-type="pvp">
+          <option value="">Tutti</option>
+          <option value="Niesta">By Niesta</option>
+          <option value="En3rgy">By En3rgy</option>
+        </select>
+      </div>
       <div class="link-list">
-        <a href="#" class="build-link">Build 1</a>
-        <a href="#" class="build-link">Build 2</a>
+        <a href="https://deepwoken.co/builder?id=1eFFnhn1" class="build-link">Katana - By Niesta</a>
+        <a href="https://deepwoken.co/builder?id=N9IhoPRj" class="build-link">Umbrite - By Niesta</a>
+        <a href="https://deepwoken.co/builder?id=0V23NHqz" class="build-link">HeroWinds Arc - By Niesta</a>
+        <a href="https://deepwoken.co/builder?id=vsGFXbBx" class="build-link">SaintSworn - By Niesta</a>
+        <a href="https://deepwoken.co/builder?id=e1IG5fBO" class="build-link">Imperator's Edge - By En3rgy</a>
       </div>
     </div>
 
     <div class="box">
-      <h2>PVE Build</h2>
+      <h2>PVE</h2>
+      <div class="search-filter">
+        <input type="text" placeholder="Cerca build..." class="search-input" data-type="pve" />
+        <select class="filter-select" data-type="pve">
+          <option value="">Tutti</option>
+          <option value="Niesta">By Niesta</option>
+          <option value="En3rgy">By En3rgy</option>
+        </select>
+      </div>
       <div class="link-list">
-        <a href="#" class="build-link">Build A</a>
-        <a href="#" class="build-link">Build B</a>
+        <a href="#" class="build-link">Tanky Spear - By Niesta</a>
+        <a href="#" class="build-link">Heavy Weapon - By En3rgy</a>
       </div>
     </div>
   </div>
 
-  <!-- Aggiunta delle nuove sezioni -->
-  <div class="ally-box">
-    <h2>Ally</h2>
-    <p>Informazioni sugli alleati, gruppi e altri dettagli utili per le alleanze.</p>
+  <div class="container">
+    <div class="tall-box">
+      <h2>Builder Creator</h2>
+      <a href="https://deepwoken.co/builder" class="build-link" target="_blank">Vai al Deepwoken Builder</a>
+    </div>
+    <div class="tall-box">
+      <h2>Spell Modifier</h2>
+      <a href="https://docs.google.com/spreadsheets/d/1IE3KIyizxEgHfTsasO0hCGvch6yNofdgNlRR__jA7jo/edit?gid=0#gid=0" class="build-link" target="_blank">Vai al Google Sheet</a>
+    </div>
   </div>
 
-  <div class="enemy-box">
-    <h2>Enemy</h2>
-    <p>Elenco dei nemici, le loro forze e debolezze.</p>
+  <div class="container">
+    <div class="box">
+      <h2>Ally</h2>
+    </div>
+    <div class="box">
+      <h2>Enemy</h2>
+    </div>
   </div>
 
-  <div class="fandom-box">
-    <h2>Fandom & Community</h2>
-    <p>Collegamenti e informazioni sulla community di Deepwoken.</p>
+  <div class="section">
+    <div class="fandom-box">
+      <h2>Deepwoken Fandom</h2>
+      <a href="https://deepwoken.fandom.com/wiki/Deepwoken_Wiki" class="build-link" target="_blank">Fandom</a>
+    </div>
   </div>
 
-  <div class="builder-box">
-    <h2>Builder Creator</h2>
-    <p>Strumenti per la creazione di build personalizzate.</p>
-  </div>
-
-  <div class="spell-box">
-    <h2>Spell Modifier</h2>
-    <p>Modificatori di incantesimi e loro effetti.</p>
-  </div>
+  <img src="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755" alt="Deepwoken Image" />
 
   <script>
-    function toggleChat() {
-      const chat = document.getElementById('chat');
-      chat.style.display = chat.style.display === 'none' || chat.style.display === '' ? 'block' : 'none';
+    function filterLinks(type) {
+      const input = document.querySelector(`.search-input[data-type="${type}"]`).value.toLowerCase();
+      const filter = document.querySelector(`.filter-select[data-type="${type}"]`).value.toLowerCase();
+      const box = document.querySelector(`.box:has(.search-input[data-type="${type}"])`);
+      const links = box.querySelectorAll('.build-link');
+
+      links.forEach(link => {
+        const text = link.textContent.toLowerCase();
+        const matchesSearch = text.includes(input);
+        const matchesFilter = !filter || text.includes(`by ${filter}`);
+        link.style.display = (matchesSearch && matchesFilter) ? 'block' : 'none';
+      });
     }
 
-    function sendMessage() {
-      const input = document.getElementById("user-input");
-      const chatBox = document.getElementById("chat-box");
-      const message = input.value.trim();
-      if (message === "") return;
-
-      chatBox.innerHTML += `<div><strong>Tu:</strong> ${message}</div>`;
-      input.value = "";
-
-      setTimeout(() => {
-        const reply = generateFakeReply(message);
-        chatBox.innerHTML += `<div><strong>IA:</strong> ${reply}</div>`;
-        chatBox.scrollTop = chatBox.scrollHeight;
-      }, 800);
-    }
-
-    function generateFakeReply(message) {
-      const msg = message.toLowerCase();
-      if (msg.includes("katana")) {
-        return "Ti consiglio una build Katana con 40 strength, 50 agility e 30 medium weapon.";
-      } else if (msg.includes("pve")) {
-        return "Per il PvE, punta su 60 fortitude, 30 willpower e una grande arma.";
-      } else {
-        return "Prova a chiedermi una build specifica o menziona una parola chiave come 'pvp' o 'katana'.";
-      }
-    }
+    document.querySelectorAll('.search-input, .filter-select').forEach(element => {
+      element.addEventListener('input', () => {
+        const type = element.getAttribute('data-type');
+        filterLinks(type);
+      });
+    });
   </script>
 </body>
 </html>
