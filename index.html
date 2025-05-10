@@ -126,14 +126,18 @@
       flex-wrap: nowrap;
     }
 
-    .search-input {
-      flex: 1;
-      min-width: 0;
+    .search-input, .filter-select {
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      background: #0f172a; /* sfondo scuro */
+      color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      appearance: none; /* rimuove lo stile di default dei select */
     }
 
-    .filter-select {
-      width: 150px;
-    }
 
 @media (max-width: 768px) {
   .search-filter {
@@ -144,8 +148,10 @@
   .search-input,
   .filter-select {
     width: 100%;
+    background: #0f172a; /* assicurati che anche qui sia presente */
   }
 }
+
 
 
     @media (max-width: 768px) {
