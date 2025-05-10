@@ -136,6 +136,12 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
 
+    /* Annulla il cambiamento della freccetta quando il selettore è in focus */
+    .filter-select:focus {
+      outline: none;
+      border-color: #0f172a; /* Colore del bordo attuale */
+    }
+
     @media (max-width: 768px) {
       body {
         padding: 1rem;
