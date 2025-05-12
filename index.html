@@ -674,6 +674,25 @@ document.getElementById('copyRequestBtn').addEventListener('click', function () 
       input.value = '';
       chatBox.scrollTop = chatBox.scrollHeight;
     });
+
+<script>
+  document.getElementById("ownerBtn").addEventListener("click", function () {
+    const popup = document.getElementById("ownerPopup");
+    popup.style.display = popup.style.display === "block" ? "none" : "block";
+  });
+
+  function checkOwnerPassword() {
+    const password = document.getElementById("ownerPassword").value;
+    // Puoi sostituire 'tuapassword' con la password reale
+    if (password === "tuapassword") {
+      alert("Accesso autorizzato!");
+      // Aggiungi qui le azioni da eseguire dopo l’accesso
+    } else {
+      alert("Password errata");
+    }
+  }
+</script>
+
   </script>
 </body>
 
