@@ -17,6 +17,109 @@
       padding: 2rem;
     }
 
+    .owner-access {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 100;
+    }
+
+    .owner-button {
+      padding: 0.75rem 1.5rem;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .owner-button:hover {
+      background: #2563eb;
+    }
+
+    .owner-popup {
+      display: none;
+      position: fixed;
+      bottom: 80px;
+      left: 20px;
+      background: #1e293b;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+      z-index: 101;
+    }
+
+    .owner-popup input {
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      border: none;
+      background: #0f172a;
+      color: white;
+      margin-right: 0.5rem;
+    }
+
+    .owner-popup button {
+      padding: 0.5rem 1rem;
+      background: #3b82f6;
+      border: none;
+      border-radius: 0.5rem;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+    }
+
+    .request-notification {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: #1e293b;
+      padding: 1rem 1.5rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+      z-index: 102;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Bottone per accesso owner -->
+  <div class="owner-access">
+    <button class="owner-button" id="ownerBtn">Sei l'owner?</button>
+    <div class="owner-popup" id="ownerPopup">
+      <input type="password" id="ownerPassword" placeholder="Inserisci password" />
+      <button onclick="checkOwnerPassword()">Accedi</button>
+    </div>
+  </div>
+
+  <!-- Notifica richieste -->
+  <div class="request-notification" id="requestNotification" onclick="openRequestsPanel()">
+    🔔 Richieste (1)
+  </div>
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Noble Mystery</title>
+  <link rel="icon" type="image/png" href="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at center, rgba(15, 23, 42, 1) 40%, rgba(0, 0, 53) 100%);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+
     .title-box {
       background: #1e293b;
       padding: 1rem 2rem;
@@ -414,3 +517,37 @@
   </script>
 </body>
 </html>
+
+
+  <script>
+    const correctPassword = "tuaPasswordSicura123"; // Cambia con la tua password reale
+    let isOwner = false;
+
+    document.getElementById('ownerBtn').addEventListener('click', () => {
+      const popup = document.getElementById('ownerPopup');
+      popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+    });
+
+    function checkOwnerPassword() {
+      const input = document.getElementById('ownerPassword').value;
+      if (input === correctPassword) {
+        isOwner = true;
+        document.getElementById('requestNotification').style.display = 'block';
+        alert("Accesso owner effettuato con successo.");
+        document.getElementById('ownerPopup').style.display = 'none';
+      } else {
+        alert("Password errata.");
+      }
+    }
+
+    function openRequestsPanel() {
+      if (isOwner) {
+        // Apri un pannello laterale o un popup con le richieste ricevute
+        alert("Qui potrai gestire le richieste inviate dagli utenti.");
+      }
+    }
+  </script>
+</body>
+</html>
+
+
