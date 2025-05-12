@@ -414,6 +414,14 @@
 </head>
 <body>
 
+<button id="richiesteBtn">Richieste</button>
+
+<div id="richiestePopup" style="display:none; position:fixed; top:20%; left:30%; width:40%; background:#fff; border:1px solid #ccc; padding:20px; z-index:999;">
+  <h3>Richieste ricevute</h3>
+  <ul id="richiesteList"></ul>
+  <button onclick="chiudiPopup()">Chiudi</button>
+</div>
+
 <div id="requestPopup" class="popup">
   <div class="popup-content">
     <h2>Dettagli Richiesta</h2>
@@ -691,9 +699,56 @@ document.getElementById('copyRequestBtn').addEventListener('click', function () 
       alert("Password errata");
     }
   }
-</script>
 
-  </script>
+document.getElementById("richiesteBtn").addEventListener("click", function () {
+    fetch("richieste.json")
+      .then(response => response.json())
+      .then(data => {
+        const list = document.getElementById("richiesteList");
+        list.innerHTML = "";
+        data.forEach((item, index) => {
+          const li = document.createElement("li");
+          li.innerHTML = `
+            <p><strong>Nome:</strong> ${item.nome}</p>
+            <p><strong>Link:</strong> <a href="${item.link}" target="_blank">${item.link}</a></p>
+            <button onclick="copiaLink('${item.link}')">Copia Link</button>
+            <button onclick="cancellaRichiesta(${index})">Cancella</button>
+            <hr/>
+          `;
+          list.appendChild(li);
+        });
+        document.getElementById("richiestePopup").style.display = "block";
+      });
+  });
+
+  function chiudiPopup() {
+    document.getElementById("richiestePopup").style.display = "none";
+  }
+
+  function copiaLink(link) {
+    navigator.clipboard.writeText(link).then(() => {
+      alert("Link copiato!");
+    });
+  }
+
+  function cancellaRichiesta(index) {
+    fetch("richieste.json")
+      .then(res => res.json())
+      .then(data => {
+        data.splice(index, 1);
+        fetch("salvaRichieste.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        }).then(() => {
+          alert("Richiesta cancellata!");
+          location.reload();
+        });
+      });
+  }
+</script>
 </body>
 
 <script>
