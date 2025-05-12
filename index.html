@@ -414,22 +414,6 @@
 </head>
 <body>
 
-  <h2>Lista Richieste</h2>
-  <ul id="request-list">
-    <li onclick="openPopup(this)">Richiesta di build 1: aggiornamento UI</li>
-    <li onclick="openPopup(this)">Richiesta di build 2: fix bug login</li>
-    <li onclick="openPopup(this)">Richiesta di build 3: aggiunta dark mode</li>
-  </ul>
-
-  <!-- Overlay e Popup -->
-  <div class="overlay" id="overlay" onclick="closePopup()"></div>
-  <div class="popup" id="popup">
-    <p id="request-content"></p>
-    <button onclick="copyContent()">Copia</button>
-    <button class="cancel" onclick="deleteRequest()">Cancella</button>
-    <button onclick="closePopup()">Chiudi</button>
-  </div>
-
 <!-- Modulo per aggiungere la build -->
 <div class="add-build-popup" id="addBuildPopup">
   <h2>Add Build</h2>
@@ -726,35 +710,6 @@
         alert("Inserisci un link valido per la build.");
       }
     });
-
-    let currentRequestElement = null;
-
-    function openPopup(element) {
-      currentRequestElement = element;
-      const content = element.innerText;
-      document.getElementById('request-content').innerText = content;
-      document.getElementById('popup').style.display = 'block';
-      document.getElementById('overlay').style.display = 'block';
-    }
-
-    function closePopup() {
-      document.getElementById('popup').style.display = 'none';
-      document.getElementById('overlay').style.display = 'none';
-    }
-
-    function copyContent() {
-      const text = document.getElementById('request-content').innerText;
-      navigator.clipboard.writeText(text)
-        .then(() => alert('Contenuto copiato negli appunti!'))
-        .catch(() => alert('Errore nella copia.'));
-    }
-
-    function deleteRequest() {
-      if (currentRequestElement && confirm('Vuoi davvero cancellare questa richiesta?')) {
-        currentRequestElement.remove();
-        closePopup();
-      }
-    }
   </script>
 </body>
 </html>
