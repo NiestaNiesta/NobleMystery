@@ -354,9 +354,78 @@
       font-weight: bold;
       cursor: pointer;
     }
+    .add-build-btn {
+      font-size: 2rem;
+      color: white;
+      background-color: #3b82f6;
+      border: none;
+      border-radius: 50%;
+      padding: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .add-build-btn:hover {
+      background-color: #2563eb;
+    }
+
+    .add-build-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #1e293b;
+      padding: 20px;
+      border-radius: 1rem;
+      width: 400px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      z-index: 100;
+    }
+
+    .add-build-popup h2 {
+      color: #22d3ee;
+    }
+
+    .add-build-popup input {
+      width: 100%;
+      padding: 10px;
+      background-color: #0f172a;
+      border: none;
+      color: white;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
+
+    .add-build-popup button {
+      padding: 10px 20px;
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .add-build-popup button:hover {
+      background-color: #2563eb;
+    }
+
   </style>
 </head>
 <body>
+
+
+    <!-- Pulsante + per aggiungere una build (PVP e PVE) -->
+<button class="add-build-btn" id="addBuildPVPBtn">+</button>
+<button class="add-build-btn" id="addBuildPVEBtn">+</button>
+
+<!-- Modulo per aggiungere la build -->
+<div class="add-build-popup" id="addBuildPopup">
+  <h2>Add Build</h2>
+      <input type="text" id="buildLinkInput" placeholder="Inserisci il link della build" />
+      <button id="submitBuildBtn">Invia richiesta</button>
+      <button id="closeAddBuildPopup">Chiudi</button>
+  </div>
 
   <!-- Bottone per accesso owner -->
   <div class="owner-access">
@@ -523,6 +592,70 @@
       alert("Qui potrai gestire le richieste inviate dagli utenti.");
     }
   }
+
+// Gestione del popup per l'aggiunta di una build
+let currentType = '';
+
+document.getElementById('addBuildPVPBtn').addEventListener('click', function() {
+  currentType = 'pvp';
+  document.getElementById('addBuildPopup').style.display = 'block';
+});
+
+document.getElementById('addBuildPVEBtn').addEventListener('click', function() {
+  currentType = 'pve';
+  document.getElementById('addBuildPopup').style.display = 'block';
+});
+
+document.getElementById('closeAddBuildPopup').addEventListener('click', function() {
+  document.getElementById('addBuildPopup').style.display = 'none';
+});
+
+// Gestione invio richiesta build
+document.getElementById('submitBuildBtn').addEventListener('click', function() {
+  const buildLink = document.getElementById('buildLinkInput').value;
+
+  if (buildLink) {
+    const request = {
+      type: currentType,
+      link: buildLink,
+      user: 'NomeUtente'  // Modifica per ottenere il nome dell'utente
+    };
+
+    // Simuliamo il salvataggio della richiesta (potrebbe essere memorizzato in un database in un'applicazione reale)
+    saveRequest(request);
+
+    // Chiudiamo il popup dopo l'invio
+    document.getElementById('addBuildPopup').style.display = 'none';
+    document.getElementById('buildLinkInput').value = '';
+  } else {
+    alert('Per favore, inserisci un link valido.');
+  }
+});
+
+// Funzione per salvare la richiesta (per scopi dimostrativi)
+function saveRequest(request) {
+  // Memorizzare la richiesta in un array, simuleremo questa parte
+  const requests = JSON.parse(localStorage.getItem('buildRequests')) || [];
+  requests.push(request);
+  localStorage.setItem('buildRequests', JSON.stringify(requests));
+
+  alert('La tua richiesta è stata inviata e verrà esaminata dagli owner.');
+}
+
+// Funzione per visualizzare le richieste per l'owner
+function openRequestsPanel() {
+  if (isOwner) {
+    const requests = JSON.parse(localStorage.getItem('buildRequests')) || [];
+    let requestList = 'Richieste di Build:\n';
+
+    requests.forEach((request, index) => {
+      requestList += `#${index + 1} - Tipo: ${request.type}, Link: ${request.link}\n`;
+    });
+
+    alert(requestList);
+  }
+}
+
 </script>
 
 </body>
