@@ -83,42 +83,6 @@
       font-weight: bold;
       cursor: pointer;
     }
-  </style>
-</head>
-<body>
-
-  <!-- Bottone per accesso owner -->
-  <div class="owner-access">
-    <button class="owner-button" id="ownerBtn">Sei l'owner?</button>
-    <div class="owner-popup" id="ownerPopup">
-      <input type="password" id="ownerPassword" placeholder="Inserisci password" />
-      <button onclick="checkOwnerPassword()">Accedi</button>
-    </div>
-  </div>
-
-  <!-- Notifica richieste -->
-  <div class="request-notification" id="requestNotification" onclick="openRequestsPanel()">
-    🔔 Richieste (1)
-  </div>
-
-<!DOCTYPE html>
-<html lang="it">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Noble Mystery</title>
-  <link rel="icon" type="image/png" href="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755" />
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: radial-gradient(circle at center, rgba(15, 23, 42, 1) 40%, rgba(0, 0, 53) 100%);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem;
-    }
 
     .title-box {
       background: #1e293b;
@@ -155,13 +119,13 @@
       text-align: center;
       transition: transform 0.2s;
       flex: 1;
-      min-width: 350px; /* Aumentata la larghezza minima */
-      max-width: 400px; /* Box più larga */
-      width: 400px; /* Larghezza fissa per la box */
+      min-width: 350px;
+      max-width: 400px;
+      width: 400px;
     }
 
     .box:hover, .tall-box:hover, .short-box:hover {
-      transform: scale(1.05); /* Effetto di ingrandimento più morbido */
+      transform: scale(1.05);
     }
 
     .box h2, .tall-box h2, .short-box h2 {
@@ -179,15 +143,6 @@
       padding-right: 0.5rem;
     }
 
-    .link-list::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .link-list::-webkit-scrollbar-thumb {
-      background-color: #475569;
-      border-radius: 6px;
-    }
-
     .build-link {
       background: #0f172a;
       padding: 1rem;
@@ -201,25 +156,13 @@
 
     .build-link:hover {
       background: #334155;
-      transform: scale(1.02); /* Ingrossamento più contenuto per i link */
+      transform: scale(1.02);
     }
 
     .section {
       width: 100%;
       max-width: 1000px;
       margin-bottom: 2rem;
-    }
-
-    img[alt="Deepwoken Image"] {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      padding: 1rem;
-      border-radius: 1rem;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-      z-index: 10;
-      width: 100%;
-      max-width: 80px;
     }
 
     .search-filter {
@@ -241,56 +184,8 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
 
-    .filter-select:focus {
-      outline: none;
-      border-color: #0f172a;
-    }
-
-    /* Stile per la "Fandom Box" */
-    .fandom-box {
-      background: #1e293b;
-      padding: 2rem;
-      border-radius: 1rem;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-      text-align: center;
-      width: 70%; /* Aumentata la larghezza */
-      max-width: 800px; /* Limite massimo di larghezza */
-      margin: 0 auto 2rem auto; /* Centrare la box e alzare la box */
-      transition: transform 0.2s;
-    }
-
-    .fandom-box:hover {
-      transform: scale(1.05); /* Effetto hover per la fandom box */
-    }
-
-    .fandom-box h2 {
-      font-size: 1.5rem;
-      color: #22d3ee;
-      margin-bottom: 1rem;
-    }
-
-    /* Bottone IA Builder */
-    .ia-builder-btn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      padding: 10px 20px;
-      background: #3b82f6;
-      color: white;
-      border-radius: 6px;
-      font-weight: bold;
-      text-decoration: none;
-      transition: background 0.2s;
-      cursor: pointer;
-    }
-
-    .ia-builder-btn:hover {
-      background: #2563eb;
-    }
-
-    /* Stile per il popup */
     .popup {
-      display: none; /* Inizialmente nascosto */
+      display: none;
       position: fixed;
       top: 50%;
       left: 50%;
@@ -302,7 +197,7 @@
       z-index: 100;
       color: white;
       text-align: center;
-      width: 400px; /* Larghezza fissa */
+      width: 400px;
     }
 
     .popup-content h2 {
@@ -315,23 +210,22 @@
       margin-bottom: 1rem;
     }
 
-   .close-popup {
-    background: #3b82f6;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-    transition: background 0.2s;
-    margin-top: 20px; /* Aggiunto margine per spostarlo verso il basso */
-  }
+    .close-popup {
+      background: #3b82f6;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 20px;
+    }
 
-   .close-popup:hover {
-    background: #2563eb;
-  }
+    .close-popup:hover {
+      background: #2563eb;
+    }
 
-    /* Blocco sfocato dello sfondo quando il popup è visibile */
     .body-overlay {
       position: fixed;
       top: 0;
@@ -342,10 +236,8 @@
       z-index: 50;
     }
 
-    /* Chat Box */
     .chat-box {
       width: 100%;
-      max-width: 100%;
       height: 250px;
       overflow-y: auto;
       margin-bottom: 1rem;
@@ -368,7 +260,7 @@
     }
 
     .chat-input {
-      width: 85%; /* Aumentato spazio per input */
+      width: 85%;
       padding: 0.5rem;
       border-radius: 6px;
       background: #0f172a;
@@ -396,24 +288,28 @@
 <body>
   <a href="javascript:void(0);" class="ia-builder-btn" id="iaBuilderBtn">IA Builder</a>
 
-  <!-- Popup che si mostra al clic del bottone -->
   <div id="popup" class="popup">
     <div class="popup-content">
       <h2>Chat con IA</h2>
-
-      <!-- Chat Box -->
-      <div class="chat-box" id="chatBox">
-        <!-- I messaggi della chat andranno qui -->
-      </div>
-
-      <!-- Input e bottone per inviare messaggi -->
+      <div class="chat-box" id="chatBox"></div>
       <div class="input-container">
         <input type="text" class="chat-input" id="chatInput" placeholder="Scrivi un messaggio..." />
         <button class="send-button" id="sendButton">Invia</button>
       </div>
-
       <button id="closePopup" class="close-popup">Chiudi</button>
     </div>
+  </div>
+
+  <div class="owner-access">
+    <button class="owner-button" id="ownerBtn">Sei l'owner?</button>
+    <div class="owner-popup" id="ownerPopup">
+      <input type="password" id="ownerPassword" placeholder="Inserisci password" />
+      <button onclick="checkOwnerPassword()">Accedi</button>
+    </div>
+  </div>
+
+  <div class="request-notification" id="requestNotification" onclick="openRequestsPanel()">
+    🔔 Richieste (1)
   </div>
 
   <div class="title-box">
@@ -440,54 +336,16 @@
       </div>
     </div>
 
-    <div class="box">
-      <h2>PVE</h2>
-      <div class="search-filter">
-        <input type="text" placeholder="Cerca build..." class="search-input" data-type="pve" />
-        <select class="filter-select" data-type="pve">
-          <option value="">Tutti</option>
-          <option value="Niesta">By Niesta</option>
-          <option value="En3rgy">By En3rgy</option>
-        </select>
-      </div>
+    <div class="short-box">
+      <h2>Build</h2>
       <div class="link-list">
-        <a href="#" class="build-link">Tanky Spear - By Niesta</a>
-        <a href="#" class="build-link">Heavy Weapon - By En3rgy</a>
+        <a href="https://deepwoken.co/builder?id=1eFFnhn1" class="build-link">Katana - By Niesta</a>
+        <a href="https://deepwoken.co/builder?id=N9IhoPRj" class="build-link">Umbrite - By Niesta</a>
       </div>
     </div>
   </div>
-
-  <div class="container">
-    <div class="tall-box">
-      <h2>Builder Creator</h2>
-      <a href="https://deepwoken.co/builder" class="build-link" target="_blank">Vai al Deepwoken Builder</a>
-    </div>
-    <div class="tall-box">
-      <h2>Spell Modifier</h2>
-      <a href="https://docs.google.com/spreadsheets/d/1IE3KIyizxEgHfTsasO0hCGvch6yNofdgNlRR__jA7jo/edit?gid=0#gid=0" class="build-link" target="_blank">Vai al Google Sheet</a>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="box">
-      <h2>Ally</h2>
-    </div>
-    <div class="box">
-      <h2>Enemy</h2>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="fandom-box">
-      <h2>Deepwoken Fandom</h2>
-      <a href="https://deepwoken.fandom.com/wiki/Deepwoken_Wiki" class="build-link" target="_blank">Fandom</a>
-    </div>
-  </div>
-
-  <img src="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755" alt="Deepwoken Image" />
 
   <script>
-    // Funzione per mostrare il popup
     document.getElementById('iaBuilderBtn').addEventListener('click', function() {
       document.getElementById('popup').style.display = 'block';
       const overlay = document.createElement('div');
@@ -495,7 +353,6 @@
       document.body.appendChild(overlay);
     });
 
-    // Funzione per chiudere il popup
     document.getElementById('closePopup').addEventListener('click', function() {
       document.getElementById('popup').style.display = 'none';
       const overlay = document.querySelector('.body-overlay');
@@ -504,7 +361,6 @@
       }
     });
 
-    // Aggiungere i messaggi della chat
     document.getElementById('sendButton').addEventListener('click', function() {
       var input = document.getElementById('chatInput');
       var chatBox = document.getElementById('chatBox');
@@ -514,13 +370,8 @@
       input.value = '';
       chatBox.scrollTop = chatBox.scrollHeight;
     });
-  </script>
-</body>
-</html>
 
-
-  <script>
-    const correctPassword = "tuaPasswordSicura123"; // Cambia con la tua password reale
+    const correctPassword = "tuaPasswordSicura123";
     let isOwner = false;
 
     document.getElementById('ownerBtn').addEventListener('click', () => {
@@ -542,12 +393,9 @@
 
     function openRequestsPanel() {
       if (isOwner) {
-        // Apri un pannello laterale o un popup con le richieste ricevute
         alert("Qui potrai gestire le richieste inviate dagli utenti.");
       }
     }
   </script>
 </body>
 </html>
-
-
