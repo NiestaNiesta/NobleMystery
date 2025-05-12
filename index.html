@@ -533,23 +533,88 @@
 
   <img src="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755" alt="Deepwoken Image" />
 
-  <script>
-    // Funzione per mostrare il popup
-    document.getElementById('iaBuilderBtn').addEventListener('click', function() {
-      document.getElementById('popup').style.display = 'block';
-      const overlay = document.createElement('div');
-      overlay.classList.add('body-overlay');
-      document.body.appendChild(overlay);
-    });
+<script>
+  // Mostra popup IA
+  document.getElementById('iaBuilderBtn').addEventListener('click', function () {
+    document.getElementById('popup').style.display = 'block';
+    const overlay = document.createElement('div');
+    overlay.classList.add('body-overlay');
+    overlay.id = 'overlay';
+    document.body.appendChild(overlay);
+  });
 
-    // Funzione per chiudere il popup
-    document.getElementById('closePopup').addEventListener('click', function() {
-      document.getElementById('popup').style.display = 'none';
-      const overlay = document.querySelector('.body-overlay');
-      if (overlay) {
-        overlay.remove();
-      }
+  // Chiudi popup IA
+  document.getElementById('closePopup').addEventListener('click', function () {
+    document.getElementById('popup').style.display = 'none';
+    const overlay = document.getElementById('overlay');
+    if (overlay) overlay.remove();
+  });
+
+  // Cerca build (filtraggio per nome o autore)
+  document.querySelectorAll('.search-input').forEach(input => {
+    input.addEventListener('input', filterBuilds);
+  });
+
+  document.querySelectorAll('.filter-select').forEach(select => {
+    select.addEventListener('change', filterBuilds);
+  });
+
+  function filterBuilds() {
+    const type = this.getAttribute('data-type');
+    const box = this.closest('.box');
+    const input = box.querySelector('.search-input').value.toLowerCase();
+    const filter = box.querySelector('.filter-select').value.toLowerCase();
+
+    box.querySelectorAll('.build-link').forEach(link => {
+      const text = link.textContent.toLowerCase();
+      const showByText = input === '' || text.includes(input);
+      const showByFilter = filter === '' || text.includes(filter);
+      link.style.display = (showByText && showByFilter) ? 'block' : 'none';
     });
+  }
+
+  // Apre il popup "aggiungi build"
+  document.getElementById('addBuildPVPBtn').addEventListener('click', () => {
+    document.getElementById('addBuildPopup').style.display = 'block';
+  });
+
+  document.getElementById('addBuildPVEBtn').addEventListener('click', () => {
+    document.getElementById('addBuildPopup').style.display = 'block';
+  });
+
+  // Chiude il popup "aggiungi build"
+  document.getElementById('closeAddBuildPopup').addEventListener('click', () => {
+    document.getElementById('addBuildPopup').style.display = 'none';
+  });
+
+  // Simulazione invio build (puoi collegarlo a un backend o salvarlo localmente)
+  document.getElementById('submitBuildBtn').addEventListener('click', () => {
+    const link = document.getElementById('buildLinkInput').value.trim();
+    if (link) {
+      alert('Richiesta inviata: ' + link);
+      document.getElementById('buildLinkInput').value = '';
+      document.getElementById('addBuildPopup').style.display = 'none';
+    }
+  });
+
+  // Owner popup toggle
+  document.getElementById('ownerBtn').addEventListener('click', () => {
+    const popup = document.getElementById('ownerPopup');
+    popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+  });
+
+  // Password owner (esempio base)
+  function checkOwnerPassword() {
+    const password = document.getElementById('ownerPassword').value;
+    if (password === 'admin') {
+      alert('Accesso consentito!');
+      document.getElementById('ownerPopup').style.display = 'none';
+    } else {
+      alert('Password errata!');
+    }
+  }
+
+  window.checkOwnerPassword = checkOwnerPassword; // Rendi accessibile la funzione inline
 
     // Aggiungere i messaggi della chat
     document.getElementById('sendButton').addEventListener('click', function() {
