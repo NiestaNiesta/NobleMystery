@@ -629,22 +629,20 @@
       const buildLink = document.getElementById('buildLinkInput').value;
 
       if (buildLink) {
+        // Salva la richiesta di build (aggiunta alla memoria locale)
         const buildRequest = {
           type: currentType,
           link: buildLink,
         };
-
-        // Memorizza la richiesta nel localStorage
-        const existingRequests = JSON.parse(localStorage.getItem('buildRequests')) || [];
-        existingRequests.push(buildRequest);
-        localStorage.setItem('buildRequests', JSON.stringify(existingRequests));
-
-        alert("Richiesta di build inviata!");
-
-        // Chiude il popup
-        document.getElementById('addBuildPopup').style.display = 'none';
+        
+        let buildRequests = JSON.parse(localStorage.getItem('buildRequests')) || [];
+        buildRequests.push(buildRequest);
+        localStorage.setItem('buildRequests', JSON.stringify(buildRequests));
+        
+        alert("Richiesta di build inviata con successo!");
+        document.getElementById('addBuildPopup').style.display = 'none'; // Chiudi il popup
       } else {
-        alert("Per favore, inserisci un link valido.");
+        alert("Inserisci un link valido per la build.");
       }
     });
   </script>
