@@ -414,6 +414,18 @@
 </head>
 <body>
 
+<div id="requestPopup" class="popup">
+  <div class="popup-content">
+    <h2>Dettagli Richiesta</h2>
+    <p id="requestContent">Contenuto della richiesta...</p>
+    
+    <!-- Pulsanti per chiudere, cancellare e copiare -->
+    <button id="closeRequestPopup" class="close-popup">Chiudi</button>
+    <button id="deleteRequestBtn" class="close-popup">Cancella richiesta</button>
+    <button id="copyRequestBtn" class="close-popup">Copia richiesta</button>
+  </div>
+</div>
+
 <!-- Modulo per aggiungere la build -->
 <div class="add-build-popup" id="addBuildPopup">
   <h2>Add Build</h2>
@@ -596,6 +608,42 @@
       document.getElementById('addBuildPopup').style.display = 'none';
     }
   });
+
+// Funzione per aprire il popup con il contenuto della richiesta
+function openRequestPopup(content) {
+  document.getElementById('requestContent').textContent = content; // Imposta il contenuto della richiesta
+  document.getElementById('requestPopup').style.display = 'block'; // Mostra il popup
+  const overlay = document.createElement('div');
+  overlay.classList.add('body-overlay');
+  overlay.id = 'overlay';
+  document.body.appendChild(overlay);
+}
+
+// Funzione per chiudere il popup
+document.getElementById('closeRequestPopup').addEventListener('click', function () {
+  document.getElementById('requestPopup').style.display = 'none';
+  const overlay = document.getElementById('overlay');
+  if (overlay) overlay.remove();
+});
+
+// Funzione per cancellare la richiesta
+document.getElementById('deleteRequestBtn').addEventListener('click', function () {
+  const requestContent = document.getElementById('requestContent').textContent;
+  alert('Richiesta cancellata: ' + requestContent); // Puoi aggiungere la logica per rimuovere la richiesta dal DOM
+  document.getElementById('requestPopup').style.display = 'none';
+  const overlay = document.getElementById('overlay');
+  if (overlay) overlay.remove();
+});
+
+// Funzione per copiare il contenuto della richiesta
+document.getElementById('copyRequestBtn').addEventListener('click', function () {
+  const requestContent = document.getElementById('requestContent').textContent;
+  navigator.clipboard.writeText(requestContent).then(() => {
+    alert('Contenuto copiato negli appunti!');
+  }).catch(err => {
+    alert('Errore nella copia: ' + err);
+  });
+});
 
   // Owner popup toggle
   document.getElementById('ownerBtn').addEventListener('click', () => {
