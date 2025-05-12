@@ -497,72 +497,15 @@
 </html>
 
 
-  <script>
-    const correctPassword = "tuaPasswordSicura123"; // Cambia con la tua password reale
-    let isOwner = false;
-
-    document.getElementById('ownerBtn').addEventListener('click', () => {
-      const popup = document.getElementById('ownerPopup');
-      popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
-    });
-
-    function checkOwnerPassword() {
-      const input = document.getElementById('ownerPassword').value;
-      if (input === correctPassword) {
-        isOwner = true;
-        document.getElementById('requestNotification').style.display = 'block';
-        alert("Accesso owner effettuato con successo.");
-        document.getElementById('ownerPopup').style.display = 'none';
-      } else {
-        alert("Password errata.");
-      }
-    }
-
-    function openRequestsPanel() {
-      if (isOwner) {
-        // Apri un pannello laterale o un popup con le richieste ricevute
-        alert("Qui potrai gestire le richieste inviate dagli utenti.");
-      }
-    }
-
-  <script>
-    const correctPassword = "tuaPasswordSicura123"; // Cambia con la tua password reale
-    let isOwner = false;
-
-    document.getElementById('ownerBtn').addEventListener('click', () => {
-      const popup = document.getElementById('ownerPopup');
-      popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
-    });
-
-    function checkOwnerPassword() {
-      const input = document.getElementById('ownerPassword').value;
-      if (input === correctPassword) {
-        isOwner = true;
-        document.getElementById('requestNotification').style.display = 'block';
-        alert("Accesso owner effettuato con successo.");
-        document.getElementById('ownerPopup').style.display = 'none';
-      } else {
-        alert("Password errata.");
-      }
-    }
-
-    function openRequestsPanel() {
-      if (isOwner) {
-        // Apri un pannello laterale o un popup con le richieste ricevute
-        alert("Qui potrai gestire le richieste inviate dagli utenti.");
-      }
-    }
-
-  const correctPassword = "tuaPasswordSicura123"; // Cambia questa password
+<script>
+  const correctPassword = "tuaPasswordSicura123"; // Cambia con la tua password reale
   let isOwner = false;
 
-  // Mostra o nasconde il popup della password quando si clicca il bottone "Sei l'owner?"
   document.getElementById('ownerBtn').addEventListener('click', () => {
     const popup = document.getElementById('ownerPopup');
     popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
   });
 
-  // Verifica la password inserita
   function checkOwnerPassword() {
     const input = document.getElementById('ownerPassword').value;
     if (input === correctPassword) {
@@ -575,42 +518,12 @@
     }
   }
 
-  // Mostra una notifica o pannello quando si clicca sulla notifica richieste
   function openRequestsPanel() {
     if (isOwner) {
       alert("Qui potrai gestire le richieste inviate dagli utenti.");
     }
   }
+</script>
 
-  // Gestione popup IA
-  document.getElementById('iaBuilderBtn').addEventListener('click', function () {
-    document.getElementById('popup').style.display = 'block';
-    const overlay = document.createElement('div');
-    overlay.classList.add('body-overlay');
-    overlay.id = 'overlay-bg';
-    document.body.appendChild(overlay);
-  });
-
-  // Chiusura popup IA
-  document.getElementById('closePopup').addEventListener('click', function () {
-    document.getElementById('popup').style.display = 'none';
-    const overlay = document.getElementById('overlay-bg');
-    if (overlay) {
-      overlay.remove();
-    }
-  });
-
-  // Invio messaggio chat
-  document.getElementById('sendButton').addEventListener('click', function () {
-    const input = document.getElementById('chatInput');
-    const chatBox = document.getElementById('chatBox');
-    const newMessage = document.createElement('div');
-    newMessage.textContent = input.value;
-    chatBox.appendChild(newMessage);
-    input.value = '';
-    chatBox.scrollTop = chatBox.scrollHeight;
-  });
-
-  </script>
 </body>
 </html>
