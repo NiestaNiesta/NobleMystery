@@ -677,88 +677,98 @@ document.getElementById('copyRequestBtn').addEventListener('click', function () 
   </script>
 </body>
 
-  <script>
-    const correctPassword = "OdioINegri104"; // Cambia con la tua password reale
-    let isOwner = false;
+<script>
+  const correctPassword = "OdioINegri104"; // Cambia con la tua password reale
+  let isOwner = false;
 
-    // Mostra o nasconde il popup per l'accesso dell'owner
-    document.getElementById('ownerBtn').addEventListener('click', () => {
-      const popup = document.getElementById('ownerPopup');
-      popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
-    });
+  // Mostra o nasconde il popup per l'accesso dell'owner
+  document.getElementById('ownerBtn').addEventListener('click', () => {
+    const popup = document.getElementById('ownerPopup');
+    popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+  });
 
-    // Verifica la password per l'accesso dell'owner
-function checkOwnerPassword() {
-  const input = document.getElementById('ownerPassword').value;
-  const correctPassword = "OdioINegri104"; // Password aggiornata
+  // Verifica la password per l'accesso dell'owner
+  function checkOwnerPassword() {
+    const input = document.getElementById('ownerPassword').value;
 
-  if (input === correctPassword) {
-    isOwner = true;
-    document.getElementById('requestNotification').style.display = 'block';
-    alert("Accesso owner effettuato con successo.");
-    document.getElementById('ownerPopup').style.display = 'none';
-  } else {
-    alert("Password errata.");
-  }
-}
-
-    // Funzione per aprire il pannello delle richieste per l'owner
-    function openRequestsPanel() {
-      if (isOwner) {
-        const requests = JSON.parse(localStorage.getItem('buildRequests')) || [];
-        let requestList = 'Richieste di Build:\n';
-
-        requests.forEach((request, index) => {
-          requestList += #${index + 1} - Tipo: ${request.type}, Link: ${request.link}\n;
-        });
-
-        alert(requestList);
-      } else {
-        alert("Devi essere l'owner per vedere le richieste.");
-      }
+    if (input === '') {
+      alert("Per favore, inserisci una password.");
+      return;
     }
 
-    // Gestione del popup per l'aggiunta di una build
-    let currentType = '';
+    if (input === correctPassword) {
+      isOwner = true;
+      document.getElementById('requestNotification').style.display = 'block';
+      alert("Accesso owner effettuato con successo.");
+      document.getElementById('ownerPopup').style.display = 'none';
+    } else {
+      alert("Password errata.");
+    }
+  }
 
-    // Mostra il popup per aggiungere una build PVP
-    document.getElementById('addBuildPVPBtn').addEventListener('click', function() {
-      currentType = 'pvp';
-      document.getElementById('addBuildPopup').style.display = 'block';
-    });
+  // Funzione per aprire il pannello delle richieste per l'owner
+  function openRequestsPanel() {
+    if (isOwner) {
+      const requests = JSON.parse(localStorage.getItem('buildRequests')) || [];
+      let requestList = 'Richieste di Build:\n';
 
-    // Mostra il popup per aggiungere una build PVE
-    document.getElementById('addBuildPVEBtn').addEventListener('click', function() {
-      currentType = 'pve';
-      document.getElementById('addBuildPopup').style.display = 'block';
-    });
+      requests.forEach((request, index) => {
+        requestList += `#${index + 1} - Tipo: ${request.type}, Link: ${request.link}\n`;
+      });
 
-    // Chiude il popup per aggiungere una build
-    document.getElementById('closeAddBuildPopup').addEventListener('click', function() {
-      document.getElementById('addBuildPopup').style.display = 'none';
-    });
+      alert(requestList);
+    } else {
+      alert("Devi essere l'owner per vedere le richieste.");
+    }
+  }
 
-    // Gestione invio della richiesta per aggiungere una build
-    document.getElementById('submitBuildBtn').addEventListener('click', function() {
-      const buildLink = document.getElementById('buildLinkInput').value;
+  // Gestione del popup per l'aggiunta di una build
+  let currentType = '';
 
-      if (buildLink) {
-        // Salva la richiesta di build (aggiunta alla memoria locale)
-        const buildRequest = {
-          type: currentType,
-          link: buildLink,
-        };
-        
-        let buildRequests = JSON.parse(localStorage.getItem('buildRequests')) || [];
-        buildRequests.push(buildRequest);
-        localStorage.setItem('buildRequests', JSON.stringify(buildRequests));
-        
-        alert("Richiesta di build inviata con successo!");
-        document.getElementById('addBuildPopup').style.display = 'none'; // Chiudi il popup
-      } else {
-        alert("Inserisci un link valido per la build.");
-      }
-    });
-  </script>
+  // Mostra il popup per aggiungere una build PVP
+  document.getElementById('addBuildPVPBtn').addEventListener('click', function() {
+    currentType = 'pvp';
+    document.getElementById('addBuildPopup').style.display = 'block';
+  });
+
+  // Mostra il popup per aggiungere una build PVE
+  document.getElementById('addBuildPVEBtn').addEventListener('click', function() {
+    currentType = 'pve';
+    document.getElementById('addBuildPopup').style.display = 'block';
+  });
+
+  // Chiude il popup per aggiungere una build
+  document.getElementById('closeAddBuildPopup').addEventListener('click', function() {
+    document.getElementById('addBuildPopup').style.display = 'none';
+  });
+
+  // Gestione invio della richiesta per aggiungere una build
+  document.getElementById('submitBuildBtn').addEventListener('click', function() {
+    const buildLink = document.getElementById('buildLinkInput').value;
+    const linkPattern = /^https?:\/\/[^\s]+$/;
+
+    if (!linkPattern.test(buildLink)) {
+      alert("Inserisci un link valido per la build.");
+      return;
+    }
+
+    if (buildLink) {
+      // Salva la richiesta di build (aggiunta alla memoria locale)
+      const buildRequest = {
+        type: currentType,
+        link: buildLink,
+      };
+      
+      let buildRequests = JSON.parse(localStorage.getItem('buildRequests')) || [];
+      buildRequests.push(buildRequest);
+      localStorage.setItem('buildRequests', JSON.stringify(buildRequests));
+      
+      alert("Richiesta di build inviata con successo!");
+      document.getElementById('addBuildPopup').style.display = 'none'; // Chiudi il popup
+    } else {
+      alert("Inserisci un link valido per la build.");
+    }
+  });
+</script>
 </body>
 </html>
