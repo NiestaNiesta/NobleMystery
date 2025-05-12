@@ -119,6 +119,30 @@
       max-width: 80px;
     }
 
+/* Modifica per garantire che i pulsanti siano centrati e nelle rispettive box */
+    .box {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .add-build-btn {
+      margin-top: 1rem; /* Distanza tra i contenuti e il pulsante */
+      padding: 0.75rem 1.5rem;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .add-build-btn:hover {
+      background: #2563eb;
+    }
+
     .search-filter {
       display: flex;
       gap: 1rem;
@@ -468,41 +492,46 @@
   </div>
 
   <div class="container">
-    <div class="box">
-      <h2>PVP</h2>
-      <div class="search-filter">
-        <input type="text" placeholder="Cerca build..." class="search-input" data-type="pvp" />
-        <select class="filter-select" data-type="pvp">
-          <option value="">Tutti</option>
-          <option value="Niesta">By Niesta</option>
-          <option value="En3rgy">By En3rgy</option>
-        </select>
-      </div>
-      <div class="link-list">
-        <a href="https://deepwoken.co/builder?id=1eFFnhn1" class="build-link">Katana - By Niesta</a>
-        <a href="https://deepwoken.co/builder?id=N9IhoPRj" class="build-link">Umbrite - By Niesta</a>
-        <a href="https://deepwoken.co/builder?id=0V23NHqz" class="build-link">HeroWinds Arc - By Niesta</a>
-        <a href="https://deepwoken.co/builder?id=vsGFXbBx" class="build-link">SaintSworn - By Niesta</a>
-        <a href="https://deepwoken.co/builder?id=e1IG5fBO" class="build-link">Imperator's Edge - By En3rgy</a>
-      </div>
-    </div>
-
-    <div class="box">
-      <h2>PVE</h2>
-      <div class="search-filter">
-        <input type="text" placeholder="Cerca build..." class="search-input" data-type="pve" />
-        <select class="filter-select" data-type="pve">
-          <option value="">Tutti</option>
-          <option value="Niesta">By Niesta</option>
-          <option value="En3rgy">By En3rgy</option>
-        </select>
-      </div>
-      <div class="link-list">
-        <a href="#" class="build-link">Tanky Spear - By Niesta</a>
-        <a href="#" class="build-link">Heavy Weapon - By En3rgy</a>
-      </div>
-    </div>
+<div class="box">
+  <h2>PVP</h2>
+  <div class="search-filter">
+    <input type="text" placeholder="Cerca build..." class="search-input" data-type="pvp" />
+    <select class="filter-select" data-type="pvp">
+      <option value="">Tutti</option>
+      <option value="Niesta">By Niesta</option>
+      <option value="En3rgy">By En3rgy</option>
+    </select>
   </div>
+  <div class="link-list">
+    <a href="https://deepwoken.co/builder?id=1eFFnhn1" class="build-link">Katana - By Niesta</a>
+    <a href="https://deepwoken.co/builder?id=N9IhoPRj" class="build-link">Umbrite - By Niesta</a>
+    <a href="https://deepwoken.co/builder?id=0V23NHqz" class="build-link">HeroWinds Arc - By Niesta</a>
+    <a href="https://deepwoken.co/builder?id=vsGFXbBx" class="build-link">SaintSworn - By Niesta</a>
+    <a href="https://deepwoken.co/builder?id=e1IG5fBO" class="build-link">Imperator's Edge - By En3rgy</a>
+  </div>
+
+  <!-- Pulsante + per aggiungere una build PVP -->
+  <button class="add-build-btn" id="addBuildPVPBtn">+</button>
+</div>
+
+<div class="box">
+  <h2>PVE</h2>
+  <div class="search-filter">
+    <input type="text" placeholder="Cerca build..." class="search-input" data-type="pve" />
+    <select class="filter-select" data-type="pve">
+      <option value="">Tutti</option>
+      <option value="Niesta">By Niesta</option>
+      <option value="En3rgy">By En3rgy</option>
+    </select>
+  </div>
+  <div class="link-list">
+    <a href="#" class="build-link">Tanky Spear - By Niesta</a>
+    <a href="#" class="build-link">Heavy Weapon - By En3rgy</a>
+  </div>
+
+  <!-- Pulsante + per aggiungere una build PVE -->
+  <button class="add-build-btn" id="addBuildPVEBtn">+</button>
+</div>
 
   <div class="container">
     <div class="tall-box">
