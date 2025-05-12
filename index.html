@@ -681,30 +681,36 @@ document.getElementById('copyRequestBtn').addEventListener('click', function () 
   const correctPassword = "OdioINegri104"; // Cambia con la tua password reale
   let isOwner = false;
 
-  // Mostra o nasconde il popup per l'accesso dell'owner
-  document.getElementById('ownerBtn').addEventListener('click', () => {
-    const popup = document.getElementById('ownerPopup');
-    popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+  // Verifica che gli elementi esistano prima di usarli
+  document.addEventListener("DOMContentLoaded", function () {
+    const ownerBtn = document.getElementById('ownerBtn');
+    const ownerPopup = document.getElementById('ownerPopup');
+    const requestNotification = document.getElementById('requestNotification');
+
+    if (ownerBtn && ownerPopup) {
+      ownerBtn.addEventListener('click', () => {
+        ownerPopup.style.display = ownerPopup.style.display === 'block' ? 'none' : 'block';
+      });
+    }
+
+    window.checkOwnerPassword = function () {
+      const input = document.getElementById('ownerPassword').value;
+
+      if (!input) {
+        alert("Per favore, inserisci una password.");
+        return;
+      }
+
+      if (input === correctPassword) {
+        isOwner = true;
+        if (requestNotification) requestNotification.style.display = 'block';
+        alert("Accesso owner effettuato con successo.");
+        ownerPopup.style.display = 'none';
+      } else {
+        alert("Password errata.");
+      }
+    };
   });
-
-  // Verifica la password per l'accesso dell'owner
-  function checkOwnerPassword() {
-    const input = document.getElementById('ownerPassword').value;
-
-    if (input === '') {
-      alert("Per favore, inserisci una password.");
-      return;
-    }
-
-    if (input === correctPassword) {
-      isOwner = true;
-      document.getElementById('requestNotification').style.display = 'block';
-      alert("Accesso owner effettuato con successo.");
-      document.getElementById('ownerPopup').style.display = 'none';
-    } else {
-      alert("Password errata.");
-    }
-  }
 
   // Funzione per aprire il pannello delle richieste per l'owner
   function openRequestsPanel() {
