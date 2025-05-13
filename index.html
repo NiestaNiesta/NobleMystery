@@ -186,8 +186,58 @@
     }
 
     /* Stile per il popup */
-    .popup {
+    #requestsPopup {
       display: none; /* Inizialmente nascosto */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5); /* sfondo semi-trasparente */
+      justify-content: center;
+      align-items: center;
+    }
+
+    #requestsPopup .popup-content {
+      background-color: #1e293b;
+      padding: 20px;
+      border-radius: 8px;
+      width: 300px;
+      text-align: center;
+    }
+
+    .close-popup {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .chat-box {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px;
+      width: 80%;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      opacity: 0.8;
+    }
+    
+    /* Popup e altri stili */
+    .popup {
+      display: none;
       position: fixed;
       top: 50%;
       left: 50%;
@@ -212,21 +262,21 @@
       margin-bottom: 1rem;
     }
 
-   .close-popup {
-    background: #3b82f6;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-    transition: background 0.2s;
-    margin-top: 20px; /* Aggiunto margine per spostarlo verso il basso */
-  }
+    .close-popup {
+      background: #3b82f6;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 20px; /* Aggiunto margine per spostarlo verso il basso */
+    }
 
-   .close-popup:hover {
-    background: #2563eb;
-  }
+    .close-popup:hover {
+      background: #2563eb;
+    }
 
     /* Blocco sfocato dello sfondo quando il popup è visibile */
     .body-overlay {
@@ -239,247 +289,6 @@
       z-index: 50;
     }
 
-    /* Chat Box */
-    .chat-box {
-      width: 100%;
-      max-width: 100%;
-      height: 250px;
-      overflow-y: auto;
-      margin-bottom: 1rem;
-      border: 2px solid #3b82f6;
-      border-radius: 10px;
-      background: #1e293b;
-      padding: 1rem;
-      color: white;
-      box-sizing: border-box;
-    }
-
-    .input-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      width: 100%;
-      padding-top: 1rem;
-      box-sizing: border-box;
-    }
-
-    .chat-input {
-      width: 85%; /* Aumentato spazio per input */
-      padding: 0.5rem;
-      border-radius: 6px;
-      background: #0f172a;
-      border: none;
-      color: white;
-      font-size: 1rem;
-    }
-
-    .send-button {
-      padding: 0.5rem 1rem;
-      background: #3b82f6;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .send-button:hover {
-      background: #2563eb;
-    }
-    .owner-access {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      z-index: 100;
-    }
-
-    .owner-button {
-      padding: 0.75rem 1.5rem;
-      background: #3b82f6;
-      color: white;
-      border: none;
-      border-radius: 0.5rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .owner-button:hover {
-      background: #2563eb;
-    }
-
-    .owner-popup {
-      display: none;
-      position: fixed;
-      bottom: 80px;
-      left: 20px;
-      background: #1e293b;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.4);
-      z-index: 101;
-    }
-
-    .owner-popup input {
-      padding: 0.5rem;
-      border-radius: 0.5rem;
-      border: none;
-      background: #0f172a;
-      color: white;
-      margin-right: 0.5rem;
-    }
-
-    .owner-popup button {
-      padding: 0.5rem 1rem;
-      background: #3b82f6;
-      border: none;
-      border-radius: 0.5rem;
-      font-weight: bold;
-      color: white;
-      cursor: pointer;
-    }
-
-    .request-notification {
-      display: none;
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      background: #1e293b;
-      padding: 1rem 1.5rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 0 10px rgba(0,0,0,0.4);
-      z-index: 102;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .add-build-btn {
-      font-size: 2rem;
-      color: white;
-      background-color: #3b82f6;
-      border: none;
-      border-radius: 50%;
-      padding: 10px;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    .add-build-btn:hover {
-      background-color: #2563eb;
-    }
-
-    .add-build-popup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #1e293b;
-      padding: 20px;
-      border-radius: 1rem;
-      width: 400px;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-      z-index: 100;
-    }
-
-    .add-build-popup h2 {
-      color: #22d3ee;
-    }
-
-    .add-build-popup input {
-      width: 100%;
-      padding: 10px;
-      background-color: #0f172a;
-      border: none;
-      color: white;
-      border-radius: 6px;
-      margin-bottom: 1rem;
-    }
-
-    .add-build-popup button {
-      padding: 10px 20px;
-      background-color: #3b82f6;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .add-build-popup button:hover {
-      background-color: #2563eb;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-    }
-    /* Popup e altri stili */
-    .popup {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      justify-content: center;
-      align-items: center;
-    }
-    .popup-content {
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      width: 80%;
-      max-width: 600px;
-    }
-    .close-popup {
-      background-color: red;
-      color: white;
-      border: none;
-      padding: 10px;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-    .chat-box {
-      max-height: 300px;
-      overflow-y: auto;
-    }
-/* Stile di base per il pop-up */
-#requestsPopup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* sfondo semi-trasparente */
-  display: none; /* Nascosto di default */
-  justify-content: center;
-  align-items: center;
-}
-
-.popup-content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 300px;
-  text-align: center;
-}
-
-button {
-  margin-top: 10px;
-  padding: 10px;
-  width: 80%;
-  font-size: 16px;
-  cursor: pointer;
-  border: none;
-  border-radius: 5px;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  opacity: 0.8;
-}
-    /* Aggiungi altri stili CSS necessari */
   </style>
 </head>
 <body>
