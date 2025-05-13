@@ -302,19 +302,16 @@
 }
 
 #ownerBtn {
-  position: fixed;
-  bottom: 10px;
-  left: 10px;
-  background-color: #4CAF50; /* Colore di sfondo verde */
+  background-color: blue;
   color: white;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
+  padding: 5px 10px;
+  font-size: 12px;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 #ownerBtn:hover {
-  background-color: #45a049; /* Colore verde scuro al passaggio del mouse */
+  background-color: darkblue;
 }
 
   </style>
@@ -433,6 +430,26 @@
   <img src="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755" alt="Deepwoken Image" />
 
   <script>
+    // Funzione per aprire il popup "Aggiungi Build"
+    document.getElementById('addBuildPVPBtn').addEventListener('click', function() {
+      document.getElementById('addBuildPopup').style.display = 'block'; // Mostra il popup
+    });
+
+    document.getElementById('addBuildPVEBtn').addEventListener('click', function() {
+      document.getElementById('addBuildPopup').style.display = 'block'; // Mostra il popup
+    });
+
+    // Funzione per chiudere il popup "Aggiungi Build"
+    document.getElementById('closeAddBuildPopup').addEventListener('click', function() {
+      document.getElementById('addBuildPopup').style.display = 'none'; // Nascondi il popup
+    });
+
+    // Funzione per gestire l'azione del tasto "Sei l'owner?"
+    document.getElementById('ownerBtn').addEventListener('click', function() {
+      document.getElementById('ownerPopup').style.display = 'block'; // Mostra il popup per la password
+    });
+
+    // Funzione per validare la password dell'owner
     function checkOwnerPassword() {
       const password = document.getElementById('ownerPassword').value;
       if (password === 'OdioINegri104') {
