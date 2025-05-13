@@ -336,7 +336,8 @@
     <button id="closeAddBuildPopup">Chiudi</button>
   </div>
 
-  <div class="owner-access">
+  <!-- Box per il tasto "Sei l'Owner?" in basso a sinistra -->
+  <div class="owner-box" style="position: fixed; bottom: 20px; left: 20px;">
     <button class="owner-button" id="ownerBtn">Sei l'owner?</button>
     <div class="owner-popup" id="ownerPopup" style="display: none;">
       <input type="password" id="ownerPassword" placeholder="Inserisci password" />
@@ -380,7 +381,9 @@
         <a href="https://deepwoken.co/builder?id=vsGFXbBx" class="build-link">SaintSworn - By Niesta</a>
         <a href="https://deepwoken.co/builder?id=e1IG5fBO" class="build-link">Imperator's Edge - By En3rgy</a>
       </div>
-      <button class="add-build-btn" id="addBuildPVPBtn" style="background-color: #4CAF50; color: white;">+</button>
+      <div class="plus-box">
+        <button class="add-build-btn" id="addBuildPVPBtn" style="background-color: #4CAF50; color: white;">+</button>
+      </div>
     </div>
 
     <div class="box">
@@ -397,7 +400,9 @@
         <a href="#" class="build-link">Tanky Spear - By Niesta</a>
         <a href="#" class="build-link">Heavy Weapon - By En3rgy</a>
       </div>
-      <button class="add-build-btn" id="addBuildPVEBtn" style="background-color: #4CAF50; color: white;">+</button>
+      <div class="plus-box">
+        <button class="add-build-btn" id="addBuildPVEBtn" style="background-color: #4CAF50; color: white;">+</button>
+      </div>
     </div>
 
     <div class="tall-box">
