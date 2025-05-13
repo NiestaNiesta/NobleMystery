@@ -316,6 +316,180 @@
 
   </style>
 </head>
+
+<body>
+  <!-- Popup per login owner -->
+  <div id="ownerLoginBox" class="popup" style="display: none;">
+    <div class="popup-content">
+      <h3>Accesso Owner</h3>
+      <input type="password" id="ownerPassword" placeholder="Inserisci password" />
+      <div style="margin-top: 10px;">
+        <button onclick="checkOwnerPassword()">Accedi</button>
+        <button onclick="closeOwnerLogin()">Chiudi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottone fisso per login Owner -->
+  <div class="owner-box" style="position: fixed; bottom: 20px; left: 20px;">
+    <button id="ownerBtn" style="font-size: 10px; padding: 6px;">Sei l'owner?</button>
+  </div>
+
+  <!-- Bottone per accedere alle richieste, visibile solo all'owner -->
+  <div id="requestManagerBtnContainer" style="display: none; text-align: center; margin-top: 20px;">
+    <button onclick="toggleRequestsPanel()" style="background-color: blue; color: white;">Gestisci Richieste</button>
+  </div>
+
+  <!-- Pannello richieste visibile solo all'owner -->
+  <div id="requestsPanel" class="popup" style="display: none;">
+    <div class="popup-content">
+      <h3>Richieste Ricevute</h3>
+      <ul id="requestList"></ul>
+      <button onclick="closeRequestsPanel()">Chiudi</button>
+    </div>
+  </div>
+
+  <!-- Popup Aggiungi Build -->
+  <div class="add-build-popup" id="addBuildPopup" style="display: none;">
+    <h2>Aggiungi Build</h2>
+    <input type="text" id="buildLinkInput" placeholder="Inserisci il link della build" />
+    <button onclick="submitBuild()">Invia richiesta</button>
+    <button onclick="closeAddBuildPopup()">Chiudi</button>
+  </div>
+
+  <!-- Sezione PVP + tasto + -->
+  <div class="box">
+    <h2>PVP</h2>
+    <div class="plus-box">
+      <button class="add-build-btn" onclick="openAddBuildPopup()" style="background-color: #4CAF50; color: white;">+</button>
+    </div>
+  </div>
+
+  <!-- Stili base -->
+  <style>
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      z-index: 1000;
+      border-radius: 10px;
+    }
+    .popup-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .popup-content input {
+      margin-bottom: 10px;
+    }
+    .popup-content button {
+      margin: 5px;
+    }
+    .add-build-btn {
+      font-size: 20px;
+      padding: 5px 10px;
+    }
+    .owner-box {
+      z-index: 1001;
+    }
+  </style>
+
+  <!-- Script -->
+  <script>
+    let isOwner = false;
+    let requests = [];
+
+    // Mostra popup login owner
+    document.getElementById('ownerBtn').addEventListener('click', () => {
+      document.getElementById('ownerLoginBox').style.display = 'block';
+    });
+
+    function closeOwnerLogin() {
+      document.getElementById('ownerLoginBox').style.display = 'none';
+    }
+
+    function checkOwnerPassword() {
+      const password = document.getElementById('ownerPassword').value;
+      if (password === 'OdioINegri104') {
+        isOwner = true;
+        alert('Accesso consentito.');
+        document.getElementById('ownerLoginBox').style.display = 'none';
+        document.getElementById('requestManagerBtnContainer').style.display = 'block';
+      } else {
+        alert('Password errata.');
+      }
+    }
+
+    // Apre/Chiude pannello richieste
+    function toggleRequestsPanel() {
+      const panel = document.getElementById('requestsPanel');
+      panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+      renderRequests();
+    }
+
+    function closeRequestsPanel() {
+      document.getElementById('requestsPanel').style.display = 'none';
+    }
+
+    // Apre popup per inserire nuova build
+    function openAddBuildPopup() {
+      document.getElementById('addBuildPopup').style.display = 'block';
+    }
+
+    function closeAddBuildPopup() {
+      document.getElementById('addBuildPopup').style.display = 'none';
+    }
+
+    // Aggiunge richiesta
+    function submitBuild() {
+      const link = document.getElementById('buildLinkInput').value.trim();
+      if (link !== '') {
+        requests.push(link);
+        alert('Richiesta inviata!');
+        document.getElementById('buildLinkInput').value = '';
+        closeAddBuildPopup();
+      }
+    }
+
+    // Visualizza richieste nel pannello
+    function renderRequests() {
+      const list = document.getElementById('requestList');
+      list.innerHTML = '';
+      if (requests.length === 0) {
+        list.innerHTML = '<li>Nessuna richiesta.</li>';
+        return;
+      }
+      requests.forEach((link, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          ${link}
+          <button onclick="copyRequest(${index})">Copia</button>
+          <button onclick="deleteRequest(${index})" style="background-color: red; color: white;">Elimina</button>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    // Elimina richiesta
+    function deleteRequest(index) {
+      requests.splice(index, 1);
+      renderRequests();
+    }
+
+    // Copia richiesta negli appunti
+    function copyRequest(index) {
+      navigator.clipboard.writeText(requests[index]).then(() => {
+        alert('Link copiato!');
+      });
+    }
+  </script>
+</body>
+
+
 <body>
 
   <!-- Moduli Popup e altre sezioni -->
