@@ -289,6 +289,34 @@
       z-index: 50;
     }
 
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  display: none; /* Popup nascosti inizialmente */
+}
+
+#ownerBtn {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  background-color: #4CAF50; /* Colore di sfondo verde */
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+#ownerBtn:hover {
+  background-color: #45a049; /* Colore verde scuro al passaggio del mouse */
+}
+
   </style>
 </head>
 <body>
@@ -299,12 +327,12 @@
       <h2>Dettagli Richiesta</h2>
       <p id="requestContent">Contenuto della richiesta...</p>
       <button id="closeRequestPopup" class="close-popup">Chiudi</button>
-      <button id="deleteRequestBtn" class="close-popup">Cancella richiesta</button>
-      <button id="copyRequestBtn" class="close-popup">Copia richiesta</button>
+      <button id="deleteRequestBtnPopup" class="close-popup" style="background-color: red; color: white;">Cancella richiesta</button>
+      <button id="copyRequestBtnPopup" class="close-popup" style="background-color: #4CAF50; color: white;">Copia richiesta</button>
     </div>
   </div>
 
-  <div class="add-build-popup" id="addBuildPopup">
+  <div class="add-build-popup" id="addBuildPopup" style="display: none;">
     <h2>Aggiungi Build</h2>
     <input type="text" id="buildLinkInput" placeholder="Inserisci il link della build" />
     <button id="submitBuildBtn">Invia richiesta</button>
@@ -313,9 +341,9 @@
 
   <div class="owner-access">
     <button class="owner-button" id="ownerBtn">Sei l'owner?</button>
-    <div class="owner-popup" id="ownerPopup">
+    <div class="owner-popup" id="ownerPopup" style="display: none;">
       <input type="password" id="ownerPassword" placeholder="Inserisci password" />
-      <button onclick="checkOwnerPassword()">Accedi</button>
+      <button id="submitPasswordBtn" onclick="checkOwnerPassword()">Accedi</button>
     </div>
   </div>
 
@@ -325,7 +353,7 @@
 
   <a href="javascript:void(0);" class="ia-builder-btn" id="iaBuilderBtn">IA Builder</a>
 
-  <div id="popup" class="popup">
+  <div id="popup" class="popup" style="display: none;">
     <div class="popup-content">
       <h2>Chat con IA</h2>
       <div class="chat-box" id="chatBox"></div>
@@ -355,7 +383,7 @@
         <a href="https://deepwoken.co/builder?id=vsGFXbBx" class="build-link">SaintSworn - By Niesta</a>
         <a href="https://deepwoken.co/builder?id=e1IG5fBO" class="build-link">Imperator's Edge - By En3rgy</a>
       </div>
-      <button class="add-build-btn" id="addBuildPVPBtn">+</button>
+      <button class="add-build-btn" id="addBuildPVPBtn" style="background-color: #4CAF50; color: white;">+</button>
     </div>
 
     <div class="box">
@@ -372,7 +400,7 @@
         <a href="#" class="build-link">Tanky Spear - By Niesta</a>
         <a href="#" class="build-link">Heavy Weapon - By En3rgy</a>
       </div>
-      <button class="add-build-btn" id="addBuildPVEBtn">+</button>
+      <button class="add-build-btn" id="addBuildPVEBtn" style="background-color: #4CAF50; color: white;">+</button>
     </div>
 
     <div class="tall-box">
@@ -391,18 +419,32 @@
   </div>
 
   <!-- Popup per visualizzare e gestire le richieste -->
-  <div id="requestsPopup" class="popup" style="display:none;">
+  <div id="requestsPopup" class="popup" style="display: none;">
     <div class="popup-content">
       <div id="requestContent">
         <!-- Il contenuto della richiesta sarà dinamico -->
       </div>
-      <button id="copyRequestBtn" style="background-color: #4CAF50; color: white;">Copia Link</button>
-      <button id="deleteRequestBtn" style="background-color: red; color: white;">Cancella</button>
+      <button id="copyRequestBtnPopup" style="background-color: #4CAF50; color: white;">Copia Link</button>
+      <button id="deleteRequestBtnPopup" style="background-color: red; color: white;">Cancella</button>
       <button id="closeRequestPopup" style="background-color: gray; color: white;">Chiudi</button>
     </div>
   </div>
 
   <img src="https://static.wikia.nocookie.net/6a8a753d-275a-460b-bf7c-2772291b8913/scale-to-width/755" alt="Deepwoken Image" />
+
+  <script>
+    function checkOwnerPassword() {
+      const password = document.getElementById('ownerPassword').value;
+      if (password === 'OdioINegri104') {
+        alert('Accesso owner effettuato con successo.');
+        document.getElementById('ownerPopup').style.display = 'none';
+      } else {
+        alert('Password errata!');
+      }
+    }
+  </script>
+
+</body>
 
 <!-- JS Script -->
 <script>
