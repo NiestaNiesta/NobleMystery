@@ -23,28 +23,31 @@
       background: rgba(255, 255, 255, 0.05);
       padding: 20px; border-radius: 15px;
       text-align: center; cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      opacity: 0; display: flex; flex-direction: column;
-      align-items: center; justify-content: flex-start;
+      transition: transform 0.3s ease;
+      opacity: 0;
+      display: flex; flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
     }
     .game-box img { max-width: 100%; border-radius: 10px; margin-top: 10px; }
     .game-box h3 { margin-bottom: 10px; font-size: 1.2rem; }
-    .game-box:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px rgba(255,255,255,0.1);
-    }
-    /* Rimuove la sottolineatura e forza il colore bianco su tutti gli stati link */
-    a:link, a:visited, a:hover, a:active {
-      text-decoration: none;
-      color: inherit;
-    }
+    .game-box:hover { transform: scale(1.05); }
+    .game-box a { color: white; text-decoration: none; display: block; width: 100%; height: 100%; }
+
     .game-description { display: none; text-align: center; margin-top: 30px; }
+
     .back-button {
       display: none; position: fixed; top: 20px; left: 20px;
       background: #222; color: white;
       padding: 10px 16px; border-radius: 8px;
       cursor: pointer; z-index: 100;
     }
+
+    a.game-box {
+      color: white !important;
+      text-decoration: none !important;
+    }
+
     @keyframes fromBottom { 0% { opacity: 0; transform: translateY(100px);} 100% { opacity: 1; transform: translateY(0);} }
     @keyframes fromTop    { 0% { opacity: 0; transform: translateY(-100px);} 100% { opacity: 1; transform: translateY(0);} }
     @keyframes toBottom   { 0% { opacity: 1; transform: translateY(0);} 100% { opacity: 0; transform: translateY(100px);} }
@@ -54,6 +57,7 @@
     .disappear-bottom { animation: toBottom 0.6s ease-out forwards; }
     .disappear-top    { animation: toTop    0.6s ease-out forwards; }
     .hidden { display: none; }
+
     /* Builds Detail */
     .search-filter { width: 100%; margin-bottom: 10px; display: flex; gap: 10px; }
     .search-filter input, .search-filter select { flex: 1; padding: 8px; border-radius: 5px; border: none; }
@@ -62,15 +66,21 @@
   </style>
 </head>
 <body>
-  <!-- Audio hover: UI hover item by steaq (Creative Commons 0) :contentReference[oaicite:0]{index=0} -->
-  <audio id="hover-sound" src="https://freesound.org/data/previews/757/757328_13999206-lq.mp3"></audio>
-
   <div class="container">
     <!-- Main Boxes -->
     <div class="grid" id="main-boxes">
-      <div class="game-box appear-bottom" id="deepwoken-box"><h3>Deepwoken</h3><img src="https://tr.rbxcdn.com/180DAY-6d62538593d51c52f053b3f1abd74dfb/768/432/Image/Webp/noFilter" alt="Deepwoken"></div>
-      <div class="game-box appear-top" id="mountfall-box"><h3>Mountfall</h3><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfjr8NhdAS8G37ivyWMa7MBUAI8jv-OCzd7_6uMVttuH4CGNNxSBXOcWFw-yc_8aiCfrc&usqp=CAU" alt="Mountfall"></div>
-      <div class="game-box appear-bottom" id="altri-box"><h3>Altri</h3><img src="https://www.example.com/other.jpg" alt="Altri"></div>
+      <div class="game-box appear-bottom" id="deepwoken-box">
+        <h3>Deepwoken</h3>
+        <img src="https://tr.rbxcdn.com/180DAY-6d62538593d51c52f053b3f1abd74dfb/768/432/Image/Webp/noFilter" alt="Deepwoken">
+      </div>
+      <div class="game-box appear-top" id="mountfall-box">
+        <h3>Mountfall</h3>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfjr8NhdAS8G37ivyWMa7MBUAI8jv-OCzd7_6uMVttuH4CGNNxSBXOcWFw-yc_8aiCfrc&usqp=CAU" alt="Mountfall">
+      </div>
+      <div class="game-box appear-bottom" id="altri-box">
+        <h3>Altri</h3>
+        <img src="https://www.example.com/other.jpg" alt="Altri">
+      </div>
     </div>
 
     <!-- Secondary Boxes -->
@@ -83,6 +93,7 @@
 
     <!-- Builds Detail: PvP and PvE -->
     <div class="grid hidden" id="builds-detail">
+      <!-- PvP Box -->
       <div class="game-box appear-bottom" id="pvp-box">
         <h3>PvP Builds</h3>
         <div class="search-filter">
@@ -100,6 +111,7 @@
           <li data-creator="Silent">Build Tank - By Silent</li>
         </ul>
       </div>
+      <!-- PvE Box -->
       <div class="game-box appear-bottom" id="pve-box">
         <h3>PvE Builds</h3>
         <div class="search-filter">
@@ -128,26 +140,39 @@
 
   <div class="back-button" id="back-button">&lt; Indietro</div>
 
+  <!-- SUONI -->
+  <audio id="hover-sound" src="sounds/DeepSelect.mp3" preload="auto"></audio>
+  <audio id="click-sound" src="sounds/DeepClick.mp3" preload="auto"></audio>
+
   <script>
-    const hoverSound = document.getElementById('hover-sound');
-    document.querySelectorAll('.game-box').forEach(box => {
-      box.addEventListener('mouseenter', () => {
+    const deepwokenBox = document.getElementById("deepwoken-box");
+    const mountfallBox = document.getElementById("mountfall-box");
+    const altriBox = document.getElementById("altri-box");
+    const mainBoxes = document.getElementById("main-boxes");
+    const extraBoxes = document.getElementById("deepwoken-extra");
+    const buildsDetail = document.getElementById("builds-detail");
+    const gameDesc = document.getElementById("game-description");
+    const backBtn = document.getElementById("back-button");
+    const buildsBox = document.getElementById("builds-box");
+
+    const hoverSound = document.getElementById("hover-sound");
+    const clickSound = document.getElementById("click-sound");
+
+    let state = 'main';
+
+    // Suoni su hover e click
+    document.querySelectorAll(".game-box").forEach(box => {
+      box.addEventListener("mouseenter", () => {
         hoverSound.currentTime = 0;
         hoverSound.play();
       });
+      box.addEventListener("click", () => {
+        clickSound.currentTime = 0;
+        clickSound.play();
+      });
     });
 
-    const deepwokenBox = document.getElementById("deepwoken-box");
-    const mountfallBox = document.getElementById("mountfall-box");
-    const altriBox     = document.getElementById("altri-box");
-    const mainBoxes    = document.getElementById("main-boxes");
-    const extraBoxes   = document.getElementById("deepwoken-extra");
-    const buildsDetail = document.getElementById("builds-detail");
-    const gameDesc     = document.getElementById("game-description");
-    const backBtn      = document.getElementById("back-button");
-    const buildsBox    = document.getElementById("builds-box");
-    let state = 'main';
-
+    // Click su Deepwoken => mostra secondary
     deepwokenBox.addEventListener("click", () => {
       deepwokenBox.classList.replace("appear-bottom","disappear-bottom");
       mountfallBox.classList.replace("appear-top","disappear-top");
@@ -157,38 +182,19 @@
         extraBoxes.classList.remove("hidden");
         gameDesc.classList.remove("hidden");
         backBtn.style.display = "block";
-        buildsBox.classList.replace("disappear-bottom","appear-bottom");
+        [buildsBox].forEach(b => b.classList.replace("disappear-bottom","appear-bottom"));
         state = 'secondary';
       }, 600);
     });
 
+    // Click su Builds => mostra buildsDetail
     buildsBox.addEventListener("click", () => {
       extraBoxes.classList.add("hidden");
       buildsDetail.classList.remove("hidden");
       state = 'builds';
-
-      function filterBuilds(searchId, filterId, listId) {
-        const searchInput = document.getElementById(searchId);
-        const filterSelect = document.getElementById(filterId);
-        const list = document.getElementById(listId);
-        const items = list.getElementsByTagName('li');
-        function filter() {
-          const term = searchInput.value.toLowerCase();
-          const creator = filterSelect.value;
-          Array.from(items).forEach(li => {
-            const text = li.textContent.toLowerCase();
-            const matchSearch = text.includes(term);
-            const matchFilter = creator === 'all' || li.dataset.creator === creator;
-            li.style.display = (matchSearch && matchFilter) ? '' : 'none';
-          });
-        }
-        searchInput.addEventListener('input', filter);
-        filterSelect.addEventListener('change', filter);
-      }
-      filterBuilds('pvp-search','pvp-filter','pvp-list');
-      filterBuilds('pve-search','pve-filter','pve-list');
     });
 
+    // Torna indietro
     backBtn.addEventListener("click", () => {
       if (state === 'builds') {
         buildsDetail.classList.add("hidden");
@@ -205,6 +211,30 @@
         state = 'main';
       }
     });
+
+    // Filtri
+    function setupFilter(searchId, filterId, listId) {
+      const searchInput = document.getElementById(searchId);
+      const filterSelect = document.getElementById(filterId);
+      const list = document.getElementById(listId);
+
+      function filterList() {
+        const search = searchInput.value.toLowerCase();
+        const creator = filterSelect.value;
+
+        Array.from(list.children).forEach(li => {
+          const matchesSearch = li.textContent.toLowerCase().includes(search);
+          const matchesCreator = creator === 'all' || li.dataset.creator === creator;
+          li.style.display = matchesSearch && matchesCreator ? '' : 'none';
+        });
+      }
+
+      searchInput.addEventListener("input", filterList);
+      filterSelect.addEventListener("change", filterList);
+    }
+
+    setupFilter("pvp-search", "pvp-filter", "pvp-list");
+    setupFilter("pve-search", "pve-filter", "pve-list");
   </script>
 </body>
 </html>
