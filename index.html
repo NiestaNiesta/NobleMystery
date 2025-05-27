@@ -2,19 +2,50 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Noble Mistery</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', sans-serif; background-color: #0f0f0f; color: #fff; height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: center; }
-    .container { width: 90%; max-width: 1200px; position: relative; }
-    .grid { display: flex; justify-content: space-around; gap: 20px; margin-top: 40px; }
-    .game-box { width: 30%; min-width: 250px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; text-align: center; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; opacity: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0f0f0f;
+      color: #fff;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-image 0.5s ease;
+      background-size: cover;
+      background-position: center;
+    }
+    body.deepwoken-background {
+      background-image: url('images/sfondo.jpg');
+    }
+    .container { width: 90%; max-width: 1200px; }
+    .grid { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; margin-top: 40px; }
+    .game-box {
+      width: 30%; min-width: 250px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px; border-radius: 15px;
+      text-align: center; cursor: pointer;
+      transition: transform 0.3s ease;
+      opacity: 0;
+      display: flex; flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
     .game-box img { max-width: 100%; border-radius: 10px; margin-top: 10px; }
     .game-box h3 { margin-bottom: 10px; font-size: 1.2rem; }
-    .game-box:not(.pvp-box):not(.pve-box):hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,255,255,0.1); }
+    .game-box:hover { transform: scale(1.05); }
     .game-box a { color: white; text-decoration: none; display: block; width: 100%; height: 100%; }
-    .back-button { display: none; position: fixed; top: 20px; left: 20px; background: #222; color: white; padding: 10px 16px; border-radius: 8px; cursor: pointer; z-index: 200; }
+    .game-description { display: none; text-align: center; margin-top: 30px; }
+    .back-button {
+      display: none; position: fixed; top: 20px; left: 20px;
+      background: #222; color: white;
+      padding: 10px 16px; border-radius: 8px;
+      cursor: pointer; z-index: 100;
+    }
     @keyframes fromBottom { 0% { opacity: 0; transform: translateY(100px);} 100% { opacity: 1; transform: translateY(0);} }
     @keyframes fromTop    { 0% { opacity: 0; transform: translateY(-100px);} 100% { opacity: 1; transform: translateY(0);} }
     @keyframes toBottom   { 0% { opacity: 1; transform: translateY(0);} 100% { opacity: 0; transform: translateY(100px);} }
@@ -23,141 +54,302 @@
     .appear-top    { animation: fromTop    0.6s ease-out forwards; }
     .disappear-bottom { animation: toBottom 0.6s ease-out forwards; }
     .disappear-top    { animation: toTop    0.6s ease-out forwards; }
-    .hidden { display: none !important; }
-    #deepwoken-extra { display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; }
-    #deepwoken-extra .game-box { width: 150px; height: 100px; opacity: 1; position: absolute; pointer-events: auto; }
-    #builds-box { left: 10px; top: 50%; transform: translateY(-50%); }
-    #fandom-box { left: 50%; top: 10px; transform: translateX(-50%); }
-    #builder-box { right: 10px; top: 50%; transform: translateY(-50%); }
-    #spell-box { left: 50%; bottom: 10px; transform: translateX(-50%); }
+    .hidden { display: none; }
+
+    /* Builds Detail */
     .search-filter { width: 100%; margin-bottom: 10px; display: flex; gap: 10px; }
     .search-filter input, .search-filter select { flex: 1; padding: 8px; border-radius: 5px; border: none; }
     .build-list { list-style: none; width: 100%; padding: 0; }
     .build-list li { background: rgba(255,255,255,0.1); margin-bottom: 8px; padding: 8px; border-radius: 5px; text-align: left; }
+
+    /* Secondary Boxes positioning */
+    #deepwoken-extra {
+      position: relative;
+      height: 400px; /* spazio per posizionare i box */
+      margin-top: 20px;
+    }
+    #builds-box {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 150px;
+      background: rgba(255,255,255,0.1);
+      cursor: pointer;
+    }
+    #fandom-box {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 150px;
+      background: rgba(255,255,255,0.1);
+      text-align: center;
+      line-height: normal;
+    }
+    #builder-box {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 150px;
+      background: rgba(255,255,255,0.1);
+      text-align: center;
+      line-height: normal;
+    }
+    #spell-box {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 150px;
+      background: rgba(255,255,255,0.1);
+      text-align: center;
+      line-height: normal;
+    }
   </style>
 </head>
 <body>
-  <audio id="hoverSound" src="sounds/DeepSelect.mp3" preload="auto"></audio>
-  <audio id="clickSound" src="sounds/DeepClick.mp3" preload="auto"></audio>
-
   <div class="container">
+    <!-- Main Boxes -->
     <div class="grid" id="main-boxes">
-      <div class="game-box appear-bottom" id="deepwoken-box"><h3>Deepwoken</h3><img src="https://tr.rbxcdn.com/180DAY-6d62538593d51c52f053b3f1abd74dfb/768/432/Image/Webp/noFilter" alt="Deepwoken"></div>
-      <div class="game-box appear-top pvp-box" id="mountfall-box"><h3>Mountfall</h3><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfjr8NhdAS8G37ivyWMa7MBUAI8jv-OCzd7_6uMVttuH4CGNNxSBXOcWFw-yc_8aiCfrc&usqp=CAU" alt="Mountfall"></div>
-      <div class="game-box appear-bottom pve-box" id="altri-box"><h3>Altri</h3><img src="https://www.example.com/other.jpg" alt="Altri"></div>
+      <div class="game-box appear-bottom" id="deepwoken-box" tabindex="0">
+        <h3>Deepwoken</h3>
+        <img src="https://tr.rbxcdn.com/180DAY-6d62538593d51c52f053b3f1abd74dfb/768/432/Image/Webp/noFilter" alt="Deepwoken">
+      </div>
+      <div class="game-box appear-top" id="mountfall-box" tabindex="0">
+        <h3>Mountfall</h3>
+        <img src="https://www.example.com/mountfall.jpg" alt="Mountfall">
+      </div>
+      <div class="game-box appear-bottom" id="altri-box" tabindex="0">
+        <h3>Altri</h3>
+        <img src="https://www.example.com/other.jpg" alt="Altri">
+      </div>
     </div>
 
-    <div id="deepwoken-extra">
-      <div class="game-box" id="builds-box">Builds</div>
-      <a href="https://deepwoken.fandom.com/wiki/Deepwoken_Wiki" target="_blank"><div class="game-box" id="fandom-box">Fandom</div></a>
-      <a href="https://deepwoken-builder.vercel.app/" target="_blank"><div class="game-box" id="builder-box">Builder Creator</div></a>
-      <a href="https://docs.google.com/spreadsheets/d/1IE3KIyizxEgHfTsasO0hCGvch6yNofdgNlRR__jA7jo/edit?gid=0#gid=0" target="_blank"><div class="game-box" id="spell-box">Spell Modifier</div></a>
+    <!-- Secondary Boxes -->
+    <div class="grid hidden" id="deepwoken-extra">
+      <div class="game-box appear-bottom" id="builds-box" tabindex="0">Builds</div>
+      <a href="https://deepwoken-builder.vercel.app/" target="_blank" class="game-box appear-bottom" id="builder-box" tabindex="0">Builder Creator</a>
+      <a href="https://docs.google.com/spreadsheets/d/1IE3KIyizxEgHfTsasO0hCGvch6yNofdgNlRR__jA7jo/edit?gid=0#gid=0" target="_blank" class="game-box appear-bottom" id="spell-box" tabindex="0">Spell Modifier</a>
+      <a href="https://deepwoken.fandom.com/wiki/Deepwoken_Wiki" target="_blank" class="game-box appear-bottom" id="fandom-box" tabindex="0">Fandom</a>
     </div>
 
+    <!-- Builds Detail: PvP and PvE -->
     <div class="grid hidden" id="builds-detail">
-      <div class="game-box appear-bottom pvp-box" id="pvp-box">
+      <!-- PvP Box -->
+      <div class="game-box appear-bottom" id="pvp-box">
         <h3>PvP Builds</h3>
-        <div class="search-filter"><input type="text" id="pvp-search" placeholder="Cerca PvP..."><select id="pvp-filter"><option value="all">all</option><option value="Niesta">Niesta</option><option value="Energy">Energy</option><option value="Silent">Silent</option></select></div>
+        <div class="search-filter">
+          <input type="text" id="pvp-search" placeholder="Cerca PvP...">
+          <select id="pvp-filter">
+            <option value="all">Tutti</option>
+            <option value="Niesta">Niesta</option>
+            <option value="Energy">Energy</option>
+            <option value="Silent">Silent</option>
+          </select>
+        </div>
         <ul class="build-list" id="pvp-list">
-          <li data-creator="Niesta"><a href="https://deepwoken.co/builder?id=5eewYqRs" target="_blank">DepthsGankFlame - By Niesta</a></li>
-          <li data-creator="Energy"><a href="#">Build Hero SHW - By Energy</a></li>
-          <li data-creator="Silent"><a href="#">Build Tank - By Silent</a></li>
+          <li><a href="https://deepwoken.co/builder?id=JTZ7Zllk" target="_blank" class="build-link">DepthsGankFlame - By Niesta</a></li>
+          <li><a href="https://deepwoken.co/builder?id=xyzExample" target="_blank" class="build-link">Build Hero SHW - By Energy</a></li>
+          <li><a href="https://deepwoken.co/builder?id=xyzAnother" target="_blank" class="build-link">Build Tank - By Silent</a></li>
         </ul>
       </div>
-      <div class="game-box appear-bottom pve-box" id="pve-box">
+      <!-- PvE Box -->
+      <div class="game-box appear-bottom" id="pve-box">
         <h3>PvE Builds</h3>
-        <div class="search-filter"><input type="text" id="pve-search" placeholder="Cerca PvE..."><select id="pve-filter"><option value="all">all</option><option value="Niesta">Niesta</option><option value="Energy">Energy</option><option value="Silent">Silent</option></select></div>
+        <div class="search-filter">
+          <input type="text" id="pve-search" placeholder="Cerca PvE...">
+          <select id="pve-filter">
+            <option value="all">Tutti</option>
+            <option value="Niesta">Niesta</option>
+            <option value="Energy">Energy</option>
+            <option value="Silent">Silent</option>
+          </select>
+        </div>
         <ul class="build-list" id="pve-list">
-          <li data-creator="Niesta"><a href="#">Build Guardian Shield - By Niesta</a></li>
-          <li data-creator="Energy"><a href="#">Build Mystic Sage - By Energy</a></li>
-          <li data-creator="Silent"><a href="#">Build Sentinel - By Silent</a></li>
+          <li><a href="https://deepwoken.co/builder?id=xyzExample" target="_blank" class="build-link">Build Guardian Shield - By Niesta</a></li>
+          <li><a href="https://deepwoken.co/builder?id=xyzEnergy" target="_blank" class="build-link">Build Mystic Sage - By Energy</a></li>
+          <li><a href="https://deepwoken.co/builder?id=xyzSilent" target="_blank" class="build-link">Build Sentinel - By Silent</a></li>
         </ul>
       </div>
     </div>
 
-    <div class="game-description hidden" id="game-description"><h2>Deepwoken</h2><p>Un gioco profondo e impegnativo in cui ogni scelta conta.</p></div>
+    <!-- Description -->
+    <div class="game-description hidden" id="game-description">
+      <h2>Deepwoken</h2>
+      <p>Un gioco profondo e impegnativo in cui ogni scelta conta.</p>
+    </div>
   </div>
 
   <div class="back-button" id="back-button">&lt; Indietro</div>
+
   <script>
-    const hoverSound = document.getElementById('hoverSound');
-    const clickSound = document.getElementById('clickSound');
-    const deepwokenBox = document.getElementById('deepwoken-box');
-    const buildsExtra = document.getElementById('deepwoken-extra');
-    const buildsDetail = document.getElementById('builds-detail');
-    const buildsBox = document.getElementById('builds-box');
-    const backBtn = document.getElementById('back-button');
-    const mountfallBox = document.getElementById('mountfall-box');
-    const altriBox = document.getElementById('altri-box');
+    const deepwokenBox = document.getElementById("deepwoken-box");
+    const mountfallBox = document.getElementById("mountfall-box");
+    const altriBox = document.getElementById("altri-box");
+    const mainBoxes = document.getElementById("main-boxes");
+    const extraBoxes = document.getElementById("deepwoken-extra");
+    const buildsDetail = document.getElementById("builds-detail");
+    const gameDesc = document.getElementById("game-description");
+    const backBtn = document.getElementById("back-button");
+    const buildsBox = document.getElementById("builds-box");
+    const body = document.body;
     let state = 'main';
 
-    // play sounds for all boxes except PvP/PvE containers
-    document.querySelectorAll('.game-box:not(.pvp-box):not(.pve-box)').forEach(box => {
-      box.addEventListener('mouseenter', () => { hoverSound.currentTime = 0; hoverSound.play(); });
-      box.addEventListener('click', () => { clickSound.currentTime = 0; clickSound.play(); });
-    });
+    // Audio setup
+    const selectAudio = new Audio('sounds/DeepSelect.mp3');
+    const clickAudio = new Audio('sounds/DeepClick.mp3');
 
-    // Deepwoken click
-    deepwokenBox.addEventListener('click', () => {
-      deepwokenBox.classList.replace('appear-bottom','disappear-bottom');
-      mountfallBox.classList.replace('appear-top','disappear-top');
-      altriBox.classList.replace('appear-bottom','disappear-bottom');
+    // Helper function to play select sound
+    function playSelectSound() {
+      selectAudio.currentTime = 0;
+      selectAudio.play();
+    }
+    // Helper function to play click sound
+    function playClickSound() {
+      clickAudio.currentTime = 0;
+      clickAudio.play();
+    }
+
+    // --- MAIN BOXES ---
+
+    // Deepwoken box click
+    deepwokenBox.addEventListener("click", () => {
+      playClickSound();
+      // Animate disappearance of main boxes
+      deepwokenBox.classList.replace("appear-bottom","disappear-bottom");
+      mountfallBox.classList.replace("appear-top","disappear-top");
+      altriBox.classList.replace("appear-bottom","disappear-bottom");
       setTimeout(() => {
-        document.getElementById('main-boxes').classList.add('hidden');
-        buildsExtra.style.display = 'block';
-        backBtn.style.display = 'block';
-        state = 'secondary';
+        mainBoxes.classList.add("hidden");
+        extraBoxes.classList.remove("hidden");
+        gameDesc.classList.remove("hidden");
+        backBtn.style.display = "block";
+        [buildsBox].forEach(b => b.classList.replace("disappear-bottom","appear-bottom"));
+        // Add deepwoken background on body
+        body.classList.add("deepwoken-background");
+        state = 'deepwoken-extra';
       }, 600);
     });
 
-    // Builds click
-    buildsBox.addEventListener('click', () => {
-      buildsExtra.style.display = 'none';
-      buildsDetail.classList.remove('hidden');
-      // setup filters
-      function setupFilter(searchId, filterId, listId) {
-        const input = document.getElementById(searchId);
-        const select = document.getElementById(filterId);
-        const list = document.getElementById(listId);
-        input.addEventListener('input', filter);
-        select.addEventListener('change', filter);
-        function filter() {
-          const term = input.value.toLowerCase();
-          const creator = select.value;
-          Array.from(list.children).forEach(li => {
-            const text = li.textContent.toLowerCase();
-            const matchSearch = text.includes(term);
-            const matchFilter = creator === 'all' || li.dataset.creator === creator;
-            li.style.display = (matchSearch && matchFilter) ? '' : 'none';
-          });
-        }
-      }
-      setupFilter('pvp-search','pvp-filter','pvp-list');
-      setupFilter('pve-search','pve-filter','pve-list');
-      // add build sounds
-      document.querySelectorAll('.build-list a').forEach(link => {
-        link.addEventListener('mouseenter', () => { hoverSound.currentTime=0; hoverSound.play(); });
-        link.addEventListener('click', () => { clickSound.currentTime=0; clickSound.play(); });
-      });
-      state = 'builds';
+    // Mountfall and Altri just simple placeholder alert on click (can be customized)
+    mountfallBox.addEventListener("click", () => {
+      alert("Mountfall box clicked!");
+    });
+    altriBox.addEventListener("click", () => {
+      alert("Altri box clicked!");
     });
 
-    // Back button
-    backBtn.addEventListener('click', () => {
-      if (state === 'builds') {
-        buildsDetail.classList.add('hidden');
-        buildsExtra.style.display = 'block';
-        state = 'secondary';
-      } else if (state === 'secondary') {
-        backBtn.style.display = 'none';
-        buildsExtra.style.display = 'none';
-        document.getElementById('main-boxes').classList.remove('hidden');
-        deepwokenBox.classList.replace('disappear-bottom','appear-bottom');
-        mountfallBox.classList.replace('disappear-top','appear-top');
-        altriBox.classList.replace('disappear-bottom','appear-bottom');
+    // Back button logic
+    backBtn.addEventListener("click", () => {
+      if(state === 'deepwoken-extra') {
+        // Hide extras, show main boxes
+        extraBoxes.classList.add("hidden");
+        gameDesc.classList.add("hidden");
+        backBtn.style.display = "none";
+
+        // Remove background
+        body.classList.remove("deepwoken-background");
+
+        // Animate main boxes in
+        mainBoxes.classList.remove("hidden");
+        deepwokenBox.classList.replace("disappear-bottom","appear-bottom");
+        mountfallBox.classList.replace("disappear-top","appear-top");
+        altriBox.classList.replace("disappear-bottom","appear-bottom");
         state = 'main';
       }
+      else if(state === 'builds-detail') {
+        buildsDetail.classList.add("hidden");
+        extraBoxes.classList.remove("hidden");
+        gameDesc.classList.remove("hidden");
+        backBtn.style.display = "block";
+        state = 'deepwoken-extra';
+      }
     });
+
+    // Builds box click - shows builds detail
+    buildsBox.addEventListener("click", () => {
+      playClickSound();
+      extraBoxes.classList.add("hidden");
+      gameDesc.classList.add("hidden");
+      buildsDetail.classList.remove("hidden");
+      backBtn.style.display = "block";
+      state = 'builds-detail';
+    });
+
+    // FILTERS LOGIC for PvP and PvE builds (without sounds)
+    function filterBuilds(searchInputId, filterSelectId, listId) {
+      const searchInput = document.getElementById(searchInputId);
+      const filterSelect = document.getElementById(filterSelectId);
+      const list = document.getElementById(listId);
+      const items = list.getElementsByTagName('li');
+
+      function filter() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const filterValue = filterSelect.value.toLowerCase();
+
+        for(let item of items) {
+          const text = item.textContent.toLowerCase();
+          const authorMatch = filterValue === 'all' || text.includes(filterValue);
+          const searchMatch = text.includes(searchTerm);
+          item.style.display = (authorMatch && searchMatch) ? '' : 'none';
+        }
+      }
+
+      searchInput.addEventListener('input', filter);
+      filterSelect.addEventListener('change', filter);
+    }
+
+    filterBuilds('pvp-search', 'pvp-filter', 'pvp-list');
+    filterBuilds('pve-search', 'pve-filter', 'pve-list');
+
+    // --- SOUNDS AND ANIMATIONS for Secondary Boxes except PvP and PvE ---
+
+    // Boxes with sounds & scale animation on hover/click (except PvP and PvE)
+    const soundBoxes = [deepwokenBox, buildsBox];
+    // Builder, Spell, Fandom links have hover effect with sounds
+    const builderBox = document.getElementById("builder-box");
+    const spellBox = document.getElementById("spell-box");
+    const fandomBox = document.getElementById("fandom-box");
+    soundBoxes.push(builderBox, spellBox, fandomBox);
+
+    soundBoxes.forEach(box => {
+      box.addEventListener("mouseenter", () => {
+        playSelectSound();
+        box.style.transform = "scale(1.05)";
+      });
+      box.addEventListener("mouseleave", () => {
+        box.style.transform = "";
+      });
+      box.addEventListener("click", () => {
+        playClickSound();
+      });
+    });
+
+    // Add sounds to builds inside PvP and PvE build lists (links)
+    // But PvP and PvE boxes themselves no sound, only the builds inside them
+
+    // Add sounds on click and hover for all build links inside PvP and PvE lists
+    function addSoundToBuildLinks(listId) {
+      const list = document.getElementById(listId);
+      const links = list.querySelectorAll('a.build-link');
+      links.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+          playSelectSound();
+          link.style.transform = "scale(1.05)";
+        });
+        link.addEventListener('mouseleave', () => {
+          link.style.transform = "";
+        });
+        link.addEventListener('click', () => {
+          playClickSound();
+        });
+      });
+    }
+    addSoundToBuildLinks('pvp-list');
+    addSoundToBuildLinks('pve-list');
+
   </script>
 </body>
 </html>
