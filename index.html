@@ -33,6 +33,10 @@
       overflow: hidden;
     }
 
+    body.friends-mode {
+      grid-template-columns: 1fr;
+    }
+
     /* Server rail */
     .servers {
       background: linear-gradient(180deg, rgba(255, 107, 167, 0.08), rgba(125, 243, 255, 0.06));
@@ -387,11 +391,45 @@
     .toggle-link { color: var(--accent); cursor: pointer; }
 
     .friends { display: flex; flex-direction: column; gap: 8px; }
-    .friend-row { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 10px; background: var(--bg-higher); border: 1px solid var(--border); }
+    .friend-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; background: var(--bg-higher); border: 1px solid var(--border); cursor: pointer; transition: border 0.15s ease, transform 0.12s ease; }
+    .friend-row:hover { border-color: rgba(255,107,167,0.3); transform: translateY(-1px); }
+    .friend-row.active { border-color: rgba(125,243,255,0.5); box-shadow: 0 12px 24px rgba(125,243,255,0.15); }
     .friend-row .avatar { width: 30px; height: 30px; font-size: 12px; }
     .friend-row span { color: var(--text); font-weight: 600; }
-    .add-friend-form { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+    .add-friend-form { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; }
     .pill { padding: 4px 8px; background: rgba(59,165,93,0.16); border: 1px solid rgba(59,165,93,0.4); color: #9ce2ae; border-radius: 8px; font-size: 12px; }
+
+    .friends-mode .servers,
+    .friends-mode .channels,
+    .friends-mode .members { display: none; }
+
+    .badge {
+      background: #ff9e4a;
+      color: #0f1117;
+      border-radius: 999px;
+      padding: 2px 7px;
+      font-size: 11px;
+      font-weight: 800;
+      box-shadow: 0 0 0 2px rgba(255, 158, 74, 0.25);
+    }
+
+    .tab-wrap { position: relative; }
+    .tab-badge { position: absolute; top: -6px; right: -6px; display: none; }
+    .tab-badge.visible { display: inline-block; }
+
+    .requests { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+    .request-panel { border: 1px solid var(--border); border-radius: 12px; background: var(--bg-elevated); padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+    .request-header { display: flex; align-items: center; justify-content: space-between; font-weight: 700; color: var(--text); }
+    .request-list { display: flex; flex-direction: column; gap: 8px; }
+    .request-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; border-radius: 10px; background: var(--bg-higher); border: 1px solid var(--border); }
+    .request-actions { display: flex; gap: 8px; }
+    .ghost-btn { background: transparent; border: 1px solid var(--border); color: var(--text); padding: 6px 8px; border-radius: 8px; cursor: pointer; }
+    .ghost-btn.positive { border-color: rgba(109,243,168,0.5); color: var(--success); }
+    .ghost-btn.negative { border-color: rgba(255,109,122,0.4); color: var(--danger); }
+
+    #friend-feedback { min-height: 18px; font-size: 13px; color: var(--muted); }
+    #friend-feedback.success { color: var(--success); }
+    #friend-feedback.error { color: var(--danger); }
   </style>
 </head>
 <body>
@@ -422,8 +460,14 @@
       <span class="chip">online</span>
     </div>
     <div class="nav-tabs">
-      <button class="tab active" id="friends-tab">Amici</button>
-      <button class="tab" id="server-tab">Server</button>
+      <div class="tab-wrap">
+        <button class="tab active" id="friends-tab">Amici</button>
+        <span class="badge tab-badge" id="friends-tab-badge">0</span>
+      </div>
+      <div class="tab-wrap">
+        <button class="tab" id="server-tab">Server</button>
+        <span class="badge tab-badge" id="server-tab-badge">0</span>
+      </div>
     </div>
     <input class="search" type="text" placeholder="Cerca canale" aria-label="Cerca canale" id="channel-search" />
 
@@ -452,11 +496,21 @@
           </div>
           <div class="hero-count" id="hero-count">0 amici</div>
         </div>
+        <div class="requests">
+          <div class="request-panel">
+            <div class="request-header">Richieste ricevute <span class="badge" id="incoming-badge">0</span></div>
+            <div class="request-list" id="incoming-requests"></div>
+          </div>
+          <div class="request-panel">
+            <div class="request-header">Invii in attesa <span class="badge" id="outgoing-badge">0</span></div>
+            <div class="request-list" id="outgoing-requests"></div>
+          </div>
+        </div>
         <div class="empty-state" id="empty-friends" style="display: none;">
           Non hai amici. Puoi sempre aggiungerne dei nuovi qui.
           <div><button class="highlight-btn" id="focus-add-friend">Vai ad aggiungere amici</button></div>
         </div>
-        <div class="friend-grid" id="friend-cards"></div>
+        <div class="friends" id="friend-cards"></div>
         <div class="dm-shell">
           <div class="dm-header">
             <span id="dm-title">Seleziona un amico per iniziare un messaggio diretto.</span>
@@ -494,6 +548,7 @@
       <input type="text" id="friend-name" placeholder="Aggiungi amico" aria-label="Aggiungi amico" required />
       <button type="submit">Invita</button>
     </form>
+    <div id="friend-feedback" aria-live="polite"></div>
     <button class="send" id="logout-btn" style="width: 100%;">Esci</button>
   </aside>
 
@@ -509,6 +564,13 @@
           Riccardo: { password: 'password', friends: [] },
           Enrico: { password: 'password', friends: [] },
           Giulia: { password: 'password', friends: [] }
+        },
+        friendRequests: {
+          Damiano: { incoming: [], outgoing: ['Enrico'] },
+          Alessia: { incoming: [], outgoing: [] },
+          Riccardo: { incoming: [], outgoing: [] },
+          Enrico: { incoming: ['Damiano'], outgoing: [] },
+          Giulia: { incoming: [], outgoing: [] }
         },
         channels: {
           generale: [
@@ -563,10 +625,14 @@
         if (!db.dms[owner][friend]) db.dms[owner][friend] = [];
       };
 
+      const ensureRequestBucket = (user) => {
+        if (!db.friendRequests[user]) db.friendRequests[user] = { incoming: [], outgoing: [] };
+      };
+
       const register = (username, password) => {
         if (db.users[username]) return { ok: false, message: 'Utente già esistente' };
         db.users[username] = { password, friends: [] };
-        ensureDmBucket(username, username);
+        db.friendRequests[username] = { incoming: [], outgoing: [] };
         save(db);
         setSession(username);
         return { ok: true };
@@ -592,15 +658,55 @@
       const listChannels = () => Object.keys(db.channels);
 
       const addFriend = (owner, friendName) => {
-        if (!db.users[friendName]) return { ok: false, message: 'Amico non trovato. Registralo prima.' };
+        ensureRequestBucket(owner);
+        ensureRequestBucket(friendName);
+        if (!db.users[friendName]) return { ok: false, message: 'Utente inesistente' };
+        if (owner === friendName) return { ok: false, message: 'Non puoi aggiungerti da solo' };
         const friends = db.users[owner].friends;
-        const mirror = db.users[friendName].friends;
-        if (!friends.includes(friendName)) friends.push(friendName);
-        if (!mirror.includes(owner)) mirror.push(owner);
-        ensureDmBucket(owner, friendName);
-        ensureDmBucket(friendName, owner);
+        if (friends.includes(friendName)) return { ok: false, message: 'Siete già amici' };
+
+        const outgoing = db.friendRequests[owner].outgoing;
+        const incoming = db.friendRequests[owner].incoming;
+        if (outgoing.includes(friendName)) return { ok: false, message: 'Richiesta già inviata' };
+        if (incoming.includes(friendName)) return { ok: false, message: 'Hai già una richiesta da questo utente' };
+
+        db.friendRequests[owner].outgoing.push(friendName);
+        db.friendRequests[friendName].incoming.push(owner);
         save(db);
-        return { ok: true, friends };
+        return { ok: true, message: 'Utente trovato. Richiesta inviata con successo' };
+      };
+
+      const acceptFriend = (owner, requester) => {
+        ensureRequestBucket(owner);
+        ensureRequestBucket(requester);
+        db.friendRequests[owner].incoming = db.friendRequests[owner].incoming.filter(n => n !== requester);
+        db.friendRequests[requester].outgoing = db.friendRequests[requester].outgoing.filter(n => n !== owner);
+        const friends = db.users[owner].friends;
+        const mirror = db.users[requester].friends;
+        if (!friends.includes(requester)) friends.push(requester);
+        if (!mirror.includes(owner)) mirror.push(owner);
+        ensureDmBucket(owner, requester);
+        ensureDmBucket(requester, owner);
+        save(db);
+        return { ok: true };
+      };
+
+      const declineFriend = (owner, requester) => {
+        ensureRequestBucket(owner);
+        ensureRequestBucket(requester);
+        db.friendRequests[owner].incoming = db.friendRequests[owner].incoming.filter(n => n !== requester);
+        db.friendRequests[requester].outgoing = db.friendRequests[requester].outgoing.filter(n => n !== owner);
+        save(db);
+        return { ok: true };
+      };
+
+      const cancelOutgoing = (owner, target) => {
+        ensureRequestBucket(owner);
+        ensureRequestBucket(target);
+        db.friendRequests[owner].outgoing = db.friendRequests[owner].outgoing.filter(n => n !== target);
+        db.friendRequests[target].incoming = db.friendRequests[target].incoming.filter(n => n !== owner);
+        save(db);
+        return { ok: true };
       };
 
       const addDirectMessage = (owner, friendName, payload) => {
@@ -614,10 +720,14 @@
 
       const listFriends = (username) => db.users[username]?.friends || [];
       const listDirectMessages = (owner, friendName) => db.dms[owner]?.[friendName] || [];
+      const listRequests = (user) => ({
+        incoming: db.friendRequests[user]?.incoming || [],
+        outgoing: db.friendRequests[user]?.outgoing || []
+      });
 
       const getSessionUser = () => getSession();
 
-      return { register, login, logout, addMessage, listMessages, listChannels, addFriend, listFriends, addDirectMessage, listDirectMessages, getSessionUser };
+      return { register, login, logout, addMessage, listMessages, listChannels, addFriend, acceptFriend, declineFriend, cancelOutgoing, listFriends, addDirectMessage, listDirectMessages, listRequests, getSessionUser };
     })();
 
     const channelListEl = document.getElementById('channel-list');
@@ -645,9 +755,16 @@
     const channelView = document.getElementById('channel-view');
     const friendsTab = document.getElementById('friends-tab');
     const serverTab = document.getElementById('server-tab');
+    const friendsTabBadge = document.getElementById('friends-tab-badge');
+    const serverTabBadge = document.getElementById('server-tab-badge');
     const emptyFriends = document.getElementById('empty-friends');
     const focusAddFriend = document.getElementById('focus-add-friend');
     const heroCount = document.getElementById('hero-count');
+    const incomingRequestsEl = document.getElementById('incoming-requests');
+    const outgoingRequestsEl = document.getElementById('outgoing-requests');
+    const incomingBadge = document.getElementById('incoming-badge');
+    const outgoingBadge = document.getElementById('outgoing-badge');
+    const friendFeedback = document.getElementById('friend-feedback');
 
     let currentChannel = 'generale';
     let currentUser = null;
@@ -754,6 +871,7 @@
       headerChip.textContent = 'Richieste e messaggi diretti';
       composer.placeholder = activeFriend ? `Scrivi a ${activeFriend}` : 'Scrivi a un amico';
       renderDirectMessages(true);
+      renderRequests();
     }
 
     function simulateRealtime() {
@@ -786,12 +904,80 @@
       emptyFriends.style.display = 'none';
       list.forEach(name => {
         const card = document.createElement('div');
-        card.className = `friend-card ${name === activeFriend ? 'active' : ''}`;
-        card.innerHTML = `<div class="avatar">${initialLetters(name)}</div><div><div class="author">${name}</div><div class="presence">DM immediati</div></div>`;
+        card.className = `friend-row ${name === activeFriend ? 'active' : ''}`;
+        card.innerHTML = `<div class="avatar">${initialLetters(name)}</div><div><div class="author">${name}</div><div class="presence">Messaggi diretti</div></div>`;
         card.addEventListener('click', () => selectFriend(name));
         friendCards.appendChild(card);
       });
       if (!activeFriend) selectFriend(list[0]);
+    }
+
+    function renderRequests() {
+      if (!currentUser) return;
+      const { incoming, outgoing } = DataStore.listRequests(currentUser);
+
+      const total = incoming.length + outgoing.length;
+      friendsTabBadge.textContent = total;
+      friendsTabBadge.classList.toggle('visible', total > 0);
+
+      incomingBadge.textContent = incoming.length;
+      incomingBadge.style.visibility = incoming.length ? 'visible' : 'hidden';
+      outgoingBadge.textContent = outgoing.length;
+      outgoingBadge.style.visibility = outgoing.length ? 'visible' : 'hidden';
+
+      incomingRequestsEl.innerHTML = '';
+      if (!incoming.length) {
+        incomingRequestsEl.innerHTML = '<div class="presence">Nessuna richiesta in attesa.</div>';
+      } else {
+        incoming.forEach(name => {
+          const row = document.createElement('div');
+          row.className = 'request-row';
+          row.innerHTML = `<div class="author">${name}</div>`;
+          const actions = document.createElement('div');
+          actions.className = 'request-actions';
+          const accept = document.createElement('button');
+          accept.className = 'ghost-btn positive';
+          accept.textContent = 'Accetta';
+          accept.addEventListener('click', () => {
+            DataStore.acceptFriend(currentUser, name);
+            selectFriend(name);
+            updateFriends();
+          });
+          const decline = document.createElement('button');
+          decline.className = 'ghost-btn negative';
+          decline.textContent = 'Rifiuta';
+          decline.addEventListener('click', () => {
+            DataStore.declineFriend(currentUser, name);
+            updateFriends();
+          });
+          actions.append(accept, decline);
+          row.appendChild(actions);
+          incomingRequestsEl.appendChild(row);
+        });
+      }
+
+      outgoingRequestsEl.innerHTML = '';
+      if (!outgoing.length) {
+        outgoingRequestsEl.innerHTML = '<div class="presence">Nessun invio in corso.</div>';
+      } else {
+        outgoing.forEach(name => {
+          const row = document.createElement('div');
+          row.className = 'request-row';
+          row.innerHTML = `<div class="author">${name}</div>`;
+          const actions = document.createElement('div');
+          actions.className = 'request-actions';
+          const cancel = document.createElement('button');
+          cancel.className = 'ghost-btn negative';
+          cancel.textContent = 'Annulla';
+          cancel.addEventListener('click', () => {
+            DataStore.cancelOutgoing(currentUser, name);
+            updateFriends();
+          });
+          actions.append(cancel);
+          row.appendChild(actions);
+          outgoingRequestsEl.appendChild(row);
+        });
+      }
     }
 
     function selectFriend(name) {
@@ -814,16 +1000,19 @@
         friendList.appendChild(row);
       });
       renderFriendCards();
+      renderRequests();
     }
 
     function setView(mode) {
       viewMode = mode;
       if (mode === 'friends') {
+        document.body.classList.add('friends-mode');
         friendView.classList.add('active');
         channelView.classList.remove('active');
         friendsTab.classList.add('active');
         serverTab.classList.remove('active');
       } else {
+        document.body.classList.remove('friends-mode');
         channelView.classList.add('active');
         friendView.classList.remove('active');
         serverTab.classList.add('active');
@@ -925,7 +1114,8 @@
       if (!name) return;
       const result = DataStore.addFriend(currentUser, name);
       friendName.value = '';
-      authError.textContent = result.ok ? '' : result.message;
+      friendFeedback.textContent = result.message || '';
+      friendFeedback.className = result.ok ? 'success' : 'error';
       updateFriends();
       switchToFriends();
     });
