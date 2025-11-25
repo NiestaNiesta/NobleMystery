@@ -206,6 +206,35 @@
       background: rgba(255,107,167,0.06);
     }
 
+    .inline-form {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      margin-top: 12px;
+    }
+
+    .inline-form input {
+      background: var(--bg-higher);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      color: var(--text);
+    }
+
+    .inline-form button {
+      background: linear-gradient(120deg, var(--accent), var(--accent-2));
+      border: none;
+      border-radius: 10px;
+      padding: 10px 12px;
+      color: #0f1117;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: var(--glow);
+    }
+
+    .helper-text { color: var(--muted); font-size: 13px; min-height: 18px; }
+
     .highlight-btn {
       margin-top: 10px;
       padding: 10px 12px;
@@ -430,6 +459,12 @@
     #friend-feedback { min-height: 18px; font-size: 13px; color: var(--muted); }
     #friend-feedback.success { color: var(--success); }
     #friend-feedback.error { color: var(--danger); }
+    .success { color: var(--success); }
+    .error { color: var(--danger); }
+
+    .stacked { display: flex; flex-direction: column; gap: 12px; }
+    .section-heading { display: flex; align-items: center; justify-content: space-between; font-weight: 800; font-size: 15px; }
+    .muted-label { color: var(--muted); font-size: 13px; }
   </style>
 </head>
 <body>
@@ -496,6 +531,17 @@
           </div>
           <div class="hero-count" id="hero-count">0 amici</div>
         </div>
+        <div class="stacked">
+          <div class="section-heading">
+            <span>Invita un amico</span>
+            <span class="muted-label">Inserisci il nickname per inviare la richiesta</span>
+          </div>
+          <form class="inline-form" id="add-friend-form-inline">
+            <input type="text" id="friend-name-inline" placeholder="Nickname dell'amico" aria-label="Nickname dell'amico" required />
+            <button type="submit">Invia richiesta</button>
+          </form>
+          <div class="helper-text" id="friend-feedback-inline"></div>
+        </div>
         <div class="requests">
           <div class="request-panel">
             <div class="request-header">Richieste ricevute <span class="badge" id="incoming-badge">0</span></div>
@@ -504,6 +550,14 @@
           <div class="request-panel">
             <div class="request-header">Invii in attesa <span class="badge" id="outgoing-badge">0</span></div>
             <div class="request-list" id="outgoing-requests"></div>
+          </div>
+          <div class="request-panel">
+            <div class="request-header">Richieste di messaggio <span class="badge" id="message-incoming-badge">0</span></div>
+            <div class="request-list" id="message-incoming"></div>
+          </div>
+          <div class="request-panel">
+            <div class="request-header">Messaggi inviati <span class="badge" id="message-outgoing-badge">0</span></div>
+            <div class="request-list" id="message-outgoing"></div>
           </div>
         </div>
         <div class="empty-state" id="empty-friends" style="display: none;">
@@ -572,6 +626,13 @@
           Enrico: { incoming: ['Damiano'], outgoing: [] },
           Giulia: { incoming: [], outgoing: [] }
         },
+        messageRequests: {
+          Damiano: { incoming: ['Giulia'], outgoing: [] },
+          Alessia: { incoming: [], outgoing: [] },
+          Riccardo: { incoming: [], outgoing: [] },
+          Enrico: { incoming: [], outgoing: [] },
+          Giulia: { incoming: [], outgoing: ['Damiano'] }
+        },
         channels: {
           generale: [
             { author: 'Damiano', role: 'admin', time: '09:30', text: 'Benvenuti su NovaChat! Sentitevi liberi di testare il layout e lasciare feedback.' },
@@ -616,6 +677,11 @@
 
       const db = load();
 
+      db.messageRequests = db.messageRequests || {};
+      Object.keys(db.users).forEach(user => {
+        if (!db.messageRequests[user]) db.messageRequests[user] = { incoming: [], outgoing: [] };
+      });
+
       const setSession = (username) => sessionStorage.setItem(SESSION_KEY, username);
       const clearSession = () => sessionStorage.removeItem(SESSION_KEY);
       const getSession = () => sessionStorage.getItem(SESSION_KEY);
@@ -629,10 +695,15 @@
         if (!db.friendRequests[user]) db.friendRequests[user] = { incoming: [], outgoing: [] };
       };
 
+      const ensureMessageBucket = (user) => {
+        if (!db.messageRequests[user]) db.messageRequests[user] = { incoming: [], outgoing: [] };
+      };
+
       const register = (username, password) => {
         if (db.users[username]) return { ok: false, message: 'Utente già esistente' };
         db.users[username] = { password, friends: [] };
         db.friendRequests[username] = { incoming: [], outgoing: [] };
+        db.messageRequests[username] = { incoming: [], outgoing: [] };
         save(db);
         setSession(username);
         return { ok: true };
@@ -660,6 +731,8 @@
       const addFriend = (owner, friendName) => {
         ensureRequestBucket(owner);
         ensureRequestBucket(friendName);
+        ensureMessageBucket(owner);
+        ensureMessageBucket(friendName);
         if (!db.users[friendName]) return { ok: false, message: 'Utente inesistente' };
         if (owner === friendName) return { ok: false, message: 'Non puoi aggiungerti da solo' };
         const friends = db.users[owner].friends;
@@ -676,9 +749,26 @@
         return { ok: true, message: 'Utente trovato. Richiesta inviata con successo' };
       };
 
+      const addMessageRequest = (owner, target) => {
+        ensureMessageBucket(owner);
+        ensureMessageBucket(target);
+        if (!db.users[target]) return { ok: false, message: 'Utente inesistente' };
+        if (owner === target) return { ok: false, message: 'Non puoi contattare te stesso' };
+        const outgoing = db.messageRequests[owner].outgoing;
+        const incoming = db.messageRequests[owner].incoming;
+        if (outgoing.includes(target)) return { ok: false, message: 'Messaggio già inviato' };
+        if (incoming.includes(target)) return { ok: false, message: 'Hai già un invito da questo utente' };
+        db.messageRequests[owner].outgoing.push(target);
+        db.messageRequests[target].incoming.push(owner);
+        save(db);
+        return { ok: true, message: 'Utente trovato. Richiesta di messaggio inviata' };
+      };
+
       const acceptFriend = (owner, requester) => {
         ensureRequestBucket(owner);
         ensureRequestBucket(requester);
+        ensureMessageBucket(owner);
+        ensureMessageBucket(requester);
         db.friendRequests[owner].incoming = db.friendRequests[owner].incoming.filter(n => n !== requester);
         db.friendRequests[requester].outgoing = db.friendRequests[requester].outgoing.filter(n => n !== owner);
         const friends = db.users[owner].friends;
@@ -694,6 +784,8 @@
       const declineFriend = (owner, requester) => {
         ensureRequestBucket(owner);
         ensureRequestBucket(requester);
+        ensureMessageBucket(owner);
+        ensureMessageBucket(requester);
         db.friendRequests[owner].incoming = db.friendRequests[owner].incoming.filter(n => n !== requester);
         db.friendRequests[requester].outgoing = db.friendRequests[requester].outgoing.filter(n => n !== owner);
         save(db);
@@ -703,6 +795,8 @@
       const cancelOutgoing = (owner, target) => {
         ensureRequestBucket(owner);
         ensureRequestBucket(target);
+        ensureMessageBucket(owner);
+        ensureMessageBucket(target);
         db.friendRequests[owner].outgoing = db.friendRequests[owner].outgoing.filter(n => n !== target);
         db.friendRequests[target].incoming = db.friendRequests[target].incoming.filter(n => n !== owner);
         save(db);
@@ -725,9 +819,43 @@
         outgoing: db.friendRequests[user]?.outgoing || []
       });
 
+      const listMessageRequests = (user) => ({
+        incoming: db.messageRequests[user]?.incoming || [],
+        outgoing: db.messageRequests[user]?.outgoing || []
+      });
+
+      const acceptMessageRequest = (owner, requester) => {
+        ensureMessageBucket(owner);
+        ensureMessageBucket(requester);
+        db.messageRequests[owner].incoming = db.messageRequests[owner].incoming.filter(n => n !== requester);
+        db.messageRequests[requester].outgoing = db.messageRequests[requester].outgoing.filter(n => n !== owner);
+        ensureDmBucket(owner, requester);
+        ensureDmBucket(requester, owner);
+        save(db);
+        return { ok: true };
+      };
+
+      const declineMessageRequest = (owner, requester) => {
+        ensureMessageBucket(owner);
+        ensureMessageBucket(requester);
+        db.messageRequests[owner].incoming = db.messageRequests[owner].incoming.filter(n => n !== requester);
+        db.messageRequests[requester].outgoing = db.messageRequests[requester].outgoing.filter(n => n !== owner);
+        save(db);
+        return { ok: true };
+      };
+
+      const cancelMessageRequest = (owner, target) => {
+        ensureMessageBucket(owner);
+        ensureMessageBucket(target);
+        db.messageRequests[owner].outgoing = db.messageRequests[owner].outgoing.filter(n => n !== target);
+        db.messageRequests[target].incoming = db.messageRequests[target].incoming.filter(n => n !== owner);
+        save(db);
+        return { ok: true };
+      };
+
       const getSessionUser = () => getSession();
 
-      return { register, login, logout, addMessage, listMessages, listChannels, addFriend, acceptFriend, declineFriend, cancelOutgoing, listFriends, addDirectMessage, listDirectMessages, listRequests, getSessionUser };
+      return { register, login, logout, addMessage, listMessages, listChannels, addFriend, addMessageRequest, acceptFriend, declineFriend, cancelOutgoing, listFriends, addDirectMessage, listDirectMessages, listRequests, listMessageRequests, acceptMessageRequest, declineMessageRequest, cancelMessageRequest, getSessionUser };
     })();
 
     const channelListEl = document.getElementById('channel-list');
@@ -765,6 +893,13 @@
     const incomingBadge = document.getElementById('incoming-badge');
     const outgoingBadge = document.getElementById('outgoing-badge');
     const friendFeedback = document.getElementById('friend-feedback');
+    const inlineForm = document.getElementById('add-friend-form-inline');
+    const inlineFriendName = document.getElementById('friend-name-inline');
+    const inlineFeedback = document.getElementById('friend-feedback-inline');
+    const messageIncoming = document.getElementById('message-incoming');
+    const messageOutgoing = document.getElementById('message-outgoing');
+    const messageIncomingBadge = document.getElementById('message-incoming-badge');
+    const messageOutgoingBadge = document.getElementById('message-outgoing-badge');
 
     let currentChannel = 'generale';
     let currentUser = null;
@@ -915,8 +1050,9 @@
     function renderRequests() {
       if (!currentUser) return;
       const { incoming, outgoing } = DataStore.listRequests(currentUser);
+      const messageReqs = DataStore.listMessageRequests(currentUser);
 
-      const total = incoming.length + outgoing.length;
+      const total = incoming.length + outgoing.length + messageReqs.incoming.length + messageReqs.outgoing.length;
       friendsTabBadge.textContent = total;
       friendsTabBadge.classList.toggle('visible', total > 0);
 
@@ -924,6 +1060,10 @@
       incomingBadge.style.visibility = incoming.length ? 'visible' : 'hidden';
       outgoingBadge.textContent = outgoing.length;
       outgoingBadge.style.visibility = outgoing.length ? 'visible' : 'hidden';
+      messageIncomingBadge.textContent = messageReqs.incoming.length;
+      messageIncomingBadge.style.visibility = messageReqs.incoming.length ? 'visible' : 'hidden';
+      messageOutgoingBadge.textContent = messageReqs.outgoing.length;
+      messageOutgoingBadge.style.visibility = messageReqs.outgoing.length ? 'visible' : 'hidden';
 
       incomingRequestsEl.innerHTML = '';
       if (!incoming.length) {
@@ -976,6 +1116,60 @@
           actions.append(cancel);
           row.appendChild(actions);
           outgoingRequestsEl.appendChild(row);
+        });
+      }
+
+      messageIncoming.innerHTML = '';
+      if (!messageReqs.incoming.length) {
+        messageIncoming.innerHTML = '<div class="presence">Nessuna richiesta di messaggio.</div>';
+      } else {
+        messageReqs.incoming.forEach(name => {
+          const row = document.createElement('div');
+          row.className = 'request-row';
+          row.innerHTML = `<div class="author">${name}</div>`;
+          const actions = document.createElement('div');
+          actions.className = 'request-actions';
+          const accept = document.createElement('button');
+          accept.className = 'ghost-btn positive';
+          accept.textContent = 'Apri chat';
+          accept.addEventListener('click', () => {
+            DataStore.acceptMessageRequest(currentUser, name);
+            selectFriend(name);
+            updateFriends();
+          });
+          const decline = document.createElement('button');
+          decline.className = 'ghost-btn negative';
+          decline.textContent = 'Rifiuta';
+          decline.addEventListener('click', () => {
+            DataStore.declineMessageRequest(currentUser, name);
+            updateFriends();
+          });
+          actions.append(accept, decline);
+          row.appendChild(actions);
+          messageIncoming.appendChild(row);
+        });
+      }
+
+      messageOutgoing.innerHTML = '';
+      if (!messageReqs.outgoing.length) {
+        messageOutgoing.innerHTML = '<div class="presence">Nessun messaggio inviato in approvazione.</div>';
+      } else {
+        messageReqs.outgoing.forEach(name => {
+          const row = document.createElement('div');
+          row.className = 'request-row';
+          row.innerHTML = `<div class="author">${name}</div>`;
+          const actions = document.createElement('div');
+          actions.className = 'request-actions';
+          const cancel = document.createElement('button');
+          cancel.className = 'ghost-btn negative';
+          cancel.textContent = 'Annulla';
+          cancel.addEventListener('click', () => {
+            DataStore.cancelMessageRequest(currentUser, name);
+            updateFriends();
+          });
+          actions.append(cancel);
+          row.appendChild(actions);
+          messageOutgoing.appendChild(row);
         });
       }
     }
@@ -1077,8 +1271,8 @@
     });
 
     focusAddFriend.addEventListener('click', () => {
-      friendName.focus();
-      friendName.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      inlineFriendName.focus();
+      inlineFriendName.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
 
     authToggle.addEventListener('click', () => {
@@ -1116,6 +1310,19 @@
       friendName.value = '';
       friendFeedback.textContent = result.message || '';
       friendFeedback.className = result.ok ? 'success' : 'error';
+      updateFriends();
+      switchToFriends();
+    });
+
+    inlineForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!currentUser) return;
+      const name = inlineFriendName.value.trim();
+      if (!name) return;
+      const result = DataStore.addFriend(currentUser, name);
+      inlineFriendName.value = '';
+      inlineFeedback.textContent = result.message || '';
+      inlineFeedback.className = result.ok ? 'success' : 'error';
       updateFriends();
       switchToFriends();
     });
