@@ -867,10 +867,10 @@
   </div>
 
   <script>
+    const normalizeName = (value = '') => value.trim().replace(/^@+/, '');
+
     const DataStore = (() => {
       const USERS_KEY = 'novachat-users-v3';
-
-      const normalizeName = (value = '') => value.trim().replace(/^@+/, '');
       const loadUsers = () => {
         try {
           const raw = localStorage.getItem(USERS_KEY);
