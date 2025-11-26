@@ -866,223 +866,286 @@
     </div>
   </div>
 
-  <script>
-    const normalizeName = (value = '') => value.trim().replace(/^@+/, '');
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAxkmhYkXr7o3cuJL8Hr1f-4RjyTw-E7gg",
+      authDomain: "novachat-c6eec.firebaseapp.com",
+      projectId: "novachat-c6eec",
+      storageBucket: "novachat-c6eec.firebasestorage.app",
+      messagingSenderId: "953037847978",
+      appId: "1:953037847978:web:779169b73da088b4bb7fd3"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
     const DataStore = (() => {
-      const USERS_KEY = 'novachat-users-v3';
-      const loadUsers = () => {
-        try {
-          const raw = localStorage.getItem(USERS_KEY);
-          if (!raw) return {};
-          const parsed = JSON.parse(raw);
-          return typeof parsed === 'object' && parsed ? parsed : {};
-        } catch (err) {
-          console.error('Impossibile leggere il DataStore', err);
-          return {};
-        }
-      };
+      const normalizeNameLower = (value = '') =>
+        value.trim().replace(/^@+/, '').toLowerCase();
 
-      const saveUsers = (users) => localStorage.setItem(USERS_KEY, JSON.stringify(users));
-      let users = loadUsers();
+      const userRef = (username) =>
+        doc(db, 'users', normalizeNameLower(username));
 
-      const reload = () => {
-        users = loadUsers();
-        return users;
-      };
+      const defaultUser = () => ({
+        password: '',
+        friends: [],
+        pending: [],
+        messages: {},
+        createdAt: new Date().toISOString(),
+        status: 'offline'
+      });
 
-      const findUserKey = (name) => {
-        const target = normalizeName(name);
-        return Object.keys(users).find(u => u.toLowerCase() === target.toLowerCase());
-      };
-      const resolveUserKey = (name) => findUserKey(name) || name;
+      const sameUser = (a, b) =>
+        normalizeNameLower(a) === normalizeNameLower(b);
 
-      const ensureUser = (username) => {
-        if (!users[username]) {
-          users[username] = { password: '', friends: [], pending: [], messages: {}, createdAt: new Date().toISOString(), status: 'offline' };
+      const ensureUser = async (username) => {
+        const ref = userRef(username);
+        const snap = await getDoc(ref);
+        if (!snap.exists()) {
+          const data = defaultUser();
+          await setDoc(ref, data);
+          return data;
         }
-        if (!users[username].createdAt) {
-          users[username].createdAt = new Date().toISOString();
-        }
-        if (!users[username].status) {
-          users[username].status = 'offline';
-        }
-      };
-
-      const ensureFriendEntry = (owner, friendName) => {
-        const ownerKey = resolveUserKey(owner);
-        const friendKey = resolveUserKey(friendName);
-        ensureUser(ownerKey);
-        const user = users[ownerKey];
-        const status = users[friendKey]?.status || 'offline';
-        if (!user.friends.some(f => f.name.toLowerCase() === friendKey.toLowerCase())) {
-          user.friends.push({ name: friendKey, status, pinned: false, blocked: false, messages: [] });
-        }
-        return user.friends.find(f => f.name.toLowerCase() === friendKey.toLowerCase());
+        return snap.data();
       };
 
       return {
-        register(username, password) {
-          const clean = normalizeName(username);
-          reload();
-          const existing = findUserKey(clean);
-          if (existing) {
+        async register(username, password) {
+          const clean = normalizeNameLower(username);
+          const ref = userRef(clean);
+          const snap = await getDoc(ref);
+          if (snap.exists()) {
             return { ok: false, message: 'Questo username è già in uso. Scegline un altro.' };
           }
-          users[clean] = { password, friends: [], pending: [], messages: {}, createdAt: new Date().toISOString(), status: 'offline' };
-          saveUsers(users);
+          const data = {
+            password,
+            friends: [],
+            pending: [],
+            messages: {},
+            createdAt: new Date().toISOString(),
+            status: 'offline'
+          };
+          await setDoc(ref, data);
           return { ok: true, user: clean };
         },
-        exists(username) {
-          reload();
-          return Boolean(findUserKey(username));
+
+        async exists(username) {
+          const ref = userRef(username);
+          const snap = await getDoc(ref);
+          return snap.exists();
         },
-        login(username, password) {
-          reload();
-          const key = findUserKey(username);
-          const user = key ? users[key] : null;
-          if (!user || user.password !== password) {
+
+        async login(username, password) {
+          const ref = userRef(username);
+          const snap = await getDoc(ref);
+          if (!snap.exists()) {
             return { ok: false, message: 'Credenziali non valide. Ritenta.' };
           }
-          return { ok: true, user: key };
+          const user = snap.data();
+          if (user.password !== password) {
+            return { ok: false, message: 'Credenziali non valide. Ritenta.' };
+          }
+          return { ok: true, user: normalizeNameLower(username) };
         },
-        getUser(username) {
-          reload();
-          const key = resolveUserKey(username);
-          ensureUser(key);
-          return users[key];
+
+        async getUser(username) {
+          const data = await ensureUser(username);
+          return data;
         },
-        reload() {
-          return reload();
+
+        async reload() {
+          return true;
         },
-        setStatus(username, status) {
-          const key = resolveUserKey(username);
-          ensureUser(key);
-          users[key].status = status;
-          Object.keys(users).forEach(owner => {
-            users[owner].friends = users[owner].friends.map(f => f.name.toLowerCase() === key.toLowerCase() ? { ...f, status } : f);
-          });
-          saveUsers(users);
+
+        async setStatus(username, status) {
+          const ref = userRef(username);
+          const data = await ensureUser(username);
+          data.status = status;
+          await setDoc(ref, data);
         },
-        addPending(sender, friendName) {
-          reload();
-          const senderKey = resolveUserKey(normalizeName(sender));
-          ensureUser(senderKey);
-          const targetKey = findUserKey(friendName);
-          if (!targetKey) {
+
+        async addPending(sender, friendName) {
+          const senderKey = normalizeNameLower(sender);
+          const targetKey = normalizeNameLower(friendName);
+
+          if (senderKey === targetKey) {
+            return { ok: false, message: 'Non puoi aggiungere te stesso.' };
+          }
+
+          const senderRef = userRef(senderKey);
+          const targetRef = userRef(targetKey);
+
+          const senderSnap = await getDoc(senderRef);
+          const targetSnap = await getDoc(targetRef);
+
+          if (!targetSnap.exists()) {
             return { ok: false, message: 'Utente non trovato.' };
           }
-          const senderUser = users[senderKey];
-          const target = users[targetKey];
-          if (senderUser.friends.some(f => f.name.toLowerCase() === targetKey.toLowerCase()) ||
-              target.friends.some(f => f.name.toLowerCase() === senderKey.toLowerCase())) {
+
+          const senderUser = senderSnap.exists() ? senderSnap.data() : defaultUser();
+          const targetUser = targetSnap.data();
+
+          senderUser.friends = senderUser.friends || [];
+          targetUser.friends = targetUser.friends || [];
+          targetUser.pending = targetUser.pending || [];
+
+          if (senderUser.friends.some(f => sameUser(f.name, targetKey)) ||
+              targetUser.friends.some(f => sameUser(f.name, senderKey))) {
             return { ok: false, message: 'Questo utente è già tra i tuoi amici.' };
           }
-          if (target.pending.some(p => p.name.toLowerCase() === senderKey.toLowerCase())) {
+
+          if (targetUser.pending.some(p => sameUser(p.name, senderKey))) {
             return { ok: false, message: 'Richiesta già inviata.' };
           }
-          target.pending.push({ name: senderKey });
-          saveUsers(users);
+
+          targetUser.pending.push({ name: senderKey });
+
+          await setDoc(senderRef, senderUser);
+          await setDoc(targetRef, targetUser);
+
           return { ok: true };
         },
-        accept(username, friendName) {
-          reload();
-          const ownerKey = resolveUserKey(username);
-          const friendKey = resolveUserKey(friendName);
-          ensureUser(ownerKey);
-          ensureUser(friendKey);
-          const user = users[ownerKey];
-          const target = users[friendKey];
-          user.pending = user.pending.filter(p => p.name.toLowerCase() !== friendKey.toLowerCase());
-          const addEntry = (owner, other) => {
-            const status = users[other]?.status || 'offline';
-            if (!owner.friends.some(f => f.name === other)) {
-              owner.friends.push({ name: other, status, pinned: false, blocked: false, messages: [] });
+
+        async accept(username, friendName) {
+          const ownerKey = normalizeNameLower(username);
+          const friendKey = normalizeNameLower(friendName);
+
+          const ownerRef = userRef(ownerKey);
+          const friendRef = userRef(friendKey);
+
+          const ownerSnap = await getDoc(ownerRef);
+          const friendSnap = await getDoc(friendRef);
+
+          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
+          const friend = friendSnap.exists() ? friendSnap.data() : defaultUser();
+
+          owner.pending = (owner.pending || []).filter(p => !sameUser(p.name, friendKey));
+
+          owner.friends = owner.friends || [];
+          friend.friends = friend.friends || [];
+
+          if (!owner.friends.some(f => sameUser(f.name, friendKey))) {
+            owner.friends.push({ name: friendKey, status: friend.status || 'offline', pinned: false, blocked: false, messages: [] });
+          }
+          if (!friend.friends.some(f => sameUser(f.name, ownerKey))) {
+            friend.friends.push({ name: ownerKey, status: owner.status || 'offline', pinned: false, blocked: false, messages: [] });
+          }
+
+          await setDoc(ownerRef, owner);
+          await setDoc(friendRef, friend);
+        },
+
+        async decline(username, friendName) {
+          const ownerKey = normalizeNameLower(username);
+          const friendKey = normalizeNameLower(friendName);
+
+          const ownerRef = userRef(ownerKey);
+          const ownerSnap = await getDoc(ownerRef);
+          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
+          owner.pending = (owner.pending || []).filter(p => !sameUser(p.name, friendKey));
+          await setDoc(ownerRef, owner);
+        },
+
+        async toggleBlock(username, friendName) {
+          const ownerKey = normalizeNameLower(username);
+          const friendKey = normalizeNameLower(friendName);
+          const ownerRef = userRef(ownerKey);
+          const ownerSnap = await getDoc(ownerRef);
+          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
+          owner.friends = owner.friends || [];
+          owner.friends = owner.friends.map(f => {
+            if (sameUser(f.name, friendKey)) {
+              return { ...f, blocked: !f.blocked };
             }
-          };
-          addEntry(user, friendKey);
-          addEntry(target, ownerKey);
-          saveUsers(users);
+            return f;
+          });
+          await setDoc(ownerRef, owner);
         },
-        decline(username, friendName) {
-          reload();
-          const ownerKey = resolveUserKey(username);
-          const friendKey = resolveUserKey(friendName);
-          ensureUser(ownerKey);
-          const user = users[ownerKey];
-          user.pending = user.pending.filter(p => p.name.toLowerCase() !== friendKey.toLowerCase());
-          saveUsers(users);
+
+        async togglePin(username, friendName) {
+          const ownerKey = normalizeNameLower(username);
+          const friendKey = normalizeNameLower(friendName);
+          const ownerRef = userRef(ownerKey);
+          const ownerSnap = await getDoc(ownerRef);
+          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
+          owner.friends = owner.friends || [];
+          owner.friends = owner.friends.map(f => {
+            if (sameUser(f.name, friendKey)) {
+              return { ...f, pinned: !f.pinned };
+            }
+            return f;
+          });
+          await setDoc(ownerRef, owner);
         },
-        toggleBlock(username, friendName) {
-          reload();
-          const ownerKey = resolveUserKey(username);
-          const friendKey = resolveUserKey(friendName);
-          ensureUser(ownerKey);
-          const user = users[ownerKey];
-          user.friends = user.friends.map(f => f.name.toLowerCase() === friendKey.toLowerCase() ? { ...f, blocked: !f.blocked } : f);
-          saveUsers(users);
+
+        async removeFriend(username, friendName) {
+          const ownerKey = normalizeNameLower(username);
+          const friendKey = normalizeNameLower(friendName);
+
+          const ownerRef = userRef(ownerKey);
+          const friendRef = userRef(friendKey);
+
+          const ownerSnap = await getDoc(ownerRef);
+          const friendSnap = await getDoc(friendRef);
+
+          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
+          const friend = friendSnap.exists() ? friendSnap.data() : defaultUser();
+
+          owner.friends = (owner.friends || []).filter(f => !sameUser(f.name, friendKey));
+          friend.friends = (friend.friends || []).filter(f => !sameUser(f.name, ownerKey));
+
+          await setDoc(ownerRef, owner);
+          await setDoc(friendRef, friend);
         },
-        togglePin(username, friendName) {
-          reload();
-          const ownerKey = resolveUserKey(username);
-          const friendKey = resolveUserKey(friendName);
-          ensureUser(ownerKey);
-          const user = users[ownerKey];
-          user.friends = user.friends.map(f => f.name.toLowerCase() === friendKey.toLowerCase() ? { ...f, pinned: !f.pinned } : f);
-          saveUsers(users);
+
+        async clearChat(username, friendName) {
+          const ownerKey = normalizeNameLower(username);
+          const friendKey = normalizeNameLower(friendName);
+
+          const ownerRef = userRef(ownerKey);
+          const friendRef = userRef(friendKey);
+
+          const ownerSnap = await getDoc(ownerRef);
+          const friendSnap = await getDoc(friendRef);
+
+          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
+          const friend = friendSnap.exists() ? friendSnap.data() : defaultUser();
+
+          owner.friends = (owner.friends || []).map(f => sameUser(f.name, friendKey) ? { ...f, messages: [] } : f);
+          friend.friends = (friend.friends || []).map(f => sameUser(f.name, ownerKey) ? { ...f, messages: [] } : f);
+
+          await setDoc(ownerRef, owner);
+          await setDoc(friendRef, friend);
         },
-        removeFriend(username, friendName) {
-          reload();
-          const ownerKey = resolveUserKey(username);
-          const friendKey = resolveUserKey(friendName);
-          ensureUser(ownerKey);
-          users[ownerKey].friends = users[ownerKey].friends.filter(f => f.name.toLowerCase() !== friendKey.toLowerCase());
-          if (users[friendKey]) {
-            users[friendKey].friends = users[friendKey].friends.filter(f => f.name.toLowerCase() !== ownerKey.toLowerCase());
-          }
-          saveUsers(users);
-        },
-        clearChat(username, friendName) {
-          reload();
-          const ownerKey = resolveUserKey(username);
-          const friendKey = resolveUserKey(friendName);
-          ensureUser(ownerKey);
-          const wipeMessages = (owner, target) => {
-            const user = users[owner];
-            user.friends = user.friends.map(f => f.name.toLowerCase() === target.toLowerCase() ? { ...f, messages: [] } : f);
-          };
-          wipeMessages(ownerKey, friendKey);
-          if (users[friendKey]) {
-            wipeMessages(friendKey, ownerKey);
-          }
-          saveUsers(users);
-        },
-        saveMessage(sender, friendName, text) {
-          reload();
+
+        async saveMessage(sender, friendName, text) {
+          const senderKey = normalizeNameLower(sender);
+          const friendKey = normalizeNameLower(friendName);
           const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-          const senderKey = resolveUserKey(sender);
-          const targetKey = resolveUserKey(friendName);
-          ensureFriendEntry(senderKey, targetKey);
-          const appendMessage = (owner, target, fromValue) => {
-            const user = users[owner];
-            user.friends = user.friends.map(f => {
-              if (f.name.toLowerCase() !== target.toLowerCase()) return f;
-              const nextMsgs = Array.isArray(f.messages) ? f.messages.slice() : [];
-              nextMsgs.push({ from: fromValue, text, time });
-              const nextStatus = f.blocked ? 'offline' : (f.status || 'online');
-              return { ...f, messages: nextMsgs, status: nextStatus };
-            });
+
+          const updateMessagesFor = async (ownerKey, otherKey, fromValue) => {
+            const ref = userRef(ownerKey);
+            const snap = await getDoc(ref);
+            const data = snap.exists() ? snap.data() : defaultUser();
+            data.friends = data.friends || [];
+            let entry = data.friends.find(f => sameUser(f.name, otherKey));
+            if (!entry) {
+              entry = { name: otherKey, status: 'online', pinned: false, blocked: false, messages: [] };
+              data.friends.push(entry);
+            }
+            entry.messages = entry.messages || [];
+            entry.messages.push({ from: fromValue, text, time });
+            data.friends = data.friends.map(f => sameUser(f.name, otherKey) ? entry : f);
+            await setDoc(ref, data);
           };
 
-          appendMessage(senderKey, targetKey, senderKey);
+          await updateMessagesFor(senderKey, friendKey, senderKey);
+          await updateMessagesFor(friendKey, senderKey, senderKey);
 
-          if (users[targetKey]) {
-            ensureFriendEntry(targetKey, senderKey);
-            appendMessage(targetKey, senderKey, senderKey);
-          }
-
-          saveUsers(users);
-          return { delivered: Boolean(users[targetKey]) };
+          return { delivered: true };
         }
       };
     })();
@@ -1156,17 +1219,13 @@
     const presenceMap = {};
     const SESSION_KEY = 'novachat-session';
 
+    const normalizeName = (value = '') => value.trim().replace(/^@+/, '');
+
     function getStatus(friend) {
       if (!friend) return 'offline';
       const stored = presenceMap[friend.name];
       if (stored) return stored;
-      if (friend.status) return friend.status;
-      if (DataStore.exists(friend.name)) {
-        const status = DataStore.getUser(friend.name).status || 'offline';
-        presenceMap[friend.name] = status;
-        return status;
-      }
-      return 'offline';
+      return friend.status || 'offline';
     }
 
     function formatDate(value) {
@@ -1214,14 +1273,14 @@
       triggerSplash();
     }
 
-    form.addEventListener('submit', (event) => {
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
       const username = normalizeName(usernameField.value);
       const password = passwordField.value.trim();
       if (!username || !password) return;
 
       const action = mode === 'signup' ? DataStore.register : DataStore.login;
-      const result = action(username, password);
+      const result = await action(username, password);
 
       status.className = 'status ' + (result.ok ? 'success' : 'error');
       status.textContent = result.ok
@@ -1233,9 +1292,9 @@
       if (result.ok) {
         passwordField.value = '';
         triggerSplash();
-        currentUser = result.user || username;
+        currentUser = result.user || normalizeName(username);
         persistSession(currentUser, stayLoggedToggle.checked);
-        showMain();
+        await showMain();
       }
     });
 
@@ -1249,9 +1308,9 @@
       }
     });
 
-    function renderUserSummary() {
+    async function renderUserSummary() {
       if (!currentUser) return;
-      const user = DataStore.getUser(currentUser);
+      const user = await DataStore.getUser(currentUser);
       sideAvatar.textContent = currentUser.charAt(0).toUpperCase();
       sideName.textContent = currentUser;
       sideHandle.textContent = '@' + currentUser.toLowerCase();
@@ -1259,9 +1318,9 @@
       memberSince.textContent = user.createdAt ? 'Dal ' + formatDate(user.createdAt) : 'Nuovo membro';
     }
 
-    function renderAccountPanel() {
+    async function renderAccountPanel() {
       if (!currentUser) return;
-      const user = DataStore.getUser(currentUser);
+      const user = await DataStore.getUser(currentUser);
       const joined = user.createdAt ? formatDate(user.createdAt) : 'Nuovo membro';
       accountAvatar.textContent = currentUser.charAt(0).toUpperCase();
       accountName.textContent = currentUser;
@@ -1273,28 +1332,24 @@
       accountMember.textContent = joined;
     }
 
-    function showMain() {
+    async function showMain() {
       if (!currentUser) return;
       authView.classList.add('hidden');
       chatView.classList.add('hidden');
       mainView.classList.remove('hidden');
       profileOverlay.classList.add('hidden');
       appShell.classList.remove('blurred');
-      DataStore.setStatus(currentUser, 'online');
-      const user = DataStore.getUser(currentUser);
-      user.friends.forEach(f => {
-        presenceMap[f.name] = f.blocked ? 'offline' : (f.status || 'online');
-      });
+      await DataStore.setStatus(currentUser, 'online');
       startPresenceLoop();
       startChatSync();
-      renderUserSummary();
-      renderAccountPanel();
-      renderFriends();
+      await renderUserSummary();
+      await renderAccountPanel();
+      await renderFriends();
     }
 
-    function logout() {
+    async function logout() {
       if (currentUser) {
-        DataStore.setStatus(currentUser, 'offline');
+        await DataStore.setStatus(currentUser, 'offline');
       }
       currentUser = null;
       activeFriend = null;
@@ -1313,7 +1368,7 @@
       setMode('login');
     }
 
-    function showChat(friend) {
+    async function showChat(friend) {
       activeFriend = friend;
       mainView.classList.add('hidden');
       chatView.classList.remove('hidden');
@@ -1352,11 +1407,10 @@
       messagesEl.scrollTop = messagesEl.scrollHeight;
     }
 
-    function syncActiveChat() {
-      if (!activeFriend || chatView.classList.contains('hidden')) return;
-      DataStore.reload();
-      const user = DataStore.getUser(currentUser);
-      const friend = user.friends.find(f => f.name === activeFriend.name);
+    async function syncActiveChat() {
+      if (!activeFriend || chatView.classList.contains('hidden') || !currentUser) return;
+      const user = await DataStore.getUser(currentUser);
+      const friend = (user.friends || []).find(f => f.name === activeFriend.name || normalizeName(f.name) === normalizeName(activeFriend.name));
       if (!friend) return;
       activeFriend = friend;
       const statusValue = getStatus(friend);
@@ -1368,28 +1422,32 @@
       renderMessages(friend);
     }
 
-    chatForm.addEventListener('submit', (e) => {
+    chatForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (!activeFriend || chatInput.disabled) return;
       const text = chatInput.value.trim();
       if (!text) return;
-      const result = DataStore.saveMessage(currentUser, activeFriend.name, text);
-      const user = DataStore.getUser(currentUser);
-      const updated = user.friends.find(f => f.name === activeFriend.name);
+      const result = await DataStore.saveMessage(currentUser, activeFriend.name, text);
+      const user = await DataStore.getUser(currentUser);
+      const updated = (user.friends || []).find(f => f.name === activeFriend.name);
       chatInput.value = '';
-      showChat(updated);
+      if (updated) await showChat(updated);
       if (!result.delivered) {
         console.warn('Messaggio non consegnato: utente destinatario non trovato.');
       }
     });
 
-    backToMain.addEventListener('click', showMain);
+    backToMain.addEventListener('click', () => {
+      showMain();
+    });
 
-    function renderFriends() {
-      DataStore.reload();
-      const user = DataStore.getUser(currentUser);
+    async function renderFriends() {
+      if (!currentUser) return;
+      const user = await DataStore.getUser(currentUser);
       const term = searchInput.value.trim().toLowerCase();
-      const filtered = user.friends
+      const friends = user.friends || [];
+
+      const filtered = friends
         .filter(f => !term || f.name.toLowerCase().includes(term))
         .filter(f => {
           const statusValue = getStatus(f);
@@ -1403,13 +1461,13 @@
       friendList.innerHTML = '';
 
       const pendingVisible = filter === 'pending';
+      const pending = user.pending || [];
 
       if (pendingVisible) {
-        const emptyPending = user.pending.length === 0;
-        if (emptyPending) {
+        if (pending.length === 0) {
           friendList.appendChild(makeEmpty('Nessuna richiesta in arrivo. Invia un invito da "Add Friend".'));
         } else {
-          user.pending.forEach(p => {
+          pending.forEach(p => {
             const card = document.createElement('div');
             card.className = 'friend-card';
             card.innerHTML = `
@@ -1443,24 +1501,24 @@
                 <div class="friend-name">${f.name}${f.pinned ? ' 📌' : ''}</div>
                 <div class="friend-status"><span class="dot ${statusDot}"></span>${statusLabel}</div>
               </div>
-                  <div class="friend-actions">
-                    <button class="action-btn" type="button">⋯</button>
-                    <div class="menu">
-                      <button data-action="report" data-friend="${f.name}">Segnala</button>
-                      <button data-action="block" data-friend="${f.name}">${f.blocked ? 'Sblocca' : 'Blocca'}</button>
-                      <button data-action="pin" data-friend="${f.name}">${f.pinned ? 'Rimuovi fissato' : 'Fissa'}</button>
-                      <button data-action="remove" data-friend="${f.name}">Rimuovi amicizia</button>
-                      <button data-action="clear" data-friend="${f.name}">Cancella chat</button>
-                    </div>
-                  </div>
+              <div class="friend-actions">
+                <button class="action-btn" type="button">⋯</button>
+                <div class="menu">
+                  <button data-action="report" data-friend="${f.name}">Segnala</button>
+                  <button data-action="block" data-friend="${f.name}">${f.blocked ? 'Sblocca' : 'Blocca'}</button>
+                  <button data-action="pin" data-friend="${f.name}">${f.pinned ? 'Rimuovi fissato' : 'Fissa'}</button>
+                  <button data-action="remove" data-friend="${f.name}">Rimuovi amicizia</button>
+                  <button data-action="clear" data-friend="${f.name}">Cancella chat</button>
+                </div>
+              </div>
             `;
             friendList.appendChild(card);
           });
         }
       }
 
-      onlineCount.textContent = user.friends.filter(f => getStatus(f) === 'online' && !f.blocked).length;
-      offlineCount.textContent = user.friends.filter(f => getStatus(f) !== 'online' && !f.blocked).length;
+      onlineCount.textContent = friends.filter(f => getStatus(f) === 'online' && !f.blocked).length;
+      offlineCount.textContent = friends.filter(f => getStatus(f) !== 'online' && !f.blocked).length;
     }
 
     function makeEmpty(text) {
@@ -1470,17 +1528,19 @@
       return empty;
     }
 
-    filters.addEventListener('click', (e) => {
+    filters.addEventListener('click', async (e) => {
       if (e.target.dataset.filter) {
         filter = e.target.dataset.filter;
         [...filters.querySelectorAll('button')].forEach(btn => btn.classList.toggle('active', btn.dataset.filter === filter));
-        renderFriends();
+        await renderFriends();
       }
     });
 
-    searchInput.addEventListener('input', renderFriends);
+    searchInput.addEventListener('input', () => {
+      renderFriends();
+    });
 
-    friendList.addEventListener('click', (e) => {
+    friendList.addEventListener('click', async (e) => {
       const accept = e.target.dataset.accept;
       const decline = e.target.dataset.decline;
       const action = e.target.dataset.action;
@@ -1497,42 +1557,42 @@
       }
 
       if (accept) {
-        DataStore.accept(currentUser, accept);
-        renderFriends();
+        await DataStore.accept(currentUser, accept);
+        await renderFriends();
         return;
       }
       if (decline) {
-        DataStore.decline(currentUser, decline);
-        renderFriends();
+        await DataStore.decline(currentUser, decline);
+        await renderFriends();
         return;
       }
 
       if (action && friendName) {
         if (action === 'block') {
-          DataStore.toggleBlock(currentUser, friendName);
+          await DataStore.toggleBlock(currentUser, friendName);
         }
         if (action === 'pin') {
-          DataStore.togglePin(currentUser, friendName);
+          await DataStore.togglePin(currentUser, friendName);
         }
         if (action === 'report') {
           alert('Segnalazione inviata per ' + friendName);
         }
         if (action === 'remove') {
-          DataStore.removeFriend(currentUser, friendName);
+          await DataStore.removeFriend(currentUser, friendName);
           if (activeFriend && activeFriend.name === friendName) {
             activeFriend = null;
-            showMain();
+            await showMain();
           }
         }
         if (action === 'clear') {
-          DataStore.clearChat(currentUser, friendName);
+          await DataStore.clearChat(currentUser, friendName);
           if (activeFriend && activeFriend.name === friendName) {
-            const user = DataStore.getUser(currentUser);
-            const refreshed = user.friends.find(f => f.name === friendName);
-            if (refreshed) showChat(refreshed);
+            const user = await DataStore.getUser(currentUser);
+            const refreshed = (user.friends || []).find(f => f.name === friendName);
+            if (refreshed) await showChat(refreshed);
           }
         }
-        renderFriends();
+        await renderFriends();
         return;
       }
 
@@ -1540,10 +1600,10 @@
       if (!card || filter === 'pending') return;
       const name = card.dataset.friend;
       if (!name) return;
-      const user = DataStore.getUser(currentUser);
-      const friend = user.friends.find(f => f.name === name);
+      const user = await DataStore.getUser(currentUser);
+      const friend = (user.friends || []).find(f => f.name === name);
       if (friend) {
-        showChat(friend);
+        await showChat(friend);
       }
     });
 
@@ -1565,19 +1625,15 @@
       appShell.classList.remove('blurred');
     });
 
-    confirmAdd.addEventListener('click', () => {
+    confirmAdd.addEventListener('click', async () => {
       const name = normalizeName(friendInput.value);
       if (!name) return;
-      if (name.toLowerCase() === currentUser.toLowerCase()) {
-        modalStatus.className = 'status error';
-        modalStatus.textContent = 'Non puoi aggiungere te stesso.';
-        return;
-      }
-      const result = DataStore.addPending(currentUser, name);
+      if (!currentUser) return;
+      const result = await DataStore.addPending(currentUser, name);
       modalStatus.className = 'status ' + (result.ok ? 'success' : 'error');
       modalStatus.textContent = result.ok ? `Richiesta inviata a ${name}.` : result.message;
       if (result.ok) {
-        renderFriends();
+        await renderFriends();
         setTimeout(() => {
           modal.classList.add('hidden');
           appShell.classList.remove('blurred');
@@ -1592,8 +1648,8 @@
       }
     });
 
-    openProfile.addEventListener('click', () => {
-      renderAccountPanel();
+    openProfile.addEventListener('click', async () => {
+      await renderAccountPanel();
       profileOverlay.classList.remove('hidden');
       appShell.classList.add('blurred');
     });
@@ -1610,13 +1666,15 @@
       }
     });
 
-    logoutBtn.addEventListener('click', logout);
+    logoutBtn.addEventListener('click', () => {
+      logout();
+    });
 
-    function restoreSession() {
+    async function restoreSession() {
       const saved = loadSession();
-      if (saved?.user && saved.stay && DataStore.exists(saved.user)) {
+      if (saved?.user && saved.stay && await DataStore.exists(saved.user)) {
         currentUser = saved.user;
-        showMain();
+        await showMain();
         return true;
       }
       if (saved?.user) {
@@ -1628,15 +1686,10 @@
 
     function startPresenceLoop() {
       clearInterval(presenceInterval);
-      presenceInterval = setInterval(() => {
+      presenceInterval = setInterval(async () => {
         if (!currentUser) return;
-        DataStore.reload();
-        const user = DataStore.getUser(currentUser);
-        user.friends.forEach(f => {
-          presenceMap[f.name] = f.blocked ? 'offline' : (f.status || presenceMap[f.name] || 'online');
-        });
-        renderFriends();
-        syncActiveChat();
+        await renderFriends();
+        await syncActiveChat();
       }, 3200);
     }
 
@@ -1645,26 +1698,30 @@
       chatInterval = setInterval(syncActiveChat, 1200);
     }
 
-    function handleStorageSync() {
+    async function handleStorageSync() {
       if (!currentUser) return;
-      DataStore.reload();
-      renderUserSummary();
-      renderAccountPanel();
-      renderFriends();
-      syncActiveChat();
+      await renderUserSummary();
+      await renderAccountPanel();
+      await renderFriends();
+      await syncActiveChat();
     }
 
-    window.addEventListener('storage', handleStorageSync);
-    window.addEventListener('beforeunload', () => {
+    window.addEventListener('storage', () => {
+      handleStorageSync();
+    });
+
+    window.addEventListener('beforeunload', async () => {
       if (currentUser) {
-        DataStore.setStatus(currentUser, 'offline');
+        await DataStore.setStatus(currentUser, 'offline');
       }
     });
 
-    const booted = restoreSession();
-    if (!booted) {
-      setMode(mode);
-    }
+    (async () => {
+      const booted = await restoreSession();
+      if (!booted) {
+        setMode(mode);
+      }
+    })();
   </script>
 </body>
 </html>
