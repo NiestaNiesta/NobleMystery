@@ -327,7 +327,7 @@
       color: var(--text);
       font-weight: 600;
     }
-
+    
     .filters {
       display: flex;
       gap: 10px;
@@ -343,9 +343,22 @@
       cursor: pointer;
       font-weight: 700;
       transition: background 0.2s ease, color 0.2s ease;
+      position: relative;
     }
 
     .filters button.active { color: var(--text); background: rgba(157, 107, 255, 0.15); border-color: rgba(157,107,255,0.5); }
+
+    .filter-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ffb347;
+      box-shadow: 0 0 0 2px rgba(13, 15, 23, 0.9);
+    }
+
 
     .list { display: flex; flex-direction: column; gap: 10px; flex: 1; min-height: 420px; }
 
@@ -374,11 +387,33 @@
       place-items: center;
       font-weight: 800;
       color: var(--text);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     .friend-meta { display: flex; flex-direction: column; gap: 4px; }
     .friend-name { font-weight: 800; letter-spacing: 0.1px; }
     .friend-status { color: var(--muted); font-size: 13px; display: flex; align-items: center; gap: 6px; }
+
+    .unread-badge {
+      position: absolute;
+      top: -6px;
+      left: -6px;
+      background: #ffb347;
+      color: #0d0f17;
+      padding: 4px 7px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+    }
 
     .dot { width: 10px; height: 10px; border-radius: 50%; }
     .dot.online { background: #4ce1b6; box-shadow: 0 0 0 6px rgba(76, 225, 182, 0.16); }
@@ -423,6 +458,19 @@
       z-index: 10;
     }
 
+    .menu .submenu {
+      position: absolute;
+      left: 100%;
+      top: 0;
+      background: rgba(16, 19, 29, 0.96);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.5);
+      display: none;
+      flex-direction: column;
+      min-width: 180px;
+    }
+
     .menu button {
       border: none;
       background: none;
@@ -434,6 +482,11 @@
     }
 
     .menu button:hover { background: rgba(255,255,255,0.05); }
+
+    .menu button.with-sub:hover + .submenu,
+    .menu .submenu:hover {
+      display: flex;
+    }
 
     .empty {
       padding: 18px;
@@ -676,7 +729,7 @@
       gap: 12px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.45);
     }
-
+           
     .profile-avatar {
       width: 82px;
       height: 82px;
@@ -688,7 +741,194 @@
       font-weight: 900;
     }
 
+    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
     .blurred { filter: blur(6px); pointer-events: none; user-select: none; }
+
+    /* Profile modal */
+    .profile-modal {
+      position: relative;
+      background: rgba(16, 19, 29, 0.96);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px;
+      width: min(880px, 94vw);
+      box-shadow: 0 30px 90px rgba(0,0,0,0.6);
+    }
+
+    .profile-header {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .avatar-interactive {
+      position: relative;
+      width: 96px;
+      height: 96px;
+      border-radius: 24px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+    }
+
+    .avatar-interactive .profile-avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      filter: none;
+      transition: filter 0.2s ease, transform 0.2s ease;
+    }
+
+    .avatar-interactive:hover .profile-avatar {
+      filter: blur(3px);
+      transform: scale(1.02);
+    }
+
+    .avatar-interactive::after {
+      content: 'Cambia';
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: var(--text);
+      font-weight: 800;
+      background: linear-gradient(180deg, rgba(13,15,23,0), rgba(13,15,23,0.65));
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+    }
+
+    .avatar-interactive:hover::after { opacity: 1; }
+
+    .profile-details { display: flex; flex-direction: column; gap: 6px; }
+    .profile-details .handle { color: var(--muted); }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .info-card {
+      position: relative;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 14px 16px;
+      min-height: 110px;
+      overflow: hidden;
+    }
+
+    .info-card:hover { border-color: rgba(92, 240, 255, 0.35); }
+
+    .info-card .label { color: var(--muted); font-weight: 700; font-size: 13px; margin-bottom: 6px; }
+    .info-card .value { font-weight: 800; line-height: 1.5; }
+
+    .edit-chip {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      border: 1px solid var(--border);
+      background: rgba(92, 240, 255, 0.08);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-weight: 700;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+
+    .info-card:hover .edit-chip { opacity: 1; }
+
+    .edit-panel {
+      margin-top: 10px;
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .edit-panel.active { display: flex; }
+
+    .edit-panel textarea,
+    .edit-panel input,
+    .edit-panel select {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      color: var(--text);
+      font-weight: 700;
+      resize: vertical;
+    }
+
+    .edit-panel button {
+      align-self: flex-start;
+      border: none;
+      background: linear-gradient(120deg, var(--accent), var(--accent-2));
+      color: #0d0f17;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+    }
+
+    .logout-card {
+      margin-top: 16px;
+      border: 1px solid rgba(255, 107, 155, 0.4);
+      background: linear-gradient(120deg, rgba(255, 107, 155, 0.12), rgba(255,255,255,0.02));
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logout-card button {
+      width: 100%;
+      border: none;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-weight: 900;
+      color: #0d0f17;
+      background: linear-gradient(120deg, #ff6b6b, #ff4d79);
+      cursor: pointer;
+      box-shadow: 0 20px 40px rgba(255, 107, 107, 0.25);
+    }
+
+    .toast-container {
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 40;
+    }
+
+    .toast {
+      background: rgba(16, 19, 29, 0.95);
+      color: var(--text);
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.45);
+      cursor: pointer;
+      min-width: 220px;
+    }
+
+    .toast strong { display: block; margin-bottom: 4px; }
+
+    .timestamp { display: flex; gap: 6px; align-items: center; }
+    .checks { font-size: 12px; color: var(--muted); }
+    .checks.seen { color: #7de2c3; }
   </style>
 </head>
 <body>
@@ -754,12 +994,12 @@
               <button class="btn" id="add-friend">Add Friend</button>
             </div>
           </div>
-          <div class="filters" id="filters">
-            <button data-filter="all" class="active">All</button>
-            <button data-filter="online">Online</button>
-            <button data-filter="pending">Pending</button>
-            <button data-filter="blocked">Blocked</button>
-          </div>
+          <div class="filters" id="filters">␊
+            <button data-filter="all" class="active">All <span class="filter-badge hidden" data-tab="all"></span></button>
+            <button data-filter="online">Online <span class="filter-badge hidden" data-tab="online"></span></button>
+            <button data-filter="pending">Pending <span class="filter-badge hidden" data-tab="pending"></span></button>
+            <button data-filter="blocked">Blocked</button>␊
+          </div>␊
           <div class="list" id="friend-list"></div>
         </main>
 
@@ -790,9 +1030,9 @@
       </div>
     </section>
 
-    <section id="chat-view" class="hidden">
-      <div class="chat-layout">
-        <div class="chat-panel">
+    <section id="chat-view" class="hidden">␊
+      <div class="chat-layout">␊
+        <div class="chat-panel">␊
           <div class="chat-header">
             <img src="Images/Logo.png" alt="Indietro a NovaChat" id="back-to-main" />
             <div>
@@ -822,6 +1062,8 @@
     </section>
   </div>
 
+  <div class="toast-container" id="toast-container"></div>
+
   <div id="modal" class="overlay hidden" role="dialog" aria-modal="true">
     <div class="modal">
       <h3>Aggiungi un amico</h3>
@@ -838,30 +1080,65 @@
   <div id="profile-overlay" class="profile-overlay hidden" role="dialog" aria-modal="true">
     <div class="profile-modal">
       <button class="close-profile" id="close-profile" type="button">×</button>
-      <div class="profile-nav">
-        <h4>Log out</h4>
-        <button type="button" id="logout-btn">Esci e torna al login</button>
+      <div class="profile-header">
+        <div class="avatar-interactive" id="avatar-trigger">
+          <div class="profile-avatar" id="account-avatar">N</div>
+        </div>
+        <div class="profile-details">
+          <div class="friend-name" id="account-name">Nova User</div>
+          <div class="handle" id="account-handle">@utente</div>
+          <div class="friend-status" id="account-status"></div>
+          <div class="friend-status" id="account-member"></div>
+        </div>
       </div>
-      <div class="profile-body">
-        <div class="section">
-          <h5>User Profile</h5>
-          <div class="row" style="margin-bottom: 12px;">
-            <div class="profile-avatar" id="account-avatar">N</div>
-            <div>
-              <div class="friend-name" id="account-name">Nova User</div>
-              <div class="friend-status" id="account-status"></div>
-              <div class="handle" id="account-handle">@utente</div>
-            </div>
+      <input type="file" id="avatar-input" accept="image/*" class="hidden" />
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="label">Display Name</div>
+          <div class="value" id="account-display"></div>
+          <button class="edit-chip" data-edit="display">Modifica</button>
+          <div class="edit-panel" id="display-panel">
+            <input id="display-input" placeholder="Il tuo display name" />
+            <button type="button" data-save="display">Salva</button>
           </div>
-          <div class="field"><strong>About me:</strong> <span id="account-about">Sempre online su NovaChat.</span></div>
-          <div class="field"><strong>Display name:</strong> <span id="account-display"></span></div>
-          <div class="field"><strong>Username:</strong> <span id="account-username"></span></div>
         </div>
-        <div class="section">
-          <h5>Info</h5>
-          <div class="field"><strong>Stato:</strong> <span id="account-state"></span></div>
-          <div class="field"><strong>Member Since:</strong> <span id="account-member"></span></div>
+        <div class="info-card">
+          <div class="label">About me</div>
+          <div class="value" id="account-about">Sempre online su NovaChat.</div>
+          <button class="edit-chip" data-edit="about">Modifica</button>
+          <div class="edit-panel" id="about-panel">
+            <textarea id="about-input" rows="3" placeholder="Parla di te"></textarea>
+            <button type="button" data-save="about">Salva</button>
+          </div>
         </div>
+        <div class="info-card">
+          <div class="label">Username</div>
+          <div class="value" id="account-username"></div>
+          <button class="edit-chip" data-edit="username">Modifica</button>
+          <div class="edit-panel" id="username-panel">
+            <input id="username-input" placeholder="Soprannome unico" />
+            <button type="button" data-save="username">Salva</button>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="label">Stato</div>
+          <div class="value" id="account-state"></div>
+          <button class="edit-chip" data-edit="status">Cambia</button>
+          <div class="edit-panel" id="status-panel">
+            <select id="status-select">
+              <option value="online">Online</option>
+              <option value="offline">Offline</option>
+            </select>
+            <button type="button" data-save="status">Aggiorna</button>
+          </div>
+        </div>
+      </div>
+      <div class="logout-card">
+        <div>
+          <div class="friend-name">Disconnettiti</div>
+          <div class="friend-status" style="color: rgba(255,255,255,0.7);">Chiudi la sessione e torna al login.</div>
+        </div>
+        <button type="button" id="logout-btn">Esci</button>
       </div>
     </div>
   </div>
@@ -895,7 +1172,11 @@
         pending: [],
         messages: {},
         createdAt: new Date().toISOString(),
-        status: 'offline'
+        status: 'offline',
+        displayName: 'Nova User',
+        about: 'Sempre online su NovaChat.',
+        avatar: '',
+        handle: ''
       });
 
       const sameUser = (a, b) =>
@@ -909,7 +1190,9 @@
           await setDoc(ref, data);
           return data;
         }
-        return snap.data();
+        const merged = { ...defaultUser(), ...snap.data() };
+        await setDoc(ref, merged);
+        return merged;
       };
 
       return {
@@ -926,7 +1209,11 @@
             pending: [],
             messages: {},
             createdAt: new Date().toISOString(),
-            status: 'offline'
+            status: 'offline',
+            displayName: username,
+            about: 'Sono pronto a chattare su NovaChat.',
+            avatar: '',
+            handle: username
           };
           await setDoc(ref, data);
           return { ok: true, user: clean };
@@ -1026,12 +1313,16 @@
 
           owner.friends = owner.friends || [];
           friend.friends = friend.friends || [];
+          const friendDisplay = friend.displayName || friendKey;
+          const ownerDisplay = owner.displayName || ownerKey;
+          const friendAvatar = friend.avatar || '';
+          const ownerAvatar = owner.avatar || '';
 
           if (!owner.friends.some(f => sameUser(f.name, friendKey))) {
-            owner.friends.push({ name: friendKey, status: friend.status || 'offline', pinned: false, blocked: false, messages: [] });
+            owner.friends.push({ name: friendKey, status: friend.status || 'offline', pinned: false, blocked: false, messages: [], displayName: friendDisplay, avatar: friendAvatar, handle: friend.handle || friendDisplay });
           }
           if (!friend.friends.some(f => sameUser(f.name, ownerKey))) {
-            friend.friends.push({ name: ownerKey, status: owner.status || 'offline', pinned: false, blocked: false, messages: [] });
+            friend.friends.push({ name: ownerKey, status: owner.status || 'offline', pinned: false, blocked: false, messages: [], displayName: ownerDisplay, avatar: ownerAvatar, handle: owner.handle || ownerDisplay });
           }
 
           await setDoc(ownerRef, owner);
@@ -1133,11 +1424,12 @@
             data.friends = data.friends || [];
             let entry = data.friends.find(f => sameUser(f.name, otherKey));
             if (!entry) {
-              entry = { name: otherKey, status: 'online', pinned: false, blocked: false, messages: [] };
+              entry = { name: otherKey, status: 'online', pinned: false, blocked: false, messages: [], displayName: otherKey, avatar: '', unread: 0 };
               data.friends.push(entry);
             }
             entry.messages = entry.messages || [];
-            entry.messages.push({ from: fromValue, text, time });
+            entry.messages.push({ from: fromValue, text, time, seen: false });
+            entry.unread = ownerKey === fromValue ? 0 : (entry.unread || 0) + 1;
             data.friends = data.friends.map(f => sameUser(f.name, otherKey) ? entry : f);
             await setDoc(ref, data);
           };
@@ -1146,10 +1438,83 @@
           await updateMessagesFor(friendKey, senderKey, senderKey);
 
           return { delivered: true };
+        },
+
+        async markSeen(viewer, friendName) {
+          const viewerKey = normalizeNameLower(viewer);
+          const friendKey = normalizeNameLower(friendName);
+
+          const viewerRef = userRef(viewerKey);
+          const viewerSnap = await getDoc(viewerRef);
+          const viewerData = viewerSnap.exists() ? viewerSnap.data() : defaultUser();
+
+          viewerData.friends = (viewerData.friends || []).map(f => {
+            if (sameUser(f.name, friendKey)) {
+              const updatedMessages = (f.messages || []).map(m => m.from === friendKey ? { ...m, seen: true } : m);
+              return { ...f, messages: updatedMessages, unread: 0 };
+            }
+            return f;
+          });
+
+          await setDoc(viewerRef, viewerData);
+
+          const friendRef = userRef(friendKey);
+          const friendSnap = await getDoc(friendRef);
+          const friendData = friendSnap.exists() ? friendSnap.data() : defaultUser();
+          friendData.friends = (friendData.friends || []).map(f => {
+            if (sameUser(f.name, viewerKey)) {
+              const updatedMessages = (f.messages || []).map(m => m.from === friendKey ? { ...m, seen: true } : m);
+              return { ...f, messages: updatedMessages };
+            }
+            return f;
+          });
+          await setDoc(friendRef, friendData);
+        },
+
+        async updateProfile(username, updates = {}) {
+          const key = normalizeNameLower(username);
+          const ref = userRef(key);
+          const snap = await getDoc(ref);
+          const data = snap.exists() ? snap.data() : defaultUser();
+          const merged = { ...data, ...updates };
+          await setDoc(ref, merged);
+
+          if (updates.displayName || updates.avatar || updates.handle) {
+            const friends = data.friends || [];
+            for (const friend of friends) {
+              const friendRef = userRef(friend.name);
+              const friendSnap = await getDoc(friendRef);
+              if (friendSnap.exists()) {
+                const fd = friendSnap.data();
+                fd.friends = (fd.friends || []).map(f => sameUser(f.name, key)
+                  ? { ...f, displayName: merged.displayName, avatar: merged.avatar, handle: merged.handle }
+                  : f);
+                await setDoc(friendRef, fd);
+              }
+            }
+          }
+
+          return merged;
+        },
+
+        async setMute(username, friendName, minutes) {
+          const ownerKey = normalizeNameLower(username);
+          const friendKey = normalizeNameLower(friendName);
+          const ownerRef = userRef(ownerKey);
+          const ownerSnap = await getDoc(ownerRef);
+          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
+          const until = minutes === 'forever'
+            ? 'forever'
+            : minutes
+              ? new Date(Date.now() + minutes * 60 * 1000).toISOString()
+              : null;
+          owner.friends = (owner.friends || []).map(f => sameUser(f.name, friendKey)
+            ? { ...f, mutedUntil: until }
+            : f);
+          await setDoc(ownerRef, owner);
         }
       };
     })();
-
     const form = document.getElementById('auth-form');
     const status = document.getElementById('status');
     const switchBtn = document.getElementById('switch-btn');
@@ -1197,6 +1562,14 @@
     const accountUsername = document.getElementById('account-username');
     const accountState = document.getElementById('account-state');
     const accountMember = document.getElementById('account-member');
+    const displayInput = document.getElementById('display-input');
+    const aboutInput = document.getElementById('about-input');
+    const usernameInputEdit = document.getElementById('username-input');
+    const statusSelect = document.getElementById('status-select');
+    const toastContainer = document.getElementById('toast-container');
+    const filterBadges = document.querySelectorAll('.filter-badge');
+    const avatarInput = document.getElementById('avatar-input');
+    const avatarTrigger = document.getElementById('avatar-trigger');
 
     const chatName = document.getElementById('chat-name');
     const chatStatus = document.getElementById('chat-status');
@@ -1217,8 +1590,8 @@
     let presenceInterval = null;
     let chatInterval = null;
     const presenceMap = {};
+    let unreadSnapshot = {};
     const SESSION_KEY = 'novachat-session';
-
     const normalizeName = (value = '') => value.trim().replace(/^@+/, '');
 
     function getStatus(friend) {
@@ -1232,6 +1605,44 @@
       const date = new Date(value);
       if (Number.isNaN(date.getTime())) return 'Nuovo membro';
       return date.toLocaleDateString('it-IT', { month: 'short', year: 'numeric' });
+    }
+
+    function setAvatarContent(el, avatar, fallback = '') {
+      if (!el) return;
+      if (avatar) {
+        el.innerHTML = `<img src="${avatar}" alt="Avatar" />`;
+      } else {
+        el.innerHTML = fallback ? fallback.charAt(0).toUpperCase() : '';
+      }
+    }
+
+    function isMuted(friend) {
+      if (!friend || !friend.mutedUntil) return false;
+      if (friend.mutedUntil === 'forever') return true;
+      const until = new Date(friend.mutedUntil).getTime();
+      return Number.isFinite(until) && until > Date.now();
+    }
+
+    function toggleBadge(tab, active) {
+      const badge = [...filterBadges].find(b => b.dataset.tab === tab);
+      if (badge) badge.classList.toggle('hidden', !active);
+    }
+
+    function showToast(friend, display, count = 1) {
+      if (!toastContainer || !currentUser) return;
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `<strong>${display}</strong><div>${count} nuovo messaggio</div>`;
+      toast.addEventListener('click', async () => {
+        const user = await DataStore.getUser(currentUser);
+        const target = (user.friends || []).find(f => f.name === friend);
+        if (target) {
+          await showChat(target);
+        }
+        toast.remove();
+      });
+      toastContainer.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
     }
 
     function persistSession(user, stay) {
@@ -1311,10 +1722,13 @@
     async function renderUserSummary() {
       if (!currentUser) return;
       const user = await DataStore.getUser(currentUser);
-      sideAvatar.textContent = currentUser.charAt(0).toUpperCase();
-      sideName.textContent = currentUser;
-      sideHandle.textContent = '@' + currentUser.toLowerCase();
-      sideStatus.innerHTML = '<span class="dot online"></span>Online';
+      const display = user.displayName || currentUser;
+      const handle = user.handle || currentUser;
+      setAvatarContent(sideAvatar, user.avatar, display);
+      sideName.textContent = display;
+      sideHandle.textContent = '@' + handle.toLowerCase();
+      const statusValue = user.status || 'online';
+      sideStatus.innerHTML = `<span class="dot ${statusValue === 'online' ? 'online' : 'offline'}"></span>${statusValue === 'online' ? 'Online' : 'Offline'}`;
       memberSince.textContent = user.createdAt ? 'Dal ' + formatDate(user.createdAt) : 'Nuovo membro';
     }
 
@@ -1322,14 +1736,20 @@
       if (!currentUser) return;
       const user = await DataStore.getUser(currentUser);
       const joined = user.createdAt ? formatDate(user.createdAt) : 'Nuovo membro';
-      accountAvatar.textContent = currentUser.charAt(0).toUpperCase();
-      accountName.textContent = currentUser;
-      accountHandle.textContent = '@' + currentUser.toLowerCase();
-      accountStatus.innerHTML = '<span class="dot online"></span>Online';
-      accountDisplay.textContent = currentUser;
-      accountUsername.textContent = currentUser;
-      accountState.textContent = 'Online';
+      const display = user.displayName || currentUser;
+      setAvatarContent(accountAvatar, user.avatar, display);
+      accountName.textContent = display;
+      accountHandle.textContent = '@' + (user.handle || currentUser).toLowerCase();
+      accountStatus.innerHTML = `<span class="dot ${user.status === 'online' ? 'online' : 'offline'}"></span>${user.status === 'online' ? 'Online' : 'Offline'}`;
+      accountDisplay.textContent = display;
+      accountUsername.textContent = user.handle || currentUser;
+      accountState.textContent = user.status === 'online' ? 'Online' : 'Offline';
+      accountAbout.textContent = user.about || 'Racconta qualcosa di te.';
       accountMember.textContent = joined;
+      displayInput.value = display;
+      aboutInput.value = user.about || '';
+      usernameInputEdit.value = user.handle || currentUser;
+      statusSelect.value = user.status || 'online';
     }
 
     async function showMain() {
@@ -1339,7 +1759,9 @@
       mainView.classList.remove('hidden');
       profileOverlay.classList.add('hidden');
       appShell.classList.remove('blurred');
-      await DataStore.setStatus(currentUser, 'online');
+      unreadSnapshot = {};
+      const profile = await DataStore.getUser(currentUser);
+      await DataStore.setStatus(currentUser, profile.status || 'online');
       startPresenceLoop();
       startChatSync();
       await renderUserSummary();
@@ -1374,14 +1796,18 @@
       chatView.classList.remove('hidden');
       const statusValue = getStatus(friend) || 'offline';
       presenceMap[friend.name] = friend.blocked ? 'offline' : 'online';
-      chatName.textContent = friend.name;
+      const display = friend.displayName || friend.name;
+      chatName.textContent = display;
       chatStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Blocked' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
-      profileAvatar.textContent = friend.name.charAt(0).toUpperCase();
-      profileName.textContent = friend.name;
+      setAvatarContent(profileAvatar, friend.avatar, display);
+      profileName.textContent = display;
       profileStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Bloccato' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
-      profileMeta.textContent = friend.pinned ? 'Fissato in alto' : 'Contatto standard';
+      profileMeta.textContent = friend.pinned ? 'Fissato in alto' : isMuted(friend) ? 'Silenziato' : 'Contatto standard';
       chatInput.placeholder = `Message @${friend.name}`;
       renderMessages(friend);
+      await DataStore.markSeen(currentUser, friend.name);
+      activeFriend.unread = 0;
+      unreadSnapshot[friend.name] = 0;
       const blocked = friend.blocked;
       blockBanner.classList.toggle('hidden', !blocked);
       chatInput.disabled = blocked;
@@ -1401,7 +1827,8 @@
       msgs.forEach(m => {
         const bubble = document.createElement('div');
         bubble.className = `bubble ${m.from === currentUser ? 'me' : 'them'}`;
-        bubble.innerHTML = `<div>${m.text}</div><div class="timestamp">${m.time}</div>`;
+        const checks = m.from === currentUser ? `<span class="checks ${m.seen ? 'seen' : ''}">✓✓</span>` : '';
+        bubble.innerHTML = `<div>${m.text}</div><div class="timestamp">${m.time}${checks}</div>`;
         messagesEl.appendChild(bubble);
       });
       messagesEl.scrollTop = messagesEl.scrollHeight;
@@ -1416,10 +1843,13 @@
       const statusValue = getStatus(friend);
       chatStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Blocked' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
       profileStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Bloccato' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
-      profileMeta.textContent = friend.pinned ? 'Fissato in alto' : 'Contatto standard';
+      profileMeta.textContent = friend.pinned ? 'Fissato in alto' : isMuted(friend) ? 'Silenziato' : 'Contatto standard';
       blockBanner.classList.toggle('hidden', !friend.blocked);
       chatInput.disabled = friend.blocked;
       renderMessages(friend);
+      await DataStore.markSeen(currentUser, friend.name);
+      activeFriend.unread = 0;
+      unreadSnapshot[friend.name] = 0;
     }
 
     chatForm.addEventListener('submit', async (e) => {
@@ -1463,11 +1893,11 @@
       const pendingVisible = filter === 'pending';
       const pending = user.pending || [];
 
-      if (pendingVisible) {
-        if (pending.length === 0) {
-          friendList.appendChild(makeEmpty('Nessuna richiesta in arrivo. Invia un invito da "Add Friend".'));
-        } else {
-          pending.forEach(p => {
+      if (pendingVisible) {␊
+        if (pending.length === 0) {␊
+          friendList.appendChild(makeEmpty('Nessuna richiesta in arrivo. Invia un invito da "Add Friend".'));␊
+        } else {␊
+          pending.forEach(p => {␊
             const card = document.createElement('div');
             card.className = 'friend-card';
             card.innerHTML = `
@@ -1495,11 +1925,14 @@
             const statusValue = getStatus(f);
             const statusDot = f.blocked ? 'blocked' : statusValue;
             const statusLabel = f.blocked ? 'Bloccato' : (statusValue === 'online' ? 'Online' : 'Offline');
+            const display = f.displayName || f.name;
+            const unread = f.unread || 0;
+            const muted = isMuted(f);
             card.innerHTML = `
-              <div class="avatar">${f.name.charAt(0).toUpperCase()}</div>
+              <div class="avatar">${f.avatar ? `<img src="${f.avatar}" alt="${display}" />` : display.charAt(0).toUpperCase()}${unread ? `<div class="unread-badge">${unread}</div>` : ''}</div>
               <div class="friend-meta">
-                <div class="friend-name">${f.name}${f.pinned ? ' 📌' : ''}</div>
-                <div class="friend-status"><span class="dot ${statusDot}"></span>${statusLabel}</div>
+                <div class="friend-name">${display}${f.pinned ? ' 📌' : ''}</div>
+                <div class="friend-status"><span class="dot ${statusDot}"></span>${statusLabel}${muted ? ' • Silenziato' : ''}</div>
               </div>
               <div class="friend-actions">
                 <button class="action-btn" type="button">⋯</button>
@@ -1507,6 +1940,15 @@
                   <button data-action="report" data-friend="${f.name}">Segnala</button>
                   <button data-action="block" data-friend="${f.name}">${f.blocked ? 'Sblocca' : 'Blocca'}</button>
                   <button data-action="pin" data-friend="${f.name}">${f.pinned ? 'Rimuovi fissato' : 'Fissa'}</button>
+                  <button class="with-sub" data-action="mute" data-friend="${f.name}">Silenzia ▸</button>
+                  <div class="submenu">
+                    <button data-mute="10" data-friend="${f.name}">10 min</button>
+                    <button data-mute="30" data-friend="${f.name}">30 min</button>
+                    <button data-mute="60" data-friend="${f.name}">1h</button>
+                    <button data-mute="180" data-friend="${f.name}">3h</button>
+                    <button data-mute="forever" data-friend="${f.name}">Fino a riattivazione</button>
+                    <button data-mute="0" data-friend="${f.name}">Riattiva notifiche</button>
+                  </div>
                   <button data-action="remove" data-friend="${f.name}">Rimuovi amicizia</button>
                   <button data-action="clear" data-friend="${f.name}">Cancella chat</button>
                 </div>
@@ -1519,6 +1961,21 @@
 
       onlineCount.textContent = friends.filter(f => getStatus(f) === 'online' && !f.blocked).length;
       offlineCount.textContent = friends.filter(f => getStatus(f) !== 'online' && !f.blocked).length;
+
+      const unreadTotal = friends.reduce((sum, f) => sum + (f.unread || 0), 0);
+      const onlineUnread = friends.some(f => getStatus(f) === 'online' && (f.unread || 0) > 0);
+      toggleBadge('all', unreadTotal > 0);
+      toggleBadge('online', onlineUnread);
+      toggleBadge('pending', (pending.length || 0) > 0);
+
+      const firstLoad = Object.keys(unreadSnapshot).length === 0;
+      friends.forEach(f => {
+        const prev = unreadSnapshot[f.name] || 0;
+        if (!firstLoad && (f.unread || 0) > prev && !isMuted(f) && f.name !== activeFriend?.name) {
+          showToast(f.name, f.displayName || f.name, (f.unread || 0) - prev);
+        }
+        unreadSnapshot[f.name] = f.unread || 0;
+      });
     }
 
     function makeEmpty(text) {
@@ -1545,6 +2002,7 @@
       const decline = e.target.dataset.decline;
       const action = e.target.dataset.action;
       const friendName = e.target.dataset.friend;
+      const muteValue = e.target.dataset.mute;
       const actionBtn = e.target.closest('.action-btn');
 
       if (actionBtn && actionBtn.nextElementSibling?.classList.contains('menu')) {
@@ -1568,6 +2026,7 @@
       }
 
       if (action && friendName) {
+        if (action === 'mute') return;
         if (action === 'block') {
           await DataStore.toggleBlock(currentUser, friendName);
         }
@@ -1592,6 +2051,13 @@
             if (refreshed) await showChat(refreshed);
           }
         }
+        await renderFriends();
+        return;
+      }
+
+      if (muteValue !== undefined && friendName) {
+        const value = muteValue === 'forever' ? 'forever' : Number(muteValue || 0) || null;
+        await DataStore.setMute(currentUser, friendName, value === null ? null : value === 'forever' ? 'forever' : value);
         await renderFriends();
         return;
       }
@@ -1648,8 +2114,51 @@
       }
     });
 
+    function closeAllEditors() {
+      document.querySelectorAll('.edit-panel').forEach(panel => panel.classList.remove('active'));
+    }
+
+    document.querySelectorAll('.edit-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        closeAllEditors();
+        const target = btn.dataset.edit;
+        const panel = document.getElementById(`${target}-panel`);
+        panel?.classList.add('active');
+      });
+    });
+
+    async function handleProfileSave(target) {
+      if (!currentUser) return;
+      if (target === 'display') {
+        const value = displayInput.value.trim() || currentUser;
+        await DataStore.updateProfile(currentUser, { displayName: value });
+      }
+      if (target === 'about') {
+        await DataStore.updateProfile(currentUser, { about: aboutInput.value.trim() || 'Sempre online su NovaChat.' });
+      }
+      if (target === 'username') {
+        const handle = usernameInputEdit.value.trim() || currentUser;
+        await DataStore.updateProfile(currentUser, { handle });
+      }
+      if (target === 'status') {
+        await DataStore.setStatus(currentUser, statusSelect.value);
+      }
+      closeAllEditors();
+      await renderUserSummary();
+      await renderAccountPanel();
+      await renderFriends();
+    }
+
+    document.querySelectorAll('[data-save]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const target = btn.dataset.save;
+        await handleProfileSave(target);
+      });
+    });
+
     openProfile.addEventListener('click', async () => {
       await renderAccountPanel();
+      closeAllEditors();
       profileOverlay.classList.remove('hidden');
       appShell.classList.add('blurred');
     });
@@ -1657,17 +2166,39 @@
     closeProfile.addEventListener('click', () => {
       profileOverlay.classList.add('hidden');
       appShell.classList.remove('blurred');
+      closeAllEditors();
     });
 
     profileOverlay.addEventListener('click', (e) => {
       if (e.target === profileOverlay) {
         profileOverlay.classList.add('hidden');
         appShell.classList.remove('blurred');
+        closeAllEditors();
       }
     });
 
     logoutBtn.addEventListener('click', () => {
       logout();
+    });
+
+    avatarTrigger.addEventListener('click', () => {
+      avatarInput.click();
+    });
+
+    avatarInput.addEventListener('change', async (event) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const dataUrl = e.target?.result;
+        if (typeof dataUrl === 'string') {
+          await DataStore.updateProfile(currentUser, { avatar: dataUrl });
+          await renderAccountPanel();
+          await renderUserSummary();
+          await renderFriends();
+        }
+      };
+      reader.readAsDataURL(file);
     });
 
     async function restoreSession() {
@@ -1725,3 +2256,4 @@
   </script>
 </body>
 </html>
+
