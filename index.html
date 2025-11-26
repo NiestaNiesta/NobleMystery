@@ -291,7 +291,6 @@
       };
 
       const saveUsers = (users) => localStorage.setItem(USERS_KEY, JSON.stringify(users));
-
       let users = loadUsers();
 
       return {
@@ -345,6 +344,8 @@
       status.textContent = '';
       status.className = 'status';
       usernameField.focus();
+
+      // 🔥 Trigger animazione splash all'avvio
       triggerSplash();
     }
 
