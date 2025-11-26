@@ -427,1301 +427,1579 @@
       border: none;
       background: none;
       color: var(--text);
-      padding: 10px 12px;
-      cursor: pointer;
-      text-align: left;
-      transition: background 0.2s ease;
-    }
-
-    .menu button:hover { background: rgba(255,255,255,0.05); }
-
-    .empty {
-      padding: 18px;
-      border: 1px dashed var(--border);
-      border-radius: 14px;
-      color: var(--muted);
-      text-align: center;
-      line-height: 1.5;
-    }
-
-    .side-card h3 { margin-bottom: 8px; }
-    .side-card p { color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
-    .side-list { display: flex; flex-direction: column; gap: 10px; }
-
-    .mini-entry { display: flex; align-items: center; gap: 10px; color: var(--muted); font-weight: 700; }
-
-    .tag { padding: 4px 8px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); font-size: 12px; }
-
-    .profile-summary {
-      background: linear-gradient(160deg, rgba(255,255,255,0.02), rgba(255,255,255,0.05));
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 16px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 16px 50px rgba(0,0,0,0.4);
-    }
-
-    .profile-summary::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 20% 30%, rgba(157, 107, 255, 0.12), transparent 40%),
-                  radial-gradient(circle at 80% 30%, rgba(92, 240, 255, 0.12), transparent 35%);
-      opacity: 0.7;
-      pointer-events: none;
-    }
-
-    .profile-summary .header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .profile-summary .avatar {
-      width: 58px;
-      height: 58px;
-      border-radius: 16px;
-      background: linear-gradient(140deg, rgba(157, 107, 255, 0.2), rgba(92, 240, 255, 0.18));
-      display: grid;
-      place-items: center;
-      font-weight: 900;
-      font-size: 22px;
-      color: var(--text);
-      border: 1px solid rgba(255,255,255,0.06);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05), 0 10px 30px rgba(0,0,0,0.35);
-    }
-
-    .profile-summary .identity { display: flex; flex-direction: column; gap: 4px; }
-    .profile-summary .handle { color: var(--muted); font-size: 13px; }
-    .profile-summary .status { font-size: 13px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
-    .profile-summary .status .dot { transform: translateY(1px); }
-
-    .profile-summary .footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 14px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .pill { padding: 6px 10px; border-radius: 12px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); font-weight: 700; font-size: 12px; }
-
-    .profile-summary .menu-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04);
-      color: var(--text);
-      display: grid;
-      place-items: center;
-      cursor: pointer;
-      transition: background 0.2s ease, border 0.2s ease, transform 0.2s ease;
-    }
-
-    .profile-summary .menu-btn:hover { background: rgba(92, 240, 255, 0.12); border-color: rgba(92, 240, 255, 0.45); transform: translateY(-1px); }
-
-    .profile-summary .divider { height: 1px; background: var(--border); margin: 12px 0; position: relative; z-index: 1; }
-
-    .toggle { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; }
-    .toggle input { accent-color: #9d6bff; width: 18px; height: 18px; }
-
-    .profile-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.55);
-      backdrop-filter: blur(10px);
-      display: grid;
-      place-items: center;
-      z-index: 60;
-    }
-
-    .profile-modal {
-      width: min(920px, 94vw);
-      background: rgba(14, 16, 26, 0.95);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      overflow: hidden;
-      box-shadow: 0 26px 90px rgba(0,0,0,0.6);
-      position: relative;
-      padding-top: 8px;
-    }
-
-    .profile-modal .close-profile {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1), rgba(255,255,255,0.03));
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      color: var(--text);
-      width: 38px;
-      height: 38px;
-      cursor: pointer;
-      z-index: 5;
-      box-shadow: 0 10px 28px rgba(0,0,0,0.45);
-    }
-
-    .profile-nav { background: rgba(19, 22, 32, 0.96); padding: 22px 18px; display: flex; flex-direction: column; gap: 10px; border-right: 1px solid var(--border); }
-    .profile-nav h4 { margin-bottom: 10px; }
-    .profile-nav button { width: 100%; justify-content: flex-start; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--text); }
-
-    .profile-body { padding: 24px 32px 24px 24px; display: grid; grid-template-columns: 1.2fr 0.9fr; gap: 24px; position: relative; }
-    .profile-body .section { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 14px; padding: 16px; box-shadow: 0 16px 50px rgba(0,0,0,0.35); }
-    .profile-body .section h5 { margin-bottom: 12px; }
-    .profile-body .field { margin-bottom: 10px; color: var(--muted); }
-
-    .row { display: flex; align-items: center; gap: 8px; color: var(--muted); }
-
-    /* Modal */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.45);
-      backdrop-filter: blur(8px);
-      display: grid;
-      place-items: center;
-      z-index: 50;
-    }
-
-    .modal {
-      width: min(420px, 92vw);
-      background: rgba(16, 19, 29, 0.95);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 24px 70px rgba(0,0,0,0.55);
-    }
-
-    .modal h3 { margin-bottom: 10px; }
-    .modal p { color: var(--muted); margin-bottom: 12px; }
-
-    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 12px; }
-    .ghost { background: rgba(255,255,255,0.03); color: var(--text); border: 1px solid var(--border); }
-
-    /* Chat view */
-    .chat-layout {
-      display: grid;
-      grid-template-columns: 1.2fr 280px;
-      gap: 16px;
-      width: min(1100px, 96vw);
-      height: 700px;
-      align-items: stretch;
-    }
-
-    .chat-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-    .chat-header img { width: 40px; height: 40px; border-radius: 12px; cursor: pointer; }
-
-    .chat-panel { display: flex; flex-direction: column; gap: 16px; height: 640px; }
-
-    .messages {
-      background: rgba(16, 19, 29, 0.92);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      flex: 1;
-      min-height: 0;
-      max-height: none;
-      overflow-y: auto;
-      overscroll-behavior: contain;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(157, 107, 255, 0.5) rgba(255,255,255,0.05);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.45);
-    }
-
-    .messages::-webkit-scrollbar { width: 8px; }
-    .messages::-webkit-scrollbar-thumb { background: linear-gradient(180deg, rgba(157,107,255,0.8), rgba(92,240,255,0.6)); border-radius: 8px; }
-    .messages::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
-
-    .bubble {
-      max-width: 70%;
-      padding: 12px 14px;
-      border-radius: 14px;
-      line-height: 1.5;
-    }
-    .bubble.me { margin-left: auto; background: linear-gradient(140deg, #8e6bff, #5cf0ff); color: #0c0f18; font-weight: 700; }
-    .bubble.them { background: rgba(255,255,255,0.04); border: 1px solid var(--border); }
-
-    .timestamp { font-size: 12px; color: var(--muted); }
-
-    .chat-form { display: flex; flex-direction: column; gap: 10px; }
-    .chat-input { display: flex; gap: 10px; }
-    .chat-input input {
-      flex: 1;
-      padding: 12px 12px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,0.03);
-      color: var(--text);
-    }
-
-    .block-warning { color: var(--danger); font-weight: 800; }
-
-    .profile-card {
-      background: rgba(16, 19, 29, 0.92);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.45);
-    }
-
-    .profile-avatar {
-      width: 82px;
-      height: 82px;
-      border-radius: 20px;
-      background: linear-gradient(160deg, rgba(157, 107, 255, 0.24), rgba(92, 240, 255, 0.22));
-      display: grid;
-      place-items: center;
-      font-size: 32px;
-      font-weight: 900;
-    }
-
-    .blurred { filter: blur(6px); pointer-events: none; user-select: none; }
-  </style>
-</head>
-<body>
-  <div class="grain"></div>
-  <div class="orb one"></div>
-  <div class="orb two"></div>
-  <div class="orb three"></div>
-
-  <div class="app-shell" id="app">
-    <section id="auth-view" class="card-wrap">
-      <div class="splash" aria-hidden="true"></div>
-      <div class="card" role="main">
-        <div class="logo" aria-hidden="true">
-          <img src="Images/Logo.png" alt="Logo NovaChat" />
-        </div>
-        <div>
-          <h1 id="form-title">NovaChat</h1>
-          <p class="subtitle" id="form-subtitle">Accedi o registra il tuo profilo con username e password: nessuna email richiesta.</p>
-        </div>
-
-        <form id="auth-form">
-          <div>
-            <label for="username">Username</label>
-            <input id="username" class="input" name="username" autocomplete="username" required />
-          </div>
-          <div>
-            <label for="password">Password</label>
-            <input id="password" class="input" type="password" name="password" autocomplete="current-password" required />
-          </div>
-          <label class="toggle" for="stay-logged">
-            <input type="checkbox" id="stay-logged" checked />
-            <span>Rimani connesso</span>
-          </label>
-          <button type="submit" class="btn" id="submit-btn">Crea account</button>
-          <div class="status" id="status"></div>
-        </form>
-
-        <div class="switcher">
-          <span id="switch-copy">Hai già un account?</span>
-          <button id="switch-btn" type="button">Accedi</button>
-        </div>
-      </div>
-    </section>
-
-    <section id="main-view" class="hidden">
-      <div class="app-layout">
-        <aside class="panel sidebar">
-          <div class="brand">
-            <img src="Images/Logo.png" alt="NovaChat" />
-            <div class="name">NovaChat</div>
-          </div>
-          <ul class="nav">
-            <li><button class="active">Friends</button></li>
-            <li><button>Core Room</button></li>
-            <li><button>Messages</button></li>
-          </ul>
-        </aside>
-
-        <main class="panel main-panel">
-          <div class="section-header">
-            <div class="search">
-              <input type="search" id="search" placeholder="Search" />
-              <button class="btn" id="add-friend">Add Friend</button>
-            </div>
-          </div>
-          <div class="filters" id="filters">
-            <button data-filter="all" class="active">All</button>
-            <button data-filter="online">Online</button>
-            <button data-filter="pending">Pending</button>
-            <button data-filter="blocked">Blocked</button>
-          </div>
-          <div class="list" id="friend-list"></div>
-        </main>
-
-        <aside class="panel side-card">
-          <div class="profile-summary">
-            <div class="header">
-              <div class="avatar" id="side-avatar">N</div>
-              <div class="identity">
-                <div class="friend-name" id="side-name">Nova User</div>
-                <div class="handle" id="side-handle">@utente</div>
-                <div class="status" id="side-status"><span class="dot online"></span>Online</div>
-              </div>
-            </div>
-            <div class="divider"></div>
-            <div class="side-list" style="margin: 6px 0 0 0;">
-              <div class="mini-entry"><span class="tag">ONLINE</span><span id="online-count">0</span></div>
-              <div class="mini-entry"><span class="tag">OFFLINE</span><span id="offline-count">0</span></div>
-            </div>
-            <div class="footer">
-              <span class="pill" id="member-since">Membro</span>
-              <button class="menu-btn" id="open-profile" type="button">⋯</button>
-            </div>
-          </div>
-          <div style="margin-top: 14px; display: flex; justify-content: space-between; gap: 10px; align-items: center;">
-            <button class="btn" id="side-add" style="flex:1;">Send Friend Request</button>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <section id="chat-view" class="hidden">
-      <div class="chat-layout">
-        <div class="chat-panel">
-          <div class="chat-header">
-            <img src="Images/Logo.png" alt="Indietro a NovaChat" id="back-to-main" />
-            <div>
-              <div class="friend-name" id="chat-name">Chat</div>
-              <div class="friend-status" id="chat-status"></div>
-            </div>
-          </div>
-          <div class="messages" id="messages"></div>
-          <form class="chat-form" id="chat-form">
-            <div id="block-banner" class="block-warning hidden">Non puoi inviare messaggi all'utente</div>
-            <div class="chat-input">
-              <input type="text" id="chat-input" placeholder="Message @username" />
-              <button type="submit" class="btn">Invia</button>
-            </div>
-          </form>
-        </div>
-        <aside class="profile-card">
-          <div class="profile-avatar" id="profile-avatar">N</div>
-          <div>
-            <div class="friend-name" id="profile-name"></div>
-            <div class="friend-status" id="profile-status"></div>
-          </div>
-          <div class="tag" id="profile-tag">Profilo</div>
-          <div class="friend-status" id="profile-meta"></div>
-        </aside>
-      </div>
-    </section>
-  </div>
-
-  <div id="modal" class="overlay hidden" role="dialog" aria-modal="true">
-    <div class="modal">
-      <h3>Aggiungi un amico</h3>
-      <p>Inserisci il nickname del tuo amico per inviare la richiesta.</p>
-      <input type="text" id="friend-name" class="input" placeholder="Nickname" />
-      <div id="modal-status" class="status"></div>
-      <div class="modal-actions">
-        <button class="btn ghost" id="close-modal" type="button">Annulla</button>
-        <button class="btn" id="confirm-add" type="button">Invia richiesta</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="profile-overlay" class="profile-overlay hidden" role="dialog" aria-modal="true">
-    <div class="profile-modal">
-      <button class="close-profile" id="close-profile" type="button">×</button>
-      <div class="profile-nav">
-        <h4>Log out</h4>
-        <button type="button" id="logout-btn">Esci e torna al login</button>
-      </div>
-      <div class="profile-body">
-        <div class="section">
-          <h5>User Profile</h5>
-          <div class="row" style="margin-bottom: 12px;">
-            <div class="profile-avatar" id="account-avatar">N</div>
-            <div>
-              <div class="friend-name" id="account-name">Nova User</div>
-              <div class="friend-status" id="account-status"></div>
-              <div class="handle" id="account-handle">@utente</div>
-            </div>
-          </div>
-          <div class="field"><strong>About me:</strong> <span id="account-about">Sempre online su NovaChat.</span></div>
-          <div class="field"><strong>Display name:</strong> <span id="account-display"></span></div>
-          <div class="field"><strong>Username:</strong> <span id="account-username"></span></div>
-        </div>
-        <div class="section">
-          <h5>Info</h5>
-          <div class="field"><strong>Stato:</strong> <span id="account-state"></span></div>
-          <div class="field"><strong>Member Since:</strong> <span id="account-member"></span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAxkmhYkXr7o3cuJL8Hr1f-4RjyTw-E7gg",
-      authDomain: "novachat-c6eec.firebaseapp.com",
-      projectId: "novachat-c6eec",
-      storageBucket: "novachat-c6eec.firebasestorage.app",
-      messagingSenderId: "953037847978",
-      appId: "1:953037847978:web:779169b73da088b4bb7fd3"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    const DataStore = (() => {
-      const normalizeNameLower = (value = '') =>
-        value.trim().replace(/^@+/, '').toLowerCase();
-
-      const userRef = (username) =>
-        doc(db, 'users', normalizeNameLower(username));
-
-      const defaultUser = () => ({
-        password: '',
-        friends: [],
-        pending: [],
-        messages: {},
-        createdAt: new Date().toISOString(),
-        status: 'offline'
-      });
-
-      const sameUser = (a, b) =>
-        normalizeNameLower(a) === normalizeNameLower(b);
-
-      const ensureUser = async (username) => {
-        const ref = userRef(username);
-        const snap = await getDoc(ref);
-        if (!snap.exists()) {
-          const data = defaultUser();
-          await setDoc(ref, data);
-          return data;
-        }
-        return snap.data();
-      };
-
-      return {
-        async register(username, password) {
-          const clean = normalizeNameLower(username);
-          const ref = userRef(clean);
-          const snap = await getDoc(ref);
-          if (snap.exists()) {
-            return { ok: false, message: 'Questo username è già in uso. Scegline un altro.' };
-          }
-          const data = {
-            password,
-            friends: [],
-            pending: [],
-            messages: {},
-            createdAt: new Date().toISOString(),
-            status: 'offline'
-          };
-          await setDoc(ref, data);
-          return { ok: true, user: clean };
-        },
-
-        async exists(username) {
-          const ref = userRef(username);
-          const snap = await getDoc(ref);
-          return snap.exists();
-        },
-
-        async login(username, password) {
-          const ref = userRef(username);
-          const snap = await getDoc(ref);
-          if (!snap.exists()) {
-            return { ok: false, message: 'Credenziali non valide. Ritenta.' };
-          }
-          const user = snap.data();
-          if (user.password !== password) {
-            return { ok: false, message: 'Credenziali non valide. Ritenta.' };
-          }
-          return { ok: true, user: normalizeNameLower(username) };
-        },
-
-        async getUser(username) {
-          const data = await ensureUser(username);
-          return data;
-        },
-
-        async reload() {
-          return true;
-        },
-
-        async setStatus(username, status) {
-          const ref = userRef(username);
-          const data = await ensureUser(username);
-          data.status = status;
-          await setDoc(ref, data);
-        },
-
-        async addPending(sender, friendName) {
-          const senderKey = normalizeNameLower(sender);
-          const targetKey = normalizeNameLower(friendName);
-
-          if (senderKey === targetKey) {
-            return { ok: false, message: 'Non puoi aggiungere te stesso.' };
-          }
-
-          const senderRef = userRef(senderKey);
-          const targetRef = userRef(targetKey);
-
-          const senderSnap = await getDoc(senderRef);
-          const targetSnap = await getDoc(targetRef);
-
-          if (!targetSnap.exists()) {
-            return { ok: false, message: 'Utente non trovato.' };
-          }
-
-          const senderUser = senderSnap.exists() ? senderSnap.data() : defaultUser();
-          const targetUser = targetSnap.data();
-
-          senderUser.friends = senderUser.friends || [];
-          targetUser.friends = targetUser.friends || [];
-          targetUser.pending = targetUser.pending || [];
-
-          if (senderUser.friends.some(f => sameUser(f.name, targetKey)) ||
-              targetUser.friends.some(f => sameUser(f.name, senderKey))) {
-            return { ok: false, message: 'Questo utente è già tra i tuoi amici.' };
-          }
-
-          if (targetUser.pending.some(p => sameUser(p.name, senderKey))) {
-            return { ok: false, message: 'Richiesta già inviata.' };
-          }
-
-          targetUser.pending.push({ name: senderKey });
-
-          await setDoc(senderRef, senderUser);
-          await setDoc(targetRef, targetUser);
-
-          return { ok: true };
-        },
-
-        async accept(username, friendName) {
-          const ownerKey = normalizeNameLower(username);
-          const friendKey = normalizeNameLower(friendName);
-
-          const ownerRef = userRef(ownerKey);
-          const friendRef = userRef(friendKey);
-
-          const ownerSnap = await getDoc(ownerRef);
-          const friendSnap = await getDoc(friendRef);
-
-          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
-          const friend = friendSnap.exists() ? friendSnap.data() : defaultUser();
-
-          owner.pending = (owner.pending || []).filter(p => !sameUser(p.name, friendKey));
-
-          owner.friends = owner.friends || [];
-          friend.friends = friend.friends || [];
-
-          if (!owner.friends.some(f => sameUser(f.name, friendKey))) {
-            owner.friends.push({ name: friendKey, status: friend.status || 'offline', pinned: false, blocked: false, messages: [] });
-          }
-          if (!friend.friends.some(f => sameUser(f.name, ownerKey))) {
-            friend.friends.push({ name: ownerKey, status: owner.status || 'offline', pinned: false, blocked: false, messages: [] });
-          }
-
-          await setDoc(ownerRef, owner);
-          await setDoc(friendRef, friend);
-        },
-
-        async decline(username, friendName) {
-          const ownerKey = normalizeNameLower(username);
-          const friendKey = normalizeNameLower(friendName);
-
-          const ownerRef = userRef(ownerKey);
-          const ownerSnap = await getDoc(ownerRef);
-          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
-          owner.pending = (owner.pending || []).filter(p => !sameUser(p.name, friendKey));
-          await setDoc(ownerRef, owner);
-        },
-
-        async toggleBlock(username, friendName) {
-          const ownerKey = normalizeNameLower(username);
-          const friendKey = normalizeNameLower(friendName);
-          const ownerRef = userRef(ownerKey);
-          const ownerSnap = await getDoc(ownerRef);
-          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
-          owner.friends = owner.friends || [];
-          owner.friends = owner.friends.map(f => {
-            if (sameUser(f.name, friendKey)) {
-              return { ...f, blocked: !f.blocked };
-            }
-            return f;
-          });
-          await setDoc(ownerRef, owner);
-        },
-
-        async togglePin(username, friendName) {
-          const ownerKey = normalizeNameLower(username);
-          const friendKey = normalizeNameLower(friendName);
-          const ownerRef = userRef(ownerKey);
-          const ownerSnap = await getDoc(ownerRef);
-          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
-          owner.friends = owner.friends || [];
-          owner.friends = owner.friends.map(f => {
-            if (sameUser(f.name, friendKey)) {
-              return { ...f, pinned: !f.pinned };
-            }
-            return f;
-          });
-          await setDoc(ownerRef, owner);
-        },
-
-        async removeFriend(username, friendName) {
-          const ownerKey = normalizeNameLower(username);
-          const friendKey = normalizeNameLower(friendName);
-
-          const ownerRef = userRef(ownerKey);
-          const friendRef = userRef(friendKey);
-
-          const ownerSnap = await getDoc(ownerRef);
-          const friendSnap = await getDoc(friendRef);
-
-          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
-          const friend = friendSnap.exists() ? friendSnap.data() : defaultUser();
-
-          owner.friends = (owner.friends || []).filter(f => !sameUser(f.name, friendKey));
-          friend.friends = (friend.friends || []).filter(f => !sameUser(f.name, ownerKey));
-
-          await setDoc(ownerRef, owner);
-          await setDoc(friendRef, friend);
-        },
-
-        async clearChat(username, friendName) {
-          const ownerKey = normalizeNameLower(username);
-          const friendKey = normalizeNameLower(friendName);
-
-          const ownerRef = userRef(ownerKey);
-          const friendRef = userRef(friendKey);
-
-          const ownerSnap = await getDoc(ownerRef);
-          const friendSnap = await getDoc(friendRef);
-
-          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
-          const friend = friendSnap.exists() ? friendSnap.data() : defaultUser();
-
-          owner.friends = (owner.friends || []).map(f => sameUser(f.name, friendKey) ? { ...f, messages: [] } : f);
-          friend.friends = (friend.friends || []).map(f => sameUser(f.name, ownerKey) ? { ...f, messages: [] } : f);
-
-          await setDoc(ownerRef, owner);
-          await setDoc(friendRef, friend);
-        },
-
-        async saveMessage(sender, friendName, text) {
-          const senderKey = normalizeNameLower(sender);
-          const friendKey = normalizeNameLower(friendName);
-          const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-          const updateMessagesFor = async (ownerKey, otherKey, fromValue) => {
-            const ref = userRef(ownerKey);
-            const snap = await getDoc(ref);
-            const data = snap.exists() ? snap.data() : defaultUser();
-            data.friends = data.friends || [];
-            let entry = data.friends.find(f => sameUser(f.name, otherKey));
-            if (!entry) {
-              entry = { name: otherKey, status: 'online', pinned: false, blocked: false, messages: [] };
-              data.friends.push(entry);
-            }
-            entry.messages = entry.messages || [];
-            entry.messages.push({ from: fromValue, text, time });
-            data.friends = data.friends.map(f => sameUser(f.name, otherKey) ? entry : f);
-            await setDoc(ref, data);
-          };
-
-          await updateMessagesFor(senderKey, friendKey, senderKey);
-          await updateMessagesFor(friendKey, senderKey, senderKey);
-
-          return { delivered: true };
-        }
-      };
-    })();
-
-    const form = document.getElementById('auth-form');
-    const status = document.getElementById('status');
-    const switchBtn = document.getElementById('switch-btn');
-    const switchCopy = document.getElementById('switch-copy');
-    const submitBtn = document.getElementById('submit-btn');
-    const title = document.getElementById('form-title');
-    const subtitle = document.getElementById('form-subtitle');
-    const usernameField = document.getElementById('username');
-    const passwordField = document.getElementById('password');
-    const stayLoggedToggle = document.getElementById('stay-logged');
-    const splash = document.querySelector('.splash');
-
-    const authView = document.getElementById('auth-view');
-    const mainView = document.getElementById('main-view');
-    const chatView = document.getElementById('chat-view');
-    const friendList = document.getElementById('friend-list');
-    const filters = document.getElementById('filters');
-    const searchInput = document.getElementById('search');
-    const onlineCount = document.getElementById('online-count');
-    const offlineCount = document.getElementById('offline-count');
-    const addFriendBtns = [document.getElementById('add-friend'), document.getElementById('side-add')];
-    const modal = document.getElementById('modal');
-    const modalStatus = document.getElementById('modal-status');
-    const friendInput = document.getElementById('friend-name');
-    const closeModal = document.getElementById('close-modal');
-    const confirmAdd = document.getElementById('confirm-add');
-    const appShell = document.getElementById('app');
-
-    const sideAvatar = document.getElementById('side-avatar');
-    const sideName = document.getElementById('side-name');
-    const sideHandle = document.getElementById('side-handle');
-    const sideStatus = document.getElementById('side-status');
-    const memberSince = document.getElementById('member-since');
-    const openProfile = document.getElementById('open-profile');
-    const profileOverlay = document.getElementById('profile-overlay');
-    const closeProfile = document.getElementById('close-profile');
-    const logoutBtn = document.getElementById('logout-btn');
-
-    const accountAvatar = document.getElementById('account-avatar');
-    const accountName = document.getElementById('account-name');
-    const accountStatus = document.getElementById('account-status');
-    const accountHandle = document.getElementById('account-handle');
-    const accountAbout = document.getElementById('account-about');
-    const accountDisplay = document.getElementById('account-display');
-    const accountUsername = document.getElementById('account-username');
-    const accountState = document.getElementById('account-state');
-    const accountMember = document.getElementById('account-member');
-
-    const chatName = document.getElementById('chat-name');
-    const chatStatus = document.getElementById('chat-status');
-    const messagesEl = document.getElementById('messages');
-    const chatForm = document.getElementById('chat-form');
-    const chatInput = document.getElementById('chat-input');
-    const blockBanner = document.getElementById('block-banner');
-    const profileAvatar = document.getElementById('profile-avatar');
-    const profileName = document.getElementById('profile-name');
-    const profileStatus = document.getElementById('profile-status');
-    const profileMeta = document.getElementById('profile-meta');
-    const backToMain = document.getElementById('back-to-main');
-
-    let mode = 'login';
-    let currentUser = null;
-    let filter = 'all';
-    let activeFriend = null;
-    let presenceInterval = null;
-    let chatInterval = null;
-    const presenceMap = {};
-    const SESSION_KEY = 'novachat-session';
-
-    const normalizeName = (value = '') => value.trim().replace(/^@+/, '');
-
-    function getStatus(friend) {
-      if (!friend) return 'offline';
-      const stored = presenceMap[friend.name];
-      if (stored) return stored;
-      return friend.status || 'offline';
-    }
-
-    function formatDate(value) {
-      const date = new Date(value);
-      if (Number.isNaN(date.getTime())) return 'Nuovo membro';
-      return date.toLocaleDateString('it-IT', { month: 'short', year: 'numeric' });
-    }
-
-    function persistSession(user, stay) {
-      if (stay && user) {
-        localStorage.setItem(SESSION_KEY, JSON.stringify({ user, stay: true }));
-      } else {
-        localStorage.removeItem(SESSION_KEY);
-      }
-    }
-
-    function loadSession() {
-      const raw = localStorage.getItem(SESSION_KEY);
-      try {
-        return raw ? JSON.parse(raw) : null;
-      } catch (err) {
-        return null;
-      }
-    }
-
-    function triggerSplash() {
-      splash.classList.remove('burst');
-      void splash.offsetWidth;
-      splash.classList.add('burst');
-    }
-
-    function setMode(next) {
-      mode = next;
-      const isSignup = mode === 'signup';
-      title.textContent = 'NovaChat';
-      subtitle.textContent = isSignup
-        ? 'Crea il tuo account per entrare nella chat. Nessuna email, solo username e password.'
-        : 'Accedi con il tuo username e la tua password.';
-      submitBtn.textContent = isSignup ? 'Crea account' : 'Accedi';
-      switchCopy.textContent = isSignup ? 'Hai già un account?' : 'Non hai ancora un account?';
-      switchBtn.textContent = isSignup ? 'Accedi' : 'Registrati';
-      status.textContent = '';
-      status.className = 'status';
-      usernameField.focus();
-      triggerSplash();
-    }
-
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const username = normalizeName(usernameField.value);
-      const password = passwordField.value.trim();
-      if (!username || !password) return;
-
-      const action = mode === 'signup' ? DataStore.register : DataStore.login;
-      const result = await action(username, password);
-
-      status.className = 'status ' + (result.ok ? 'success' : 'error');
-      status.textContent = result.ok
-        ? mode === 'signup'
-          ? 'Account creato con successo. Benvenuto su NovaChat!'
-          : 'Login effettuato con successo.'
-        : result.message;
-
-      if (result.ok) {
-        passwordField.value = '';
-        triggerSplash();
-        currentUser = result.user || normalizeName(username);
-        persistSession(currentUser, stayLoggedToggle.checked);
-        await showMain();
-      }
-    });
-
-    switchBtn.addEventListener('click', () => {
-      setMode(mode === 'signup' ? 'login' : 'signup');
-    });
-
-    splash.addEventListener('animationend', (event) => {
-      if (event.animationName === 'splashBurst') {
-        splash.classList.remove('burst');
-      }
-    });
-
-    async function renderUserSummary() {
-      if (!currentUser) return;
-      const user = await DataStore.getUser(currentUser);
-      sideAvatar.textContent = currentUser.charAt(0).toUpperCase();
-      sideName.textContent = currentUser;
-      sideHandle.textContent = '@' + currentUser.toLowerCase();
-      sideStatus.innerHTML = '<span class="dot online"></span>Online';
-      memberSince.textContent = user.createdAt ? 'Dal ' + formatDate(user.createdAt) : 'Nuovo membro';
-    }
-
-    async function renderAccountPanel() {
-      if (!currentUser) return;
-      const user = await DataStore.getUser(currentUser);
-      const joined = user.createdAt ? formatDate(user.createdAt) : 'Nuovo membro';
-      accountAvatar.textContent = currentUser.charAt(0).toUpperCase();
-      accountName.textContent = currentUser;
-      accountHandle.textContent = '@' + currentUser.toLowerCase();
-      accountStatus.innerHTML = '<span class="dot online"></span>Online';
-      accountDisplay.textContent = currentUser;
-      accountUsername.textContent = currentUser;
-      accountState.textContent = 'Online';
-      accountMember.textContent = joined;
-    }
-
-    async function showMain() {
-      if (!currentUser) return;
-      authView.classList.add('hidden');
-      chatView.classList.add('hidden');
-      mainView.classList.remove('hidden');
-      profileOverlay.classList.add('hidden');
-      appShell.classList.remove('blurred');
-      await DataStore.setStatus(currentUser, 'online');
-      startPresenceLoop();
-      startChatSync();
-      await renderUserSummary();
-      await renderAccountPanel();
-      await renderFriends();
-    }
-
-    async function logout() {
-      if (currentUser) {
-        await DataStore.setStatus(currentUser, 'offline');
-      }
-      currentUser = null;
-      activeFriend = null;
-      clearInterval(presenceInterval);
-      clearInterval(chatInterval);
-      persistSession('', false);
-      appShell.classList.remove('blurred');
-      profileOverlay.classList.add('hidden');
-      modal.classList.add('hidden');
-      mainView.classList.add('hidden');
-      chatView.classList.add('hidden');
-      authView.classList.remove('hidden');
-      usernameField.value = '';
-      passwordField.value = '';
-      stayLoggedToggle.checked = false;
-      setMode('login');
-    }
-
-    async function showChat(friend) {
-      activeFriend = friend;
-      mainView.classList.add('hidden');
-      chatView.classList.remove('hidden');
-      const statusValue = getStatus(friend) || 'offline';
-      presenceMap[friend.name] = friend.blocked ? 'offline' : 'online';
-      chatName.textContent = friend.name;
-      chatStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Blocked' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
-      profileAvatar.textContent = friend.name.charAt(0).toUpperCase();
-      profileName.textContent = friend.name;
-      profileStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Bloccato' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
-      profileMeta.textContent = friend.pinned ? 'Fissato in alto' : 'Contatto standard';
-      chatInput.placeholder = `Message @${friend.name}`;
-      renderMessages(friend);
-      const blocked = friend.blocked;
-      blockBanner.classList.toggle('hidden', !blocked);
-      chatInput.disabled = blocked;
-    }
-
-    function renderMessages(friend) {
-      messagesEl.innerHTML = '';
-      const msgs = Array.isArray(friend.messages) ? friend.messages : [];
-      if (!msgs.length) {
-        const empty = document.createElement('div');
-        empty.className = 'empty';
-        empty.textContent = 'La chat è vuota. Invia un messaggio per iniziare.';
-        messagesEl.appendChild(empty);
-        messagesEl.scrollTop = messagesEl.scrollHeight;
-        return;
-      }
-      msgs.forEach(m => {
-        const bubble = document.createElement('div');
-        bubble.className = `bubble ${m.from === currentUser ? 'me' : 'them'}`;
-        bubble.innerHTML = `<div>${m.text}</div><div class="timestamp">${m.time}</div>`;
-        messagesEl.appendChild(bubble);
-      });
-      messagesEl.scrollTop = messagesEl.scrollHeight;
-    }
-
-    async function syncActiveChat() {
-      if (!activeFriend || chatView.classList.contains('hidden') || !currentUser) return;
-      const user = await DataStore.getUser(currentUser);
-      const friend = (user.friends || []).find(f => f.name === activeFriend.name || normalizeName(f.name) === normalizeName(activeFriend.name));
-      if (!friend) return;
-      activeFriend = friend;
-      const statusValue = getStatus(friend);
-      chatStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Blocked' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
-      profileStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Bloccato' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
-      profileMeta.textContent = friend.pinned ? 'Fissato in alto' : 'Contatto standard';
-      blockBanner.classList.toggle('hidden', !friend.blocked);
-      chatInput.disabled = friend.blocked;
-      renderMessages(friend);
-    }
-
-    chatForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!activeFriend || chatInput.disabled) return;
-      const text = chatInput.value.trim();
-      if (!text) return;
-      const result = await DataStore.saveMessage(currentUser, activeFriend.name, text);
-      const user = await DataStore.getUser(currentUser);
-      const updated = (user.friends || []).find(f => f.name === activeFriend.name);
-      chatInput.value = '';
-      if (updated) await showChat(updated);
-      if (!result.delivered) {
-        console.warn('Messaggio non consegnato: utente destinatario non trovato.');
-      }
-    });
-
-    backToMain.addEventListener('click', () => {
-      showMain();
-    });
-
-    async function renderFriends() {
-      if (!currentUser) return;
-      const user = await DataStore.getUser(currentUser);
-      const term = searchInput.value.trim().toLowerCase();
-      const friends = user.friends || [];
-
-      const filtered = friends
-        .filter(f => !term || f.name.toLowerCase().includes(term))
-        .filter(f => {
-          const statusValue = getStatus(f);
-          if (filter === 'online') return statusValue === 'online' && !f.blocked;
-          if (filter === 'pending') return false;
-          if (filter === 'blocked') return f.blocked;
-          return !f.blocked;
-        })
-        .sort((a, b) => Number(b.pinned) - Number(a.pinned));
-
-      friendList.innerHTML = '';
-
-      const pendingVisible = filter === 'pending';
-      const pending = user.pending || [];
-
-      if (pendingVisible) {
-        if (pending.length === 0) {
-          friendList.appendChild(makeEmpty('Nessuna richiesta in arrivo. Invia un invito da "Add Friend".'));
-        } else {
-          pending.forEach(p => {
-            const card = document.createElement('div');
-            card.className = 'friend-card';
-            card.innerHTML = `
-              <div class="avatar">${p.name.charAt(0).toUpperCase()}</div>
-              <div class="friend-meta">
-                <div class="friend-name">${p.name}</div>
-                <div class="friend-status"><span class="dot online"></span>Richiesta in arrivo</div>
-              </div>
-              <div class="friend-actions" style="opacity:1; display:flex; gap:6px;">
-                <button class="action-btn" data-accept="${p.name}">Accetta</button>
-                <button class="action-btn" data-decline="${p.name}">Rifiuta</button>
-              </div>
-            `;
-            friendList.appendChild(card);
-          });
-        }
-      } else {
-        if (!filtered.length) {
-          friendList.appendChild(makeEmpty('Non hai ancora amici qui. Usa "Add Friend" per iniziare.'));
-        } else {
-          filtered.forEach(f => {
-            const card = document.createElement('div');
-            card.className = 'friend-card';
-            card.dataset.friend = f.name;
-            const statusValue = getStatus(f);
-            const statusDot = f.blocked ? 'blocked' : statusValue;
-            const statusLabel = f.blocked ? 'Bloccato' : (statusValue === 'online' ? 'Online' : 'Offline');
-            card.innerHTML = `
-              <div class="avatar">${f.name.charAt(0).toUpperCase()}</div>
-              <div class="friend-meta">
-                <div class="friend-name">${f.name}${f.pinned ? ' 📌' : ''}</div>
-                <div class="friend-status"><span class="dot ${statusDot}"></span>${statusLabel}</div>
-              </div>
-              <div class="friend-actions">
-                <button class="action-btn" type="button">⋯</button>
-                <div class="menu">
-                  <button data-action="report" data-friend="${f.name}">Segnala</button>
-                  <button data-action="block" data-friend="${f.name}">${f.blocked ? 'Sblocca' : 'Blocca'}</button>
-                  <button data-action="pin" data-friend="${f.name}">${f.pinned ? 'Rimuovi fissato' : 'Fissa'}</button>
-                  <button data-action="remove" data-friend="${f.name}">Rimuovi amicizia</button>
-                  <button data-action="clear" data-friend="${f.name}">Cancella chat</button>
-                </div>
-              </div>
-            `;
-            friendList.appendChild(card);
-          });
-        }
-      }
-
-      onlineCount.textContent = friends.filter(f => getStatus(f) === 'online' && !f.blocked).length;
-      offlineCount.textContent = friends.filter(f => getStatus(f) !== 'online' && !f.blocked).length;
-    }
-
-    function makeEmpty(text) {
-      const empty = document.createElement('div');
-      empty.className = 'empty';
-      empty.textContent = text;
-      return empty;
-    }
-
-    filters.addEventListener('click', async (e) => {
-      if (e.target.dataset.filter) {
-        filter = e.target.dataset.filter;
-        [...filters.querySelectorAll('button')].forEach(btn => btn.classList.toggle('active', btn.dataset.filter === filter));
-        await renderFriends();
-      }
-    });
-
-    searchInput.addEventListener('input', () => {
-      renderFriends();
-    });
-
-    friendList.addEventListener('click', async (e) => {
-      const accept = e.target.dataset.accept;
-      const decline = e.target.dataset.decline;
-      const action = e.target.dataset.action;
-      const friendName = e.target.dataset.friend;
-      const actionBtn = e.target.closest('.action-btn');
-
-      if (actionBtn && actionBtn.nextElementSibling?.classList.contains('menu')) {
-        const menu = actionBtn.nextElementSibling;
-        const open = menu.style.display === 'flex';
-        document.querySelectorAll('.menu').forEach(m => m.style.display = 'none');
-        menu.style.display = open ? 'none' : 'flex';
-        e.stopPropagation();
-        return;
-      }
-
-      if (accept) {
-        await DataStore.accept(currentUser, accept);
-        await renderFriends();
-        return;
-      }
-      if (decline) {
-        await DataStore.decline(currentUser, decline);
-        await renderFriends();
-        return;
-      }
-
-      if (action && friendName) {
-        if (action === 'block') {
-          await DataStore.toggleBlock(currentUser, friendName);
-        }
-        if (action === 'pin') {
-          await DataStore.togglePin(currentUser, friendName);
-        }
-        if (action === 'report') {
-          alert('Segnalazione inviata per ' + friendName);
-        }
-        if (action === 'remove') {
-          await DataStore.removeFriend(currentUser, friendName);
-          if (activeFriend && activeFriend.name === friendName) {
-            activeFriend = null;
-            await showMain();
-          }
-        }
-        if (action === 'clear') {
-          await DataStore.clearChat(currentUser, friendName);
-          if (activeFriend && activeFriend.name === friendName) {
-            const user = await DataStore.getUser(currentUser);
-            const refreshed = (user.friends || []).find(f => f.name === friendName);
-            if (refreshed) await showChat(refreshed);
-          }
-        }
-        await renderFriends();
-        return;
-      }
-
-      const card = e.target.closest('.friend-card');
-      if (!card || filter === 'pending') return;
-      const name = card.dataset.friend;
-      if (!name) return;
-      const user = await DataStore.getUser(currentUser);
-      const friend = (user.friends || []).find(f => f.name === name);
-      if (friend) {
-        await showChat(friend);
-      }
-    });
-
-    friendList.addEventListener('mouseleave', () => {
-      document.querySelectorAll('.menu').forEach(m => m.style.display = 'none');
-    });
-
-    addFriendBtns.forEach(btn => btn.addEventListener('click', () => {
-      modal.classList.remove('hidden');
-      appShell.classList.add('blurred');
-      modalStatus.textContent = '';
-      modalStatus.className = 'status';
-      friendInput.value = '';
-      friendInput.focus();
-    }));
-
-    closeModal.addEventListener('click', () => {
-      modal.classList.add('hidden');
-      appShell.classList.remove('blurred');
-    });
-
-    confirmAdd.addEventListener('click', async () => {
-      const name = normalizeName(friendInput.value);
-      if (!name) return;
-      if (!currentUser) return;
-      const result = await DataStore.addPending(currentUser, name);
-      modalStatus.className = 'status ' + (result.ok ? 'success' : 'error');
-      modalStatus.textContent = result.ok ? `Richiesta inviata a ${name}.` : result.message;
-      if (result.ok) {
-        await renderFriends();
-        setTimeout(() => {
-          modal.classList.add('hidden');
-          appShell.classList.remove('blurred');
-        }, 600);
-      }
-    });
-
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.add('hidden');
-        appShell.classList.remove('blurred');
-      }
-    });
-
-    openProfile.addEventListener('click', async () => {
-      await renderAccountPanel();
-      profileOverlay.classList.remove('hidden');
-      appShell.classList.add('blurred');
-    });
-
-    closeProfile.addEventListener('click', () => {
-      profileOverlay.classList.add('hidden');
-      appShell.classList.remove('blurred');
-    });
-
-    profileOverlay.addEventListener('click', (e) => {
-      if (e.target === profileOverlay) {
-        profileOverlay.classList.add('hidden');
-        appShell.classList.remove('blurred');
-      }
-    });
-
-    logoutBtn.addEventListener('click', () => {
-      logout();
-    });
-
-    async function restoreSession() {
-      const saved = loadSession();
-      if (saved?.user && saved.stay && await DataStore.exists(saved.user)) {
-        currentUser = saved.user;
-        await showMain();
-        return true;
-      }
-      if (saved?.user) {
-        usernameField.value = saved.user;
-        stayLoggedToggle.checked = Boolean(saved.stay);
-      }
-      return false;
-    }
-
-    function startPresenceLoop() {
-      clearInterval(presenceInterval);
-      presenceInterval = setInterval(async () => {
-        if (!currentUser) return;
-        await renderFriends();
-        await syncActiveChat();
-      }, 3200);
-    }
-
-    function startChatSync() {
-      clearInterval(chatInterval);
-      chatInterval = setInterval(syncActiveChat, 1200);
-    }
-
-    async function handleStorageSync() {
-      if (!currentUser) return;
-      await renderUserSummary();
-      await renderAccountPanel();
-      await renderFriends();
-      await syncActiveChat();
-    }
-
-    window.addEventListener('storage', () => {
-      handleStorageSync();
-    });
-
-    window.addEventListener('beforeunload', async () => {
-      if (currentUser) {
-        await DataStore.setStatus(currentUser, 'offline');
-      }
-    });
-
-    (async () => {
-      const booted = await restoreSession();
-      if (!booted) {
-        setMode(mode);
-      }
-    })();
+      padding: 10px 12px;diff --git a/index.html b/index.html
+index 33b1728c6172cdbb30af30158397dab4039b53d9..0a33afecfb8d8a1e230d02c89feaf97cc8516490 100644
+--- a/index.html
++++ b/index.html
+@@ -430,51 +430,51 @@
+       padding: 10px 12px;
+       cursor: pointer;
+       text-align: left;
+       transition: background 0.2s ease;
+     }
+ 
+     .menu button:hover { background: rgba(255,255,255,0.05); }
+ 
+     .empty {
+       padding: 18px;
+       border: 1px dashed var(--border);
+       border-radius: 14px;
+       color: var(--muted);
+       text-align: center;
+       line-height: 1.5;
+     }
+ 
+     .side-card h3 { margin-bottom: 8px; }
+     .side-card p { color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
+     .side-list { display: flex; flex-direction: column; gap: 10px; }
+ 
+     .mini-entry { display: flex; align-items: center; gap: 10px; color: var(--muted); font-weight: 700; }
+ 
+     .tag { padding: 4px 8px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); font-size: 12px; }
+ 
+-    .profile-summary {
++    .profile-summary {
+       background: linear-gradient(160deg, rgba(255,255,255,0.02), rgba(255,255,255,0.05));
+       border: 1px solid var(--border);
+       border-radius: 16px;
+       padding: 16px;
+       position: relative;
+       overflow: hidden;
+       box-shadow: 0 16px 50px rgba(0,0,0,0.4);
+     }
+ 
+     .profile-summary::after {
+       content: '';
+       position: absolute;
+       inset: 0;
+       background: radial-gradient(circle at 20% 30%, rgba(157, 107, 255, 0.12), transparent 40%),
+                   radial-gradient(circle at 80% 30%, rgba(92, 240, 255, 0.12), transparent 35%);
+       opacity: 0.7;
+       pointer-events: none;
+     }
+ 
+     .profile-summary .header {
+       display: flex;
+       align-items: center;
+       gap: 12px;
+       position: relative;
+       z-index: 1;
+@@ -503,103 +503,139 @@
+       display: flex;
+       align-items: center;
+       justify-content: space-between;
+       margin-top: 14px;
+       position: relative;
+       z-index: 1;
+     }
+ 
+     .pill { padding: 6px 10px; border-radius: 12px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); font-weight: 700; font-size: 12px; }
+ 
+     .profile-summary .menu-btn {
+       width: 36px;
+       height: 36px;
+       border-radius: 12px;
+       border: 1px solid var(--border);
+       background: rgba(255,255,255,0.04);
+       color: var(--text);
+       display: grid;
+       place-items: center;
+       cursor: pointer;
+       transition: background 0.2s ease, border 0.2s ease, transform 0.2s ease;
+     }
+ 
+     .profile-summary .menu-btn:hover { background: rgba(92, 240, 255, 0.12); border-color: rgba(92, 240, 255, 0.45); transform: translateY(-1px); }
+ 
+-    .profile-summary .divider { height: 1px; background: var(--border); margin: 12px 0; position: relative; z-index: 1; }
++    .profile-summary .divider { height: 1px; background: var(--border); margin: 12px 0; position: relative; z-index: 1; }
++
++    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
++    .info-card { position: relative; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--border); background: rgba(255,255,255,0.03); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02); overflow: hidden; }
++    .info-card:hover .edit-handle { opacity: 1; transform: translateX(0); }
++    .info-label { color: var(--muted); font-size: 12px; letter-spacing: 0.2px; margin-bottom: 4px; display: block; }
++    .info-value { font-weight: 800; letter-spacing: 0.2px; }
++    .edit-handle { position: absolute; right: 8px; top: 50%; transform: translateX(10px) translateY(-50%); opacity: 0; transition: all 0.15s ease; display: flex; align-items: center; gap: 6px; }
++    .edit-btn { border: 1px solid var(--border); background: rgba(92, 240, 255, 0.12); color: var(--text); border-radius: 10px; padding: 6px 8px; cursor: pointer; font-weight: 700; }
++    .edit-pop { position: absolute; right: -6px; top: 34px; background: rgba(16, 19, 29, 0.96); border: 1px solid var(--border); border-radius: 10px; padding: 10px; display: none; flex-direction: column; gap: 8px; width: 200px; box-shadow: 0 10px 35px rgba(0,0,0,0.45); z-index: 10; }
++    .edit-pop input, .edit-pop select { width: 100%; border-radius: 8px; border: 1px solid var(--border); background: rgba(255,255,255,0.04); color: var(--text); padding: 8px; }
++    .edit-pop.show { display: flex; }
++
++    .logout-tile { margin-top: auto; background: linear-gradient(160deg, rgba(255,107,155,0.15), rgba(255,107,155,0.08)); border: 1px solid rgba(255,107,155,0.35); color: var(--text); border-radius: 12px; padding: 12px; display: flex; align-items: center; justify-content: space-between; font-weight: 800; box-shadow: 0 12px 40px rgba(255,107,155,0.25); }
++    .logout-tile button { border: 1px solid rgba(255,107,155,0.45); background: rgba(255,255,255,0.04); color: var(--danger); border-radius: 10px; padding: 8px 12px; font-weight: 800; cursor: pointer; }
+ 
+     .toggle { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; }
+     .toggle input { accent-color: #9d6bff; width: 18px; height: 18px; }
+ 
+-    .profile-overlay {
++    .profile-overlay {
+       position: fixed;
+       inset: 0;
+       background: rgba(0,0,0,0.55);
+       backdrop-filter: blur(10px);
+       display: grid;
+       place-items: center;
+       z-index: 60;
+     }
+ 
+-    .profile-modal {
++    .profile-modal {
+       width: min(920px, 94vw);
+       background: rgba(14, 16, 26, 0.95);
+       border: 1px solid var(--border);
+       border-radius: 20px;
+       display: grid;
+       grid-template-columns: 220px 1fr;
+       overflow: hidden;
+       box-shadow: 0 26px 90px rgba(0,0,0,0.6);
+       position: relative;
+       padding-top: 8px;
+-    }
++    }
+ 
+     .profile-modal .close-profile {
+       position: absolute;
+       top: 10px;
+       right: 10px;
+       background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1), rgba(255,255,255,0.03));
+       border: 1px solid var(--border);
+       border-radius: 10px;
+       color: var(--text);
+       width: 38px;
+       height: 38px;
+       cursor: pointer;
+       z-index: 5;
+       box-shadow: 0 10px 28px rgba(0,0,0,0.45);
+     }
+ 
+-    .profile-nav { background: rgba(19, 22, 32, 0.96); padding: 22px 18px; display: flex; flex-direction: column; gap: 10px; border-right: 1px solid var(--border); }
+-    .profile-nav h4 { margin-bottom: 10px; }
+-    .profile-nav button { width: 100%; justify-content: flex-start; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--text); }
++    .profile-nav { background: rgba(19, 22, 32, 0.96); padding: 22px 18px; display: flex; flex-direction: column; gap: 10px; border-right: 1px solid var(--border); }
++    .profile-nav h4 { margin-bottom: 10px; }
++    .profile-nav button { width: 100%; justify-content: flex-start; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--text); }
+ 
+-    .profile-body { padding: 24px 32px 24px 24px; display: grid; grid-template-columns: 1.2fr 0.9fr; gap: 24px; position: relative; }
++    .profile-body { padding: 24px 32px 24px 24px; display: grid; grid-template-columns: 1.2fr 0.9fr; gap: 24px; position: relative; }
+     .profile-body .section { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 14px; padding: 16px; box-shadow: 0 16px 50px rgba(0,0,0,0.35); }
+     .profile-body .section h5 { margin-bottom: 12px; }
+     .profile-body .field { margin-bottom: 10px; color: var(--muted); }
+ 
+-    .row { display: flex; align-items: center; gap: 8px; color: var(--muted); }
++    .row { display: flex; align-items: center; gap: 8px; color: var(--muted); }
++
++    .avatar-change { position: relative; }
++    .avatar-change .profile-avatar { transition: filter 0.2s ease; cursor: pointer; }
++    .avatar-change:hover .profile-avatar { filter: blur(3px) brightness(0.9); }
++    .avatar-change .avatar-hint { position: absolute; inset: 0; display: grid; place-items: center; color: var(--text); font-weight: 800; opacity: 0; transition: opacity 0.2s ease; pointer-events: none; }
++    .avatar-change:hover .avatar-hint { opacity: 1; }
++
++    .toast-container { position: fixed; bottom: 18px; right: 18px; display: flex; flex-direction: column; gap: 10px; z-index: 200; }
++    .toast { min-width: 240px; background: rgba(19,22,32,0.96); border: 1px solid var(--border); border-radius: 12px; padding: 12px; box-shadow: 0 10px 35px rgba(0,0,0,0.4); cursor: pointer; }
++    .toast .title { font-weight: 800; margin-bottom: 6px; }
++    .toast .text { color: var(--muted); font-size: 13px; }
++
++    .notify-dot { position: relative; }
++    .notify-dot::after { content: ''; position: absolute; width: 10px; height: 10px; border-radius: 50%; background: orange; right: -4px; top: -4px; display: none; }
++    .notify-dot.has-unread::after { display: block; }
++
++    .friend-card { overflow: hidden; }
++    .unread-badge { position: absolute; left: 8px; top: 8px; background: orange; color: #0d0f17; border-radius: 10px; padding: 2px 6px; font-size: 12px; font-weight: 900; box-shadow: 0 6px 16px rgba(0,0,0,0.4); }
++
++    .submenu { position: absolute; left: 100%; top: 0; background: rgba(19,22,32,0.98); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 12px 36px rgba(0,0,0,0.45); display: none; flex-direction: column; min-width: 140px; }
++    .submenu button { width: 100%; }
++    .menu button[data-action="mute"]:hover + .submenu, .submenu:hover { display: flex; }
+ 
+     /* Modal */
+     .overlay {
+       position: fixed;
+       inset: 0;
+       background: rgba(0,0,0,0.45);
+       backdrop-filter: blur(8px);
+       display: grid;
+       place-items: center;
+       z-index: 50;
+     }
+ 
+     .modal {
+       width: min(420px, 92vw);
+       background: rgba(16, 19, 29, 0.95);
+       border: 1px solid var(--border);
+       border-radius: 16px;
+       padding: 20px;
+       box-shadow: 0 24px 70px rgba(0,0,0,0.55);
+     }
+ 
+     .modal h3 { margin-bottom: 10px; }
+     .modal p { color: var(--muted); margin-bottom: 12px; }
+ 
+     .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 12px; }
+@@ -813,448 +849,580 @@
+           <div class="profile-avatar" id="profile-avatar">N</div>
+           <div>
+             <div class="friend-name" id="profile-name"></div>
+             <div class="friend-status" id="profile-status"></div>
+           </div>
+           <div class="tag" id="profile-tag">Profilo</div>
+           <div class="friend-status" id="profile-meta"></div>
+         </aside>
+       </div>
+     </section>
+   </div>
+ 
+   <div id="modal" class="overlay hidden" role="dialog" aria-modal="true">
+     <div class="modal">
+       <h3>Aggiungi un amico</h3>
+       <p>Inserisci il nickname del tuo amico per inviare la richiesta.</p>
+       <input type="text" id="friend-name" class="input" placeholder="Nickname" />
+       <div id="modal-status" class="status"></div>
+       <div class="modal-actions">
+         <button class="btn ghost" id="close-modal" type="button">Annulla</button>
+         <button class="btn" id="confirm-add" type="button">Invia richiesta</button>
+       </div>
+     </div>
+   </div>
+ 
+-  <div id="profile-overlay" class="profile-overlay hidden" role="dialog" aria-modal="true">
+-    <div class="profile-modal">
+-      <button class="close-profile" id="close-profile" type="button">×</button>
+-      <div class="profile-nav">
+-        <h4>Log out</h4>
+-        <button type="button" id="logout-btn">Esci e torna al login</button>
+-      </div>
+-      <div class="profile-body">
+-        <div class="section">
+-          <h5>User Profile</h5>
+-          <div class="row" style="margin-bottom: 12px;">
+-            <div class="profile-avatar" id="account-avatar">N</div>
+-            <div>
+-              <div class="friend-name" id="account-name">Nova User</div>
+-              <div class="friend-status" id="account-status"></div>
+-              <div class="handle" id="account-handle">@utente</div>
+-            </div>
+-          </div>
+-          <div class="field"><strong>About me:</strong> <span id="account-about">Sempre online su NovaChat.</span></div>
+-          <div class="field"><strong>Display name:</strong> <span id="account-display"></span></div>
+-          <div class="field"><strong>Username:</strong> <span id="account-username"></span></div>
+-        </div>
+-        <div class="section">
+-          <h5>Info</h5>
+-          <div class="field"><strong>Stato:</strong> <span id="account-state"></span></div>
+-          <div class="field"><strong>Member Since:</strong> <span id="account-member"></span></div>
+-        </div>
+-      </div>
+-    </div>
+-  </div>
++  <div id="profile-overlay" class="profile-overlay hidden" role="dialog" aria-modal="true">
++    <div class="profile-modal">
++      <button class="close-profile" id="close-profile" type="button">×</button>
++      <div class="profile-nav">
++        <h4>Impostazioni profilo</h4>
++        <div class="logout-tile">
++          <span>Disconnettiti</span>
++          <button type="button" id="logout-btn">Log out</button>
++        </div>
++      </div>
++      <div class="profile-body">
++        <div class="section">
++          <h5>User Profile</h5>
++          <div class="row avatar-change" style="margin-bottom: 12px;">
++            <div class="profile-avatar" id="account-avatar">N</div>
++            <div class="avatar-hint">Cambia immagine</div>
++            <input type="file" id="avatar-upload" accept="image/*" class="hidden" />
++            <div>
++              <div class="friend-name" id="account-name">Nova User</div>
++              <div class="friend-status" id="account-status"></div>
++              <div class="handle" id="account-handle">@utente</div>
++            </div>
++          </div>
++          <div class="info-grid">
++            <div class="info-card" data-edit="displayName">
++              <span class="info-label">Display Name</span>
++              <div class="info-value" id="account-display"></div>
++              <div class="edit-handle"><button class="edit-btn" type="button">Modifica</button></div>
++              <div class="edit-pop">
++                <input type="text" id="edit-display" />
++                <button class="btn" type="button" data-save="displayName">Salva</button>
++              </div>
++            </div>
++            <div class="info-card" data-edit="username">
++              <span class="info-label">Username</span>
++              <div class="info-value" id="account-username"></div>
++              <div class="edit-handle"><button class="edit-btn" type="button">Modifica</button></div>
++              <div class="edit-pop">
++                <input type="text" id="edit-username" />
++                <button class="btn" type="button" data-save="username">Salva</button>
++              </div>
++            </div>
++            <div class="info-card" data-edit="about">
++              <span class="info-label">About me</span>
++              <div class="info-value" id="account-about">Sempre online su NovaChat.</div>
++              <div class="edit-handle"><button class="edit-btn" type="button">Modifica</button></div>
++              <div class="edit-pop">
++                <input type="text" id="edit-about" />
++                <button class="btn" type="button" data-save="about">Salva</button>
++              </div>
++            </div>
++            <div class="info-card" data-edit="status">
++              <span class="info-label">Stato</span>
++              <div class="info-value" id="account-state"></div>
++              <div class="edit-handle"><button class="edit-btn" type="button">Modifica</button></div>
++              <div class="edit-pop">
++                <select id="edit-status">
++                  <option value="online">Online</option>
++                  <option value="offline">Offline</option>
++                </select>
++                <button class="btn" type="button" data-save="status">Aggiorna</button>
++              </div>
++            </div>
++          </div>
++        </div>
++        <div class="section">
++          <h5>Info</h5>
++          <div class="field"><strong>Member Since:</strong> <span id="account-member"></span></div>
++        </div>
++      </div>
++    </div>
++  </div>
++
++  <div id="toast-container" class="toast-container"></div>
+ 
+   <script type="module">
+     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+     import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+ 
+     const firebaseConfig = {
+       apiKey: "AIzaSyAxkmhYkXr7o3cuJL8Hr1f-4RjyTw-E7gg",
+       authDomain: "novachat-c6eec.firebaseapp.com",
+       projectId: "novachat-c6eec",
+       storageBucket: "novachat-c6eec.firebasestorage.app",
+       messagingSenderId: "953037847978",
+       appId: "1:953037847978:web:779169b73da088b4bb7fd3"
+     };
+ 
+     const app = initializeApp(firebaseConfig);
+     const db = getFirestore(app);
+ 
+     const DataStore = (() => {
+       const normalizeNameLower = (value = '') =>
+         value.trim().replace(/^@+/, '').toLowerCase();
+ 
+       const userRef = (username) =>
+         doc(db, 'users', normalizeNameLower(username));
+ 
+       const defaultUser = () => ({
+         password: '',
+         friends: [],
+         pending: [],
+-        messages: {},
+-        createdAt: new Date().toISOString(),
+-        status: 'offline'
+-      });
++        messages: {},
++        createdAt: new Date().toISOString(),
++        status: 'offline',
++        username: '',
++        displayName: '',
++        about: 'Sempre online su NovaChat.',
++        avatar: '',
++        mutedUntil: 0
++      });
+ 
+       const sameUser = (a, b) =>
+         normalizeNameLower(a) === normalizeNameLower(b);
+ 
+       const ensureUser = async (username) => {
+         const ref = userRef(username);
+-        const snap = await getDoc(ref);
+-        if (!snap.exists()) {
+-          const data = defaultUser();
+-          await setDoc(ref, data);
+-          return data;
+-        }
+-        return snap.data();
+-      };
++        const snap = await getDoc(ref);
++        if (!snap.exists()) {
++          const data = defaultUser();
++          await setDoc(ref, data);
++          return data;
++        }
++        return { ...defaultUser(), ...snap.data() };
++      };
+ 
+       return {
+         async register(username, password) {
+           const clean = normalizeNameLower(username);
+           const ref = userRef(clean);
+           const snap = await getDoc(ref);
+           if (snap.exists()) {
+             return { ok: false, message: 'Questo username è già in uso. Scegline un altro.' };
+           }
+           const data = {
+             password,
+-            friends: [],
+-            pending: [],
+-            messages: {},
+-            createdAt: new Date().toISOString(),
+-            status: 'offline'
+-          };
+-          await setDoc(ref, data);
+-          return { ok: true, user: clean };
++            friends: [],
++            pending: [],
++            messages: {},
++            createdAt: new Date().toISOString(),
++            status: 'offline',
++            username: clean,
++            displayName: clean,
++            about: 'Sempre online su NovaChat.',
++            avatar: '',
++            mutedUntil: 0
++          };
++          await setDoc(ref, data);
++          return { ok: true, user: clean };
+         },
+ 
+         async exists(username) {
+           const ref = userRef(username);
+           const snap = await getDoc(ref);
+           return snap.exists();
+         },
+ 
+         async login(username, password) {
+           const ref = userRef(username);
+           const snap = await getDoc(ref);
+           if (!snap.exists()) {
+             return { ok: false, message: 'Credenziali non valide. Ritenta.' };
+           }
+           const user = snap.data();
+           if (user.password !== password) {
+             return { ok: false, message: 'Credenziali non valide. Ritenta.' };
+           }
+           return { ok: true, user: normalizeNameLower(username) };
+         },
+ 
+         async getUser(username) {
+           const data = await ensureUser(username);
+           return data;
+         },
+ 
+         async reload() {
+           return true;
+         },
+ 
+-        async setStatus(username, status) {
+-          const ref = userRef(username);
+-          const data = await ensureUser(username);
+-          data.status = status;
+-          await setDoc(ref, data);
+-        },
++        async updateUser(username, patch) {
++          const ref = userRef(username);
++          const snap = await getDoc(ref);
++          const data = snap.exists() ? { ...defaultUser(), ...snap.data() } : defaultUser();
++          const next = { ...data, ...patch };
++          await setDoc(ref, next);
++          return next;
++        },
++
++        async setStatus(username, status) {
++          const ref = userRef(username);
++          const data = await ensureUser(username);
++          data.status = status;
++          await setDoc(ref, data);
++        },
++
++        async updateProfile(username, fields) {
++          return this.updateUser(username, fields);
++        },
+ 
+         async addPending(sender, friendName) {
+           const senderKey = normalizeNameLower(sender);
+           const targetKey = normalizeNameLower(friendName);
+ 
+           if (senderKey === targetKey) {
+             return { ok: false, message: 'Non puoi aggiungere te stesso.' };
+           }
+ 
+           const senderRef = userRef(senderKey);
+           const targetRef = userRef(targetKey);
+ 
+           const senderSnap = await getDoc(senderRef);
+           const targetSnap = await getDoc(targetRef);
+ 
+           if (!targetSnap.exists()) {
+             return { ok: false, message: 'Utente non trovato.' };
+           }
+ 
+-          const senderUser = senderSnap.exists() ? senderSnap.data() : defaultUser();
+-          const targetUser = targetSnap.data();
++          const senderUser = senderSnap.exists() ? { ...defaultUser(), ...senderSnap.data() } : defaultUser();
++          const targetUser = { ...defaultUser(), ...targetSnap.data() };
+ 
+           senderUser.friends = senderUser.friends || [];
+           targetUser.friends = targetUser.friends || [];
+           targetUser.pending = targetUser.pending || [];
+ 
+           if (senderUser.friends.some(f => sameUser(f.name, targetKey)) ||
+               targetUser.friends.some(f => sameUser(f.name, senderKey))) {
+             return { ok: false, message: 'Questo utente è già tra i tuoi amici.' };
+           }
+ 
+           if (targetUser.pending.some(p => sameUser(p.name, senderKey))) {
+             return { ok: false, message: 'Richiesta già inviata.' };
+           }
+ 
+           targetUser.pending.push({ name: senderKey });
+ 
+           await setDoc(senderRef, senderUser);
+           await setDoc(targetRef, targetUser);
+ 
+           return { ok: true };
+         },
+ 
+         async accept(username, friendName) {
+           const ownerKey = normalizeNameLower(username);
+           const friendKey = normalizeNameLower(friendName);
+ 
+           const ownerRef = userRef(ownerKey);
+           const friendRef = userRef(friendKey);
+ 
+           const ownerSnap = await getDoc(ownerRef);
+           const friendSnap = await getDoc(friendRef);
+ 
+-          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
+-          const friend = friendSnap.exists() ? friendSnap.data() : defaultUser();
++          const owner = ownerSnap.exists() ? { ...defaultUser(), ...ownerSnap.data() } : defaultUser();
++          const friend = friendSnap.exists() ? { ...defaultUser(), ...friendSnap.data() } : defaultUser();
+ 
+           owner.pending = (owner.pending || []).filter(p => !sameUser(p.name, friendKey));
+ 
+           owner.friends = owner.friends || [];
+           friend.friends = friend.friends || [];
+ 
+-          if (!owner.friends.some(f => sameUser(f.name, friendKey))) {
+-            owner.friends.push({ name: friendKey, status: friend.status || 'offline', pinned: false, blocked: false, messages: [] });
+-          }
+-          if (!friend.friends.some(f => sameUser(f.name, ownerKey))) {
+-            friend.friends.push({ name: ownerKey, status: owner.status || 'offline', pinned: false, blocked: false, messages: [] });
+-          }
++          if (!owner.friends.some(f => sameUser(f.name, friendKey))) {
++            owner.friends.push({ name: friendKey, status: friend.status || 'offline', pinned: false, blocked: false, messages: [], mutedUntil: 0 });
++          }
++          if (!friend.friends.some(f => sameUser(f.name, ownerKey))) {
++            friend.friends.push({ name: ownerKey, status: owner.status || 'offline', pinned: false, blocked: false, messages: [], mutedUntil: 0 });
++          }
+ 
+           await setDoc(ownerRef, owner);
+           await setDoc(friendRef, friend);
+         },
+ 
+         async decline(username, friendName) {
+           const ownerKey = normalizeNameLower(username);
+           const friendKey = normalizeNameLower(friendName);
+ 
+           const ownerRef = userRef(ownerKey);
+           const ownerSnap = await getDoc(ownerRef);
+-          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
+-          owner.pending = (owner.pending || []).filter(p => !sameUser(p.name, friendKey));
+-          await setDoc(ownerRef, owner);
+-        },
+-
+-        async toggleBlock(username, friendName) {
+-          const ownerKey = normalizeNameLower(username);
+-          const friendKey = normalizeNameLower(friendName);
+-          const ownerRef = userRef(ownerKey);
+-          const ownerSnap = await getDoc(ownerRef);
+-          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
+-          owner.friends = owner.friends || [];
+-          owner.friends = owner.friends.map(f => {
+-            if (sameUser(f.name, friendKey)) {
+-              return { ...f, blocked: !f.blocked };
+-            }
++          const owner = ownerSnap.exists() ? { ...defaultUser(), ...ownerSnap.data() } : defaultUser();
++          owner.pending = (owner.pending || []).filter(p => !sameUser(p.name, friendKey));
++          await setDoc(ownerRef, owner);
++        },
++
++        async toggleBlock(username, friendName) {
++          const ownerKey = normalizeNameLower(username);
++          const friendKey = normalizeNameLower(friendName);
++          const ownerRef = userRef(ownerKey);
++          const ownerSnap = await getDoc(ownerRef);
++          const owner = ownerSnap.exists() ? { ...defaultUser(), ...ownerSnap.data() } : defaultUser();
++          owner.friends = owner.friends || [];
++          owner.friends = owner.friends.map(f => {
++            if (sameUser(f.name, friendKey)) {
++              return { ...f, blocked: !f.blocked };
++            }
+             return f;
+           });
+           await setDoc(ownerRef, owner);
+         },
+ 
+         async togglePin(username, friendName) {
+           const ownerKey = normalizeNameLower(username);
+           const friendKey = normalizeNameLower(friendName);
+           const ownerRef = userRef(ownerKey);
+           const ownerSnap = await getDoc(ownerRef);
+-          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
+-          owner.friends = owner.friends || [];
+-          owner.friends = owner.friends.map(f => {
+-            if (sameUser(f.name, friendKey)) {
+-              return { ...f, pinned: !f.pinned };
+-            }
++          const owner = ownerSnap.exists() ? { ...defaultUser(), ...ownerSnap.data() } : defaultUser();
++          owner.friends = owner.friends || [];
++          owner.friends = owner.friends.map(f => {
++            if (sameUser(f.name, friendKey)) {
++              return { ...f, pinned: !f.pinned };
++            }
+             return f;
+           });
+           await setDoc(ownerRef, owner);
+         },
+ 
+         async removeFriend(username, friendName) {
+           const ownerKey = normalizeNameLower(username);
+           const friendKey = normalizeNameLower(friendName);
+ 
+           const ownerRef = userRef(ownerKey);
+           const friendRef = userRef(friendKey);
+ 
+           const ownerSnap = await getDoc(ownerRef);
+           const friendSnap = await getDoc(friendRef);
+ 
+-          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
+-          const friend = friendSnap.exists() ? friendSnap.data() : defaultUser();
++          const owner = ownerSnap.exists() ? { ...defaultUser(), ...ownerSnap.data() } : defaultUser();
++          const friend = friendSnap.exists() ? { ...defaultUser(), ...friendSnap.data() } : defaultUser();
+ 
+           owner.friends = (owner.friends || []).filter(f => !sameUser(f.name, friendKey));
+           friend.friends = (friend.friends || []).filter(f => !sameUser(f.name, ownerKey));
+ 
+           await setDoc(ownerRef, owner);
+           await setDoc(friendRef, friend);
+         },
+ 
+         async clearChat(username, friendName) {
+           const ownerKey = normalizeNameLower(username);
+           const friendKey = normalizeNameLower(friendName);
+ 
+           const ownerRef = userRef(ownerKey);
+           const friendRef = userRef(friendKey);
+ 
+           const ownerSnap = await getDoc(ownerRef);
+           const friendSnap = await getDoc(friendRef);
+ 
+-          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
+-          const friend = friendSnap.exists() ? friendSnap.data() : defaultUser();
++          const owner = ownerSnap.exists() ? { ...defaultUser(), ...ownerSnap.data() } : defaultUser();
++          const friend = friendSnap.exists() ? { ...defaultUser(), ...friendSnap.data() } : defaultUser();
+ 
+           owner.friends = (owner.friends || []).map(f => sameUser(f.name, friendKey) ? { ...f, messages: [] } : f);
+           friend.friends = (friend.friends || []).map(f => sameUser(f.name, ownerKey) ? { ...f, messages: [] } : f);
+ 
+           await setDoc(ownerRef, owner);
+           await setDoc(friendRef, friend);
+         },
+ 
+-        async saveMessage(sender, friendName, text) {
+-          const senderKey = normalizeNameLower(sender);
+-          const friendKey = normalizeNameLower(friendName);
+-          const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+-
+-          const updateMessagesFor = async (ownerKey, otherKey, fromValue) => {
+-            const ref = userRef(ownerKey);
+-            const snap = await getDoc(ref);
+-            const data = snap.exists() ? snap.data() : defaultUser();
+-            data.friends = data.friends || [];
+-            let entry = data.friends.find(f => sameUser(f.name, otherKey));
+-            if (!entry) {
+-              entry = { name: otherKey, status: 'online', pinned: false, blocked: false, messages: [] };
+-              data.friends.push(entry);
+-            }
+-            entry.messages = entry.messages || [];
+-            entry.messages.push({ from: fromValue, text, time });
+-            data.friends = data.friends.map(f => sameUser(f.name, otherKey) ? entry : f);
+-            await setDoc(ref, data);
+-          };
++        async setMutedUntil(username, friendName, untilTs) {
++          const ownerKey = normalizeNameLower(username);
++          const friendKey = normalizeNameLower(friendName);
++          const ownerRef = userRef(ownerKey);
++          const ownerSnap = await getDoc(ownerRef);
++          const owner = ownerSnap.exists() ? { ...defaultUser(), ...ownerSnap.data() } : defaultUser();
++          owner.friends = owner.friends || [];
++          owner.friends = owner.friends.map(f => sameUser(f.name, friendKey) ? { ...f, mutedUntil: untilTs } : f);
++          await setDoc(ownerRef, owner);
++        },
++
++        async markSeen(viewer, friendName) {
++          const viewerKey = normalizeNameLower(viewer);
++          const friendKey = normalizeNameLower(friendName);
++          const viewerRef = userRef(viewerKey);
++          const friendRef = userRef(friendKey);
++
++          const viewerSnap = await getDoc(viewerRef);
++          const friendSnap = await getDoc(friendRef);
++
++          const viewerData = viewerSnap.exists() ? { ...defaultUser(), ...viewerSnap.data() } : defaultUser();
++          const friendData = friendSnap.exists() ? { ...defaultUser(), ...friendSnap.data() } : defaultUser();
++
++          const mark = (data, target) => {
++            data.friends = data.friends || [];
++            data.friends = data.friends.map(f => {
++              if (sameUser(f.name, target)) {
++                const msgs = (f.messages || []).map(m => m.from === target ? { ...m, seen: true } : m);
++                return { ...f, messages: msgs };
++              }
++              return f;
++            });
++            return data;
++          };
++
++          const nextViewer = mark(viewerData, friendKey);
++          const nextFriend = mark(friendData, viewerKey);
++
++          await setDoc(viewerRef, nextViewer);
++          await setDoc(friendRef, nextFriend);
++        },
++
++        async saveMessage(sender, friendName, text) {
++          const senderKey = normalizeNameLower(sender);
++          const friendKey = normalizeNameLower(friendName);
++          const now = new Date();
++          const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
++          const stamp = now.getTime();
++
++          const updateMessagesFor = async (ownerKey, otherKey, fromValue) => {
++            const ref = userRef(ownerKey);
++            const snap = await getDoc(ref);
++            const data = snap.exists() ? { ...defaultUser(), ...snap.data() } : defaultUser();
++            data.friends = data.friends || [];
++            let entry = data.friends.find(f => sameUser(f.name, otherKey));
++            if (!entry) {
++              entry = { name: otherKey, status: 'online', pinned: false, blocked: false, messages: [], mutedUntil: 0 };
++              data.friends.push(entry);
++            }
++            entry.messages = entry.messages || [];
++            entry.messages.push({ from: fromValue, text, time, seen: false, id: stamp });
++            data.friends = data.friends.map(f => sameUser(f.name, otherKey) ? entry : f);
++            await setDoc(ref, data);
++          };
+ 
+           await updateMessagesFor(senderKey, friendKey, senderKey);
+           await updateMessagesFor(friendKey, senderKey, senderKey);
+ 
+           return { delivered: true };
+         }
+       };
+     })();
+ 
+     const form = document.getElementById('auth-form');
+     const status = document.getElementById('status');
+     const switchBtn = document.getElementById('switch-btn');
+     const switchCopy = document.getElementById('switch-copy');
+     const submitBtn = document.getElementById('submit-btn');
+     const title = document.getElementById('form-title');
+     const subtitle = document.getElementById('form-subtitle');
+     const usernameField = document.getElementById('username');
+     const passwordField = document.getElementById('password');
+     const stayLoggedToggle = document.getElementById('stay-logged');
+     const splash = document.querySelector('.splash');
+ 
+     const authView = document.getElementById('auth-view');
+     const mainView = document.getElementById('main-view');
+     const chatView = document.getElementById('chat-view');
+     const friendList = document.getElementById('friend-list');
+     const filters = document.getElementById('filters');
+     const searchInput = document.getElementById('search');
+     const onlineCount = document.getElementById('online-count');
+     const offlineCount = document.getElementById('offline-count');
+-    const addFriendBtns = [document.getElementById('add-friend'), document.getElementById('side-add')];
+-    const modal = document.getElementById('modal');
+-    const modalStatus = document.getElementById('modal-status');
+-    const friendInput = document.getElementById('friend-name');
+-    const closeModal = document.getElementById('close-modal');
++    const addFriendBtns = [document.getElementById('add-friend'), document.getElementById('side-add')];
++    const modal = document.getElementById('modal');
++    const modalStatus = document.getElementById('modal-status');
++    const friendInput = document.getElementById('friend-name');
++    const closeModal = document.getElementById('close-modal');
+     const confirmAdd = document.getElementById('confirm-add');
+     const appShell = document.getElementById('app');
+ 
+     const sideAvatar = document.getElementById('side-avatar');
+     const sideName = document.getElementById('side-name');
+     const sideHandle = document.getElementById('side-handle');
+     const sideStatus = document.getElementById('side-status');
+     const memberSince = document.getElementById('member-since');
+     const openProfile = document.getElementById('open-profile');
+     const profileOverlay = document.getElementById('profile-overlay');
+     const closeProfile = document.getElementById('close-profile');
+     const logoutBtn = document.getElementById('logout-btn');
+ 
+     const accountAvatar = document.getElementById('account-avatar');
+     const accountName = document.getElementById('account-name');
+     const accountStatus = document.getElementById('account-status');
+     const accountHandle = document.getElementById('account-handle');
+-    const accountAbout = document.getElementById('account-about');
+-    const accountDisplay = document.getElementById('account-display');
+-    const accountUsername = document.getElementById('account-username');
+-    const accountState = document.getElementById('account-state');
+-    const accountMember = document.getElementById('account-member');
+-
+-    const chatName = document.getElementById('chat-name');
+-    const chatStatus = document.getElementById('chat-status');
+-    const messagesEl = document.getElementById('messages');
+-    const chatForm = document.getElementById('chat-form');
++    const accountAbout = document.getElementById('account-about');
++    const accountDisplay = document.getElementById('account-display');
++    const accountUsername = document.getElementById('account-username');
++    const accountState = document.getElementById('account-state');
++    const accountMember = document.getElementById('account-member');
++    const avatarUpload = document.getElementById('avatar-upload');
++
++    const chatName = document.getElementById('chat-name');
++    const chatStatus = document.getElementById('chat-status');
++    const messagesEl = document.getElementById('messages');
++    const chatForm = document.getElementById('chat-form');
+     const chatInput = document.getElementById('chat-input');
+     const blockBanner = document.getElementById('block-banner');
+     const profileAvatar = document.getElementById('profile-avatar');
+     const profileName = document.getElementById('profile-name');
+-    const profileStatus = document.getElementById('profile-status');
+-    const profileMeta = document.getElementById('profile-meta');
+-    const backToMain = document.getElementById('back-to-main');
+-
+-    let mode = 'login';
+-    let currentUser = null;
+-    let filter = 'all';
+-    let activeFriend = null;
++    const profileStatus = document.getElementById('profile-status');
++    const profileMeta = document.getElementById('profile-meta');
++    const backToMain = document.getElementById('back-to-main');
++    const toastContainer = document.getElementById('toast-container');
++
++    let mode = 'login';
++    let currentUser = null;
++    let filter = 'all';
++    let activeFriend = null;
+     let presenceInterval = null;
+     let chatInterval = null;
+-    const presenceMap = {};
++    const presenceMap = {};
++    const incomingCounter = {};
+     const SESSION_KEY = 'novachat-session';
+ 
+     const normalizeName = (value = '') => value.trim().replace(/^@+/, '');
+ 
+     function getStatus(friend) {
+       if (!friend) return 'offline';
+       const stored = presenceMap[friend.name];
+       if (stored) return stored;
+       return friend.status || 'offline';
+     }
+ 
+-    function formatDate(value) {
+-      const date = new Date(value);
+-      if (Number.isNaN(date.getTime())) return 'Nuovo membro';
+-      return date.toLocaleDateString('it-IT', { month: 'short', year: 'numeric' });
+-    }
++    function formatDate(value) {
++      const date = new Date(value);
++      if (Number.isNaN(date.getTime())) return 'Nuovo membro';
++      return date.toLocaleDateString('it-IT', { month: 'short', year: 'numeric' });
++    }
++
++    function getUnreadCount(friend) {
++      const msgs = Array.isArray(friend?.messages) ? friend.messages : [];
++      return msgs.filter(m => m.from === friend.name && !m.seen).length;
++    }
++
++    function showToast(title, text, onClick) {
++      const toast = document.createElement('div');
++      toast.className = 'toast';
++      toast.innerHTML = `<div class="title">${title}</div><div class="text">${text}</div>`;
++      const handler = () => {
++        onClick?.();
++        toast.remove();
++      };
++      toast.addEventListener('click', handler);
++      toastContainer.appendChild(toast);
++      setTimeout(() => toast.remove(), 3000);
++    }
+ 
+     function persistSession(user, stay) {
+       if (stay && user) {
+         localStorage.setItem(SESSION_KEY, JSON.stringify({ user, stay: true }));
+       } else {
+         localStorage.removeItem(SESSION_KEY);
+       }
+     }
+ 
+     function loadSession() {
+       const raw = localStorage.getItem(SESSION_KEY);
+       try {
+         return raw ? JSON.parse(raw) : null;
+       } catch (err) {
+         return null;
+       }
+     }
+ 
+     function triggerSplash() {
+       splash.classList.remove('burst');
+       void splash.offsetWidth;
+       splash.classList.add('burst');
+     }
+ 
+     function setMode(next) {
+@@ -1286,337 +1454,417 @@
+       status.textContent = result.ok
+         ? mode === 'signup'
+           ? 'Account creato con successo. Benvenuto su NovaChat!'
+           : 'Login effettuato con successo.'
+         : result.message;
+ 
+       if (result.ok) {
+         passwordField.value = '';
+         triggerSplash();
+         currentUser = result.user || normalizeName(username);
+         persistSession(currentUser, stayLoggedToggle.checked);
+         await showMain();
+       }
+     });
+ 
+     switchBtn.addEventListener('click', () => {
+       setMode(mode === 'signup' ? 'login' : 'signup');
+     });
+ 
+     splash.addEventListener('animationend', (event) => {
+       if (event.animationName === 'splashBurst') {
+         splash.classList.remove('burst');
+       }
+     });
+ 
+-    async function renderUserSummary() {
+-      if (!currentUser) return;
+-      const user = await DataStore.getUser(currentUser);
+-      sideAvatar.textContent = currentUser.charAt(0).toUpperCase();
+-      sideName.textContent = currentUser;
+-      sideHandle.textContent = '@' + currentUser.toLowerCase();
+-      sideStatus.innerHTML = '<span class="dot online"></span>Online';
+-      memberSince.textContent = user.createdAt ? 'Dal ' + formatDate(user.createdAt) : 'Nuovo membro';
+-    }
+-
+-    async function renderAccountPanel() {
+-      if (!currentUser) return;
+-      const user = await DataStore.getUser(currentUser);
+-      const joined = user.createdAt ? formatDate(user.createdAt) : 'Nuovo membro';
+-      accountAvatar.textContent = currentUser.charAt(0).toUpperCase();
+-      accountName.textContent = currentUser;
+-      accountHandle.textContent = '@' + currentUser.toLowerCase();
+-      accountStatus.innerHTML = '<span class="dot online"></span>Online';
+-      accountDisplay.textContent = currentUser;
+-      accountUsername.textContent = currentUser;
+-      accountState.textContent = 'Online';
+-      accountMember.textContent = joined;
+-    }
++    async function renderUserSummary() {
++      if (!currentUser) return;
++      const user = await DataStore.getUser(currentUser);
++      sideAvatar.textContent = (user.displayName || currentUser).charAt(0).toUpperCase();
++      if (user.avatar) {
++        sideAvatar.style.backgroundImage = `url(${user.avatar})`;
++        sideAvatar.style.backgroundSize = 'cover';
++      } else {
++        sideAvatar.style.backgroundImage = '';
++      }
++      sideName.textContent = user.displayName || currentUser;
++      sideHandle.textContent = '@' + (user.username || currentUser).toLowerCase();
++      sideStatus.innerHTML = `<span class="dot ${user.status || 'offline'}"></span>${(user.status || 'offline')[0].toUpperCase() + (user.status || 'offline').slice(1)}`;
++      memberSince.textContent = user.createdAt ? 'Dal ' + formatDate(user.createdAt) : 'Nuovo membro';
++    }
++
++    async function renderAccountPanel() {
++      if (!currentUser) return;
++      const user = await DataStore.getUser(currentUser);
++      const joined = user.createdAt ? formatDate(user.createdAt) : 'Nuovo membro';
++      const displayName = user.displayName || currentUser;
++      accountAvatar.textContent = displayName.charAt(0).toUpperCase();
++      if (user.avatar) {
++        accountAvatar.style.backgroundImage = `url(${user.avatar})`;
++        accountAvatar.style.backgroundSize = 'cover';
++      } else {
++        accountAvatar.style.backgroundImage = '';
++      }
++      accountName.textContent = displayName;
++      accountHandle.textContent = '@' + (user.username || currentUser).toLowerCase();
++      const statusValue = user.status || 'offline';
++      accountStatus.innerHTML = `<span class="dot ${statusValue}"></span>${statusValue[0].toUpperCase() + statusValue.slice(1)}`;
++      accountDisplay.textContent = displayName;
++      accountUsername.textContent = user.username || currentUser;
++      accountState.textContent = statusValue;
++      accountMember.textContent = joined;
++      accountAbout.textContent = user.about || 'Sempre online su NovaChat.';
++      document.getElementById('edit-display').value = displayName;
++      document.getElementById('edit-about').value = user.about || '';
++      document.getElementById('edit-username').value = user.username || currentUser;
++      document.getElementById('edit-status').value = statusValue;
++    }
+ 
+     async function showMain() {
+       if (!currentUser) return;
+       authView.classList.add('hidden');
+       chatView.classList.add('hidden');
+       mainView.classList.remove('hidden');
+       profileOverlay.classList.add('hidden');
+       appShell.classList.remove('blurred');
+       await DataStore.setStatus(currentUser, 'online');
+       startPresenceLoop();
+       startChatSync();
+       await renderUserSummary();
+       await renderAccountPanel();
+       await renderFriends();
+     }
+ 
+     async function logout() {
+       if (currentUser) {
+         await DataStore.setStatus(currentUser, 'offline');
+       }
+       currentUser = null;
+       activeFriend = null;
+       clearInterval(presenceInterval);
+       clearInterval(chatInterval);
+       persistSession('', false);
+       appShell.classList.remove('blurred');
+       profileOverlay.classList.add('hidden');
+       modal.classList.add('hidden');
+       mainView.classList.add('hidden');
+       chatView.classList.add('hidden');
+       authView.classList.remove('hidden');
+       usernameField.value = '';
+       passwordField.value = '';
+       stayLoggedToggle.checked = false;
+       setMode('login');
+     }
+ 
+     async function showChat(friend) {
+       activeFriend = friend;
+       mainView.classList.add('hidden');
+       chatView.classList.remove('hidden');
+       const statusValue = getStatus(friend) || 'offline';
+       presenceMap[friend.name] = friend.blocked ? 'offline' : 'online';
+       chatName.textContent = friend.name;
+       chatStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Blocked' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
+       profileAvatar.textContent = friend.name.charAt(0).toUpperCase();
+       profileName.textContent = friend.name;
+-      profileStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Bloccato' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
+-      profileMeta.textContent = friend.pinned ? 'Fissato in alto' : 'Contatto standard';
+-      chatInput.placeholder = `Message @${friend.name}`;
+-      renderMessages(friend);
+-      const blocked = friend.blocked;
+-      blockBanner.classList.toggle('hidden', !blocked);
+-      chatInput.disabled = blocked;
+-    }
+-
+-    function renderMessages(friend) {
+-      messagesEl.innerHTML = '';
+-      const msgs = Array.isArray(friend.messages) ? friend.messages : [];
+-      if (!msgs.length) {
+-        const empty = document.createElement('div');
++      profileStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Bloccato' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
++      profileMeta.textContent = friend.pinned ? 'Fissato in alto' : 'Contatto standard';
++      chatInput.placeholder = `Message @${friend.name}`;
++      renderMessages(friend);
++      const blocked = friend.blocked;
++      blockBanner.classList.toggle('hidden', !blocked);
++      chatInput.disabled = blocked;
++      await DataStore.markSeen(currentUser, friend.name);
++      incomingCounter[friend.name] = (friend.messages || []).filter(m => m.from === friend.name).length;
++    }
++
++    function renderMessages(friend) {
++      messagesEl.innerHTML = '';
++      const msgs = Array.isArray(friend.messages) ? friend.messages : [];
++      if (!msgs.length) {
++        const empty = document.createElement('div');
+         empty.className = 'empty';
+         empty.textContent = 'La chat è vuota. Invia un messaggio per iniziare.';
+         messagesEl.appendChild(empty);
+         messagesEl.scrollTop = messagesEl.scrollHeight;
+         return;
+       }
+-      msgs.forEach(m => {
+-        const bubble = document.createElement('div');
+-        bubble.className = `bubble ${m.from === currentUser ? 'me' : 'them'}`;
+-        bubble.innerHTML = `<div>${m.text}</div><div class="timestamp">${m.time}</div>`;
+-        messagesEl.appendChild(bubble);
+-      });
+-      messagesEl.scrollTop = messagesEl.scrollHeight;
+-    }
++      msgs.forEach(m => {
++        const bubble = document.createElement('div');
++        bubble.className = `bubble ${m.from === currentUser ? 'me' : 'them'}`;
++        const seenMark = m.from === currentUser ? (m.seen ? '✓✓' : '✓') : '';
++        bubble.innerHTML = `<div>${m.text}</div><div class="timestamp">${m.time}${seenMark ? ' ' + seenMark : ''}</div>`;
++        messagesEl.appendChild(bubble);
++      });
++      messagesEl.scrollTop = messagesEl.scrollHeight;
++    }
+ 
+     async function syncActiveChat() {
+       if (!activeFriend || chatView.classList.contains('hidden') || !currentUser) return;
+       const user = await DataStore.getUser(currentUser);
+       const friend = (user.friends || []).find(f => f.name === activeFriend.name || normalizeName(f.name) === normalizeName(activeFriend.name));
+       if (!friend) return;
+       activeFriend = friend;
+       const statusValue = getStatus(friend);
+       chatStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Blocked' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
+       profileStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Bloccato' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
+-      profileMeta.textContent = friend.pinned ? 'Fissato in alto' : 'Contatto standard';
+-      blockBanner.classList.toggle('hidden', !friend.blocked);
+-      chatInput.disabled = friend.blocked;
+-      renderMessages(friend);
+-    }
++      profileMeta.textContent = friend.pinned ? 'Fissato in alto' : 'Contatto standard';
++      blockBanner.classList.toggle('hidden', !friend.blocked);
++      chatInput.disabled = friend.blocked;
++      renderMessages(friend);
++      await DataStore.markSeen(currentUser, friend.name);
++      incomingCounter[friend.name] = (friend.messages || []).filter(m => m.from === friend.name).length;
++    }
+ 
+     chatForm.addEventListener('submit', async (e) => {
+       e.preventDefault();
+       if (!activeFriend || chatInput.disabled) return;
+       const text = chatInput.value.trim();
+       if (!text) return;
+       const result = await DataStore.saveMessage(currentUser, activeFriend.name, text);
+       const user = await DataStore.getUser(currentUser);
+       const updated = (user.friends || []).find(f => f.name === activeFriend.name);
+       chatInput.value = '';
+       if (updated) await showChat(updated);
+       if (!result.delivered) {
+         console.warn('Messaggio non consegnato: utente destinatario non trovato.');
+       }
+     });
+ 
+     backToMain.addEventListener('click', () => {
+       showMain();
+     });
+ 
+-    async function renderFriends() {
+-      if (!currentUser) return;
+-      const user = await DataStore.getUser(currentUser);
+-      const term = searchInput.value.trim().toLowerCase();
+-      const friends = user.friends || [];
+-
+-      const filtered = friends
+-        .filter(f => !term || f.name.toLowerCase().includes(term))
+-        .filter(f => {
+-          const statusValue = getStatus(f);
+-          if (filter === 'online') return statusValue === 'online' && !f.blocked;
+-          if (filter === 'pending') return false;
++    async function renderFriends() {
++      if (!currentUser) return;
++      const user = await DataStore.getUser(currentUser);
++      const term = searchInput.value.trim().toLowerCase();
++      const friends = user.friends || [];
++
++      filters.querySelectorAll('button').forEach(btn => btn.classList.add('notify-dot'));
++
++      friends.forEach(f => {
++        const totalIncoming = (f.messages || []).filter(m => m.from === f.name).length;
++        if (incomingCounter[f.name] === undefined) {
++          incomingCounter[f.name] = totalIncoming;
++        }
++        if (f.blocked) {
++          incomingCounter[f.name] = totalIncoming;
++          return;
++        }
++        const isMuted = f.mutedUntil && f.mutedUntil > Date.now();
++        if (totalIncoming > incomingCounter[f.name]) {
++          const diff = totalIncoming - incomingCounter[f.name];
++          incomingCounter[f.name] = totalIncoming;
++          if (!isMuted && (!activeFriend || activeFriend.name !== f.name)) {
++            const lastMsg = (f.messages || []).filter(m => m.from === f.name).pop();
++            showToast(`Nuovo messaggio da ${f.name}`, lastMsg?.text || `${diff} nuovi messaggi`, async () => {
++              const refreshed = (await DataStore.getUser(currentUser)).friends.find(fr => fr.name === f.name);
++              if (refreshed) {
++                await showChat(refreshed);
++              }
++            });
++          }
++        }
++      });
++
++      const filtered = friends
++        .filter(f => !term || f.name.toLowerCase().includes(term))
++        .filter(f => {
++          const statusValue = getStatus(f);
++          if (filter === 'online') return statusValue === 'online' && !f.blocked;
++          if (filter === 'pending') return false;
+           if (filter === 'blocked') return f.blocked;
+           return !f.blocked;
+         })
+         .sort((a, b) => Number(b.pinned) - Number(a.pinned));
+ 
+       friendList.innerHTML = '';
+ 
+       const pendingVisible = filter === 'pending';
+       const pending = user.pending || [];
+ 
+       if (pendingVisible) {
+         if (pending.length === 0) {
+           friendList.appendChild(makeEmpty('Nessuna richiesta in arrivo. Invia un invito da "Add Friend".'));
+         } else {
+           pending.forEach(p => {
+             const card = document.createElement('div');
+             card.className = 'friend-card';
+             card.innerHTML = `
+               <div class="avatar">${p.name.charAt(0).toUpperCase()}</div>
+               <div class="friend-meta">
+                 <div class="friend-name">${p.name}</div>
+                 <div class="friend-status"><span class="dot online"></span>Richiesta in arrivo</div>
+               </div>
+               <div class="friend-actions" style="opacity:1; display:flex; gap:6px;">
+                 <button class="action-btn" data-accept="${p.name}">Accetta</button>
+                 <button class="action-btn" data-decline="${p.name}">Rifiuta</button>
+               </div>
+             `;
+             friendList.appendChild(card);
+           });
+         }
+       } else {
+         if (!filtered.length) {
+           friendList.appendChild(makeEmpty('Non hai ancora amici qui. Usa "Add Friend" per iniziare.'));
+         } else {
+-          filtered.forEach(f => {
+-            const card = document.createElement('div');
+-            card.className = 'friend-card';
+-            card.dataset.friend = f.name;
+-            const statusValue = getStatus(f);
+-            const statusDot = f.blocked ? 'blocked' : statusValue;
+-            const statusLabel = f.blocked ? 'Bloccato' : (statusValue === 'online' ? 'Online' : 'Offline');
+-            card.innerHTML = `
+-              <div class="avatar">${f.name.charAt(0).toUpperCase()}</div>
+-              <div class="friend-meta">
+-                <div class="friend-name">${f.name}${f.pinned ? ' 📌' : ''}</div>
+-                <div class="friend-status"><span class="dot ${statusDot}"></span>${statusLabel}</div>
+-              </div>
+-              <div class="friend-actions">
+-                <button class="action-btn" type="button">⋯</button>
+-                <div class="menu">
+-                  <button data-action="report" data-friend="${f.name}">Segnala</button>
+-                  <button data-action="block" data-friend="${f.name}">${f.blocked ? 'Sblocca' : 'Blocca'}</button>
+-                  <button data-action="pin" data-friend="${f.name}">${f.pinned ? 'Rimuovi fissato' : 'Fissa'}</button>
+-                  <button data-action="remove" data-friend="${f.name}">Rimuovi amicizia</button>
+-                  <button data-action="clear" data-friend="${f.name}">Cancella chat</button>
+-                </div>
+-              </div>
+-            `;
+-            friendList.appendChild(card);
+-          });
+-        }
+-      }
+-
+-      onlineCount.textContent = friends.filter(f => getStatus(f) === 'online' && !f.blocked).length;
+-      offlineCount.textContent = friends.filter(f => getStatus(f) !== 'online' && !f.blocked).length;
+-    }
++          filtered.forEach(f => {
++            const card = document.createElement('div');
++            card.className = 'friend-card';
++            card.dataset.friend = f.name;
++            const statusValue = getStatus(f);
++            const statusDot = f.blocked ? 'blocked' : statusValue;
++            const statusLabel = f.blocked ? 'Bloccato' : (statusValue === 'online' ? 'Online' : 'Offline');
++            const unread = getUnreadCount(f);
++            card.innerHTML = `
++              ${unread ? `<div class="unread-badge">${unread}</div>` : ''}
++              <div class="avatar">${f.name.charAt(0).toUpperCase()}</div>
++              <div class="friend-meta">
++                <div class="friend-name">${f.name}${f.pinned ? ' 📌' : ''}</div>
++                <div class="friend-status"><span class="dot ${statusDot}"></span>${statusLabel}</div>
++              </div>
++              <div class="friend-actions">
++                <button class="action-btn" type="button">⋯</button>
++                <div class="menu">
++                  <button data-action="report" data-friend="${f.name}">Segnala</button>
++                  <button data-action="block" data-friend="${f.name}">${f.blocked ? 'Sblocca' : 'Blocca'}</button>
++                  <button data-action="pin" data-friend="${f.name}">${f.pinned ? 'Rimuovi fissato' : 'Fissa'}</button>
++                  <button data-action="mute" data-friend="${f.name}">Silenzia ▸</button>
++                  <div class="submenu">
++                    <button data-duration="10" data-friend="${f.name}">10 min</button>
++                    <button data-duration="30" data-friend="${f.name}">30 min</button>
++                    <button data-duration="60" data-friend="${f.name}">1h</button>
++                    <button data-duration="180" data-friend="${f.name}">3h</button>
++                    <button data-duration="0" data-friend="${f.name}">Riattiva</button>
++                  </div>
++                  <button data-action="remove" data-friend="${f.name}">Rimuovi amicizia</button>
++                  <button data-action="clear" data-friend="${f.name}">Cancella chat</button>
++                </div>
++              </div>
++            `;
++            friendList.appendChild(card);
++          });
++        }
++      }
++
++      onlineCount.textContent = friends.filter(f => getStatus(f) === 'online' && !f.blocked).length;
++      offlineCount.textContent = friends.filter(f => getStatus(f) !== 'online' && !f.blocked).length;
++
++      const hasUnreadAll = friends.some(f => getUnreadCount(f) > 0 && !f.blocked);
++      const hasUnreadOnline = friends.some(f => getUnreadCount(f) > 0 && getStatus(f) === 'online' && !f.blocked);
++      const hasPending = (user.pending || []).length > 0 || hasUnreadAll;
++      filters.querySelector('[data-filter="all"]').classList.toggle('has-unread', hasUnreadAll);
++      filters.querySelector('[data-filter="online"]').classList.toggle('has-unread', hasUnreadOnline);
++      filters.querySelector('[data-filter="pending"]').classList.toggle('has-unread', hasPending);
++    }
+ 
+     function makeEmpty(text) {
+       const empty = document.createElement('div');
+       empty.className = 'empty';
+       empty.textContent = text;
+       return empty;
+     }
+ 
+     filters.addEventListener('click', async (e) => {
+       if (e.target.dataset.filter) {
+         filter = e.target.dataset.filter;
+         [...filters.querySelectorAll('button')].forEach(btn => btn.classList.toggle('active', btn.dataset.filter === filter));
+         await renderFriends();
+       }
+     });
+ 
+     searchInput.addEventListener('input', () => {
+       renderFriends();
+     });
+ 
+     friendList.addEventListener('click', async (e) => {
+       const accept = e.target.dataset.accept;
+       const decline = e.target.dataset.decline;
+       const action = e.target.dataset.action;
+       const friendName = e.target.dataset.friend;
+-      const actionBtn = e.target.closest('.action-btn');
++      const actionBtn = e.target.closest('.action-btn');
++      const duration = e.target.dataset.duration;
+ 
+       if (actionBtn && actionBtn.nextElementSibling?.classList.contains('menu')) {
+         const menu = actionBtn.nextElementSibling;
+         const open = menu.style.display === 'flex';
+         document.querySelectorAll('.menu').forEach(m => m.style.display = 'none');
+         menu.style.display = open ? 'none' : 'flex';
+         e.stopPropagation();
+         return;
+       }
+ 
+-      if (accept) {
+-        await DataStore.accept(currentUser, accept);
+-        await renderFriends();
+-        return;
+-      }
++      if (accept) {
++        await DataStore.accept(currentUser, accept);
++        await renderFriends();
++        return;
++      }
+       if (decline) {
+         await DataStore.decline(currentUser, decline);
+         await renderFriends();
+         return;
+       }
+ 
+-      if (action && friendName) {
+-        if (action === 'block') {
+-          await DataStore.toggleBlock(currentUser, friendName);
+-        }
+-        if (action === 'pin') {
+-          await DataStore.togglePin(currentUser, friendName);
+-        }
+-        if (action === 'report') {
+-          alert('Segnalazione inviata per ' + friendName);
+-        }
+-        if (action === 'remove') {
+-          await DataStore.removeFriend(currentUser, friendName);
++      if (action && friendName) {
++        if (action === 'block') {
++          await DataStore.toggleBlock(currentUser, friendName);
++        }
++        if (action === 'pin') {
++          await DataStore.togglePin(currentUser, friendName);
++        }
++        if (action === 'mute') {
++          // handled by submenu
++        }
++        if (action === 'report') {
++          alert('Segnalazione inviata per ' + friendName);
++        }
++        if (action === 'remove') {
++          await DataStore.removeFriend(currentUser, friendName);
+           if (activeFriend && activeFriend.name === friendName) {
+             activeFriend = null;
+             await showMain();
+           }
+         }
+         if (action === 'clear') {
+           await DataStore.clearChat(currentUser, friendName);
+           if (activeFriend && activeFriend.name === friendName) {
+             const user = await DataStore.getUser(currentUser);
+             const refreshed = (user.friends || []).find(f => f.name === friendName);
+             if (refreshed) await showChat(refreshed);
+           }
+         }
+-        await renderFriends();
+-        return;
+-      }
++        await renderFriends();
++        return;
++      }
++
++      if (duration && friendName) {
++        const minutes = Number(duration);
++        const until = minutes > 0 ? Date.now() + minutes * 60 * 1000 : 0;
++        await DataStore.setMutedUntil(currentUser, friendName, until);
++        await renderFriends();
++        return;
++      }
+ 
+       const card = e.target.closest('.friend-card');
+       if (!card || filter === 'pending') return;
+       const name = card.dataset.friend;
+       if (!name) return;
+       const user = await DataStore.getUser(currentUser);
+       const friend = (user.friends || []).find(f => f.name === name);
+       if (friend) {
+         await showChat(friend);
+       }
+     });
+ 
+     friendList.addEventListener('mouseleave', () => {
+       document.querySelectorAll('.menu').forEach(m => m.style.display = 'none');
+     });
+ 
+     addFriendBtns.forEach(btn => btn.addEventListener('click', () => {
+       modal.classList.remove('hidden');
+       appShell.classList.add('blurred');
+       modalStatus.textContent = '';
+       modalStatus.className = 'status';
+       friendInput.value = '';
+       friendInput.focus();
+     }));
+ 
+@@ -1644,53 +1892,107 @@
+     modal.addEventListener('click', (e) => {
+       if (e.target === modal) {
+         modal.classList.add('hidden');
+         appShell.classList.remove('blurred');
+       }
+     });
+ 
+     openProfile.addEventListener('click', async () => {
+       await renderAccountPanel();
+       profileOverlay.classList.remove('hidden');
+       appShell.classList.add('blurred');
+     });
+ 
+     closeProfile.addEventListener('click', () => {
+       profileOverlay.classList.add('hidden');
+       appShell.classList.remove('blurred');
+     });
+ 
+     profileOverlay.addEventListener('click', (e) => {
+       if (e.target === profileOverlay) {
+         profileOverlay.classList.add('hidden');
+         appShell.classList.remove('blurred');
+       }
+     });
+ 
+-    logoutBtn.addEventListener('click', () => {
+-      logout();
+-    });
++    logoutBtn.addEventListener('click', () => {
++      logout();
++    });
++
++    document.querySelectorAll('.info-card .edit-btn').forEach(btn => {
++      const card = btn.closest('.info-card');
++      const pop = card.querySelector('.edit-pop');
++      btn.addEventListener('click', () => {
++        document.querySelectorAll('.edit-pop').forEach(p => p.classList.remove('show'));
++        pop.classList.toggle('show');
++      });
++      card.addEventListener('mouseleave', () => pop.classList.remove('show'));
++    });
++
++    document.querySelectorAll('[data-save]').forEach(btn => {
++      btn.addEventListener('click', async () => {
++        if (!currentUser) return;
++        const field = btn.dataset.save;
++        if (field === 'displayName') {
++          const value = document.getElementById('edit-display').value.trim();
++          await DataStore.updateProfile(currentUser, { displayName: value || currentUser });
++        }
++        if (field === 'about') {
++          const value = document.getElementById('edit-about').value.trim();
++          await DataStore.updateProfile(currentUser, { about: value });
++        }
++        if (field === 'username') {
++          const value = normalizeName(document.getElementById('edit-username').value.trim());
++          await DataStore.updateProfile(currentUser, { username: value || currentUser });
++        }
++        if (field === 'status') {
++          const value = document.getElementById('edit-status').value;
++          await DataStore.setStatus(currentUser, value);
++        }
++        document.querySelectorAll('.edit-pop').forEach(p => p.classList.remove('show'));
++        await renderUserSummary();
++        await renderAccountPanel();
++        await renderFriends();
++        await syncActiveChat();
++      });
++    });
++
++    accountAvatar.addEventListener('click', () => avatarUpload.click());
++    avatarUpload.addEventListener('change', async (e) => {
++      const file = e.target.files?.[0];
++      if (!file || !currentUser) return;
++      const reader = new FileReader();
++      reader.onload = async (ev) => {
++        const dataUrl = ev.target?.result;
++        if (typeof dataUrl === 'string') {
++          await DataStore.updateProfile(currentUser, { avatar: dataUrl });
++          await renderUserSummary();
++          await renderAccountPanel();
++        }
++      };
++      reader.readAsDataURL(file);
++    });
+ 
+     async function restoreSession() {
+       const saved = loadSession();
+       if (saved?.user && saved.stay && await DataStore.exists(saved.user)) {
+         currentUser = saved.user;
+         await showMain();
+         return true;
+       }
+       if (saved?.user) {
+         usernameField.value = saved.user;
+         stayLoggedToggle.checked = Boolean(saved.stay);
+       }
+       return false;
+     }
+ 
+     function startPresenceLoop() {
+       clearInterval(presenceInterval);
+       presenceInterval = setInterval(async () => {
+         if (!currentUser) return;
+         await renderFriends();
+         await syncActiveChat();
+       }, 3200);
+     }
+ 
+     function startChatSync() {
   </script>
 </body>
 </html>
+
