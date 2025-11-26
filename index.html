@@ -550,26 +550,29 @@
       overflow: hidden;
       box-shadow: 0 26px 90px rgba(0,0,0,0.6);
       position: relative;
+      padding-top: 8px;
     }
 
     .profile-modal .close-profile {
       position: absolute;
-      top: 14px;
-      right: 14px;
-      background: rgba(255,255,255,0.06);
+      top: 10px;
+      right: 10px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1), rgba(255,255,255,0.03));
       border: 1px solid var(--border);
       border-radius: 10px;
       color: var(--text);
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       cursor: pointer;
+      z-index: 5;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.45);
     }
 
     .profile-nav { background: rgba(19, 22, 32, 0.96); padding: 22px 18px; display: flex; flex-direction: column; gap: 10px; border-right: 1px solid var(--border); }
     .profile-nav h4 { margin-bottom: 10px; }
     .profile-nav button { width: 100%; justify-content: flex-start; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--text); }
 
-    .profile-body { padding: 24px; display: grid; grid-template-columns: 1.2fr 0.9fr; gap: 24px; position: relative; }
+    .profile-body { padding: 24px 32px 24px 24px; display: grid; grid-template-columns: 1.2fr 0.9fr; gap: 24px; position: relative; }
     .profile-body .section { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 14px; padding: 16px; box-shadow: 0 16px 50px rgba(0,0,0,0.35); }
     .profile-body .section h5 { margin-bottom: 12px; }
     .profile-body .field { margin-bottom: 10px; color: var(--muted); }
@@ -881,20 +884,29 @@
       const saveUsers = (users) => localStorage.setItem(USERS_KEY, JSON.stringify(users));
       let users = loadUsers();
 
+      const reload = () => {
+        users = loadUsers();
+        return users;
+      };
+
       const ensureUser = (username) => {
         if (!users[username]) {
-          users[username] = { password: '', friends: [], pending: [], messages: {}, createdAt: new Date().toISOString() };
+          users[username] = { password: '', friends: [], pending: [], messages: {}, createdAt: new Date().toISOString(), status: 'offline' };
         }
         if (!users[username].createdAt) {
           users[username].createdAt = new Date().toISOString();
+        }
+        if (!users[username].status) {
+          users[username].status = 'offline';
         }
       };
 
       const ensureFriendEntry = (owner, friendName) => {
         ensureUser(owner);
         const user = users[owner];
+        const status = users[friendName]?.status || 'offline';
         if (!user.friends.some(f => f.name === friendName)) {
-          user.friends.push({ name: friendName, status: 'online', pinned: false, blocked: false, messages: [] });
+          user.friends.push({ name: friendName, status, pinned: false, blocked: false, messages: [] });
         }
         return user.friends.find(f => f.name === friendName);
       };
@@ -904,7 +916,7 @@
           if (users[username]) {
             return { ok: false, message: 'Questo username è già in uso. Scegline un altro.' };
           }
-          users[username] = { password, friends: [], pending: [], messages: {}, createdAt: new Date().toISOString() };
+          users[username] = { password, friends: [], pending: [], messages: {}, createdAt: new Date().toISOString(), status: 'offline' };
           saveUsers(users);
           return { ok: true };
         },
@@ -921,6 +933,17 @@
         getUser(username) {
           ensureUser(username);
           return users[username];
+        },
+        reload() {
+          return reload();
+        },
+        setStatus(username, status) {
+          ensureUser(username);
+          users[username].status = status;
+          Object.keys(users).forEach(owner => {
+            users[owner].friends = users[owner].friends.map(f => f.name === username ? { ...f, status } : f);
+          });
+          saveUsers(users);
         },
         addPending(sender, friendName) {
           ensureUser(sender);
@@ -947,8 +970,9 @@
           const target = users[friendName];
           user.pending = user.pending.filter(p => p.name !== friendName);
           const addEntry = (owner, other) => {
+            const status = users[other]?.status || 'offline';
             if (!owner.friends.some(f => f.name === other)) {
-              owner.friends.push({ name: other, status: 'online', pinned: false, blocked: false, messages: [] });
+              owner.friends.push({ name: other, status, pinned: false, blocked: false, messages: [] });
             }
           };
           addEntry(user, friendName);
@@ -1091,9 +1115,15 @@
 
     function getStatus(friend) {
       if (!friend) return 'offline';
-      if (friend.status) return friend.status;
       const stored = presenceMap[friend.name];
-      return stored || 'offline';
+      if (stored) return stored;
+      if (friend.status) return friend.status;
+      if (DataStore.exists(friend.name)) {
+        const status = DataStore.getUser(friend.name).status || 'offline';
+        presenceMap[friend.name] = status;
+        return status;
+      }
+      return 'offline';
     }
 
     function formatDate(value) {
@@ -1207,6 +1237,7 @@
       mainView.classList.remove('hidden');
       profileOverlay.classList.add('hidden');
       appShell.classList.remove('blurred');
+      DataStore.setStatus(currentUser, 'online');
       const user = DataStore.getUser(currentUser);
       user.friends.forEach(f => {
         presenceMap[f.name] = f.blocked ? 'offline' : (f.status || 'online');
@@ -1219,6 +1250,9 @@
     }
 
     function logout() {
+      if (currentUser) {
+        DataStore.setStatus(currentUser, 'offline');
+      }
       currentUser = null;
       activeFriend = null;
       clearInterval(presenceInterval);
@@ -1277,6 +1311,7 @@
 
     function syncActiveChat() {
       if (!activeFriend || chatView.classList.contains('hidden')) return;
+      DataStore.reload();
       const user = DataStore.getUser(currentUser);
       const friend = user.friends.find(f => f.name === activeFriend.name);
       if (!friend) return;
@@ -1308,6 +1343,7 @@
     backToMain.addEventListener('click', showMain);
 
     function renderFriends() {
+      DataStore.reload();
       const user = DataStore.getUser(currentUser);
       const term = searchInput.value.trim().toLowerCase();
       const filtered = user.friends
@@ -1551,6 +1587,7 @@
       clearInterval(presenceInterval);
       presenceInterval = setInterval(() => {
         if (!currentUser) return;
+        DataStore.reload();
         const user = DataStore.getUser(currentUser);
         user.friends.forEach(f => {
           presenceMap[f.name] = f.blocked ? 'offline' : (f.status || presenceMap[f.name] || 'online');
@@ -1564,6 +1601,22 @@
       clearInterval(chatInterval);
       chatInterval = setInterval(syncActiveChat, 1200);
     }
+
+    function handleStorageSync() {
+      if (!currentUser) return;
+      DataStore.reload();
+      renderUserSummary();
+      renderAccountPanel();
+      renderFriends();
+      syncActiveChat();
+    }
+
+    window.addEventListener('storage', handleStorageSync);
+    window.addEventListener('beforeunload', () => {
+      if (currentUser) {
+        DataStore.setStatus(currentUser, 'offline');
+      }
+    });
 
     const booted = restoreSession();
     if (!booted) {
