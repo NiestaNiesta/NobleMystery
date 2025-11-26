@@ -491,7 +491,7 @@
     .chat-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
     .chat-header img { width: 40px; height: 40px; border-radius: 12px; cursor: pointer; }
 
-    .chat-panel { display: flex; flex-direction: column; gap: 16px; min-height: 72vh; }
+    .chat-panel { display: flex; flex-direction: column; gap: 16px; min-height: 72vh; height: 78vh; }
 
     .messages {
       background: rgba(16, 19, 29, 0.92);
@@ -501,7 +501,9 @@
       display: flex;
       flex-direction: column;
       gap: 14px;
-      min-height: 420px;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
       box-shadow: 0 20px 60px rgba(0,0,0,0.45);
     }
 
@@ -703,6 +705,15 @@
         }
       };
 
+      const ensureFriendEntry = (owner, friendName) => {
+        ensureUser(owner);
+        const user = users[owner];
+        if (!user.friends.some(f => f.name === friendName)) {
+          user.friends.push({ name: friendName, status: 'online', pinned: false, blocked: false, messages: [] });
+        }
+        return user.friends.find(f => f.name === friendName);
+      };
+
       return {
         register(username, password) {
           if (users[username]) {
@@ -741,7 +752,7 @@
           const user = users[username];
           user.pending = user.pending.filter(p => p.name !== friendName);
           if (!user.friends.some(f => f.name === friendName)) {
-            user.friends.push({ name: friendName, status: 'offline', pinned: false, blocked: false, messages: [] });
+            user.friends.push({ name: friendName, status: 'online', pinned: false, blocked: false, messages: [] });
           }
           saveUsers(users);
         },
@@ -763,16 +774,29 @@
           user.friends = user.friends.map(f => f.name === friendName ? { ...f, pinned: !f.pinned } : f);
           saveUsers(users);
         },
-        saveMessage(username, friendName, from, text) {
-          ensureUser(username);
-          const user = users[username];
-          user.friends = user.friends.map(f => {
-            if (f.name !== friendName) return f;
-            const nextMsgs = Array.isArray(f.messages) ? f.messages.slice() : [];
-            nextMsgs.push({ from, text, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
-            return { ...f, messages: nextMsgs };
-          });
+        saveMessage(sender, friendName, text) {
+          const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          ensureFriendEntry(sender, friendName);
+          const appendMessage = (owner, target, fromValue) => {
+            const user = users[owner];
+            user.friends = user.friends.map(f => {
+              if (f.name !== target) return f;
+              const nextMsgs = Array.isArray(f.messages) ? f.messages.slice() : [];
+              nextMsgs.push({ from: fromValue, text, time });
+              const nextStatus = f.blocked ? 'offline' : (f.status || 'online');
+              return { ...f, messages: nextMsgs, status: nextStatus };
+            });
+          };
+
+          appendMessage(sender, friendName, sender);
+
+          if (users[friendName]) {
+            ensureFriendEntry(friendName, sender);
+            appendMessage(friendName, sender, sender);
+          }
+
           saveUsers(users);
+          return { delivered: Boolean(users[friendName]) };
         }
       };
     })();
@@ -826,8 +850,9 @@
 
     function getStatus(friend) {
       if (!friend) return 'offline';
+      if (friend.status) return friend.status;
       const stored = presenceMap[friend.name];
-      return stored || friend.status || 'offline';
+      return stored || 'offline';
     }
 
     function triggerSplash() {
@@ -892,9 +917,7 @@
       mainView.classList.remove('hidden');
       const user = DataStore.getUser(currentUser);
       user.friends.forEach(f => {
-        if (!presenceMap[f.name]) {
-          presenceMap[f.name] = Math.random() > 0.45 ? 'online' : 'offline';
-        }
+        presenceMap[f.name] = f.blocked ? 'offline' : (f.status || 'online');
       });
       startPresenceLoop();
       startChatSync();
@@ -928,6 +951,7 @@
         empty.className = 'empty';
         empty.textContent = 'La chat è vuota. Invia un messaggio per iniziare.';
         messagesEl.appendChild(empty);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
         return;
       }
       msgs.forEach(m => {
@@ -936,6 +960,7 @@
         bubble.innerHTML = `<div>${m.text}</div><div class="timestamp">${m.time}</div>`;
         messagesEl.appendChild(bubble);
       });
+      messagesEl.scrollTop = messagesEl.scrollHeight;
     }
 
     function syncActiveChat() {
@@ -958,19 +983,13 @@
       if (!activeFriend || chatInput.disabled) return;
       const text = chatInput.value.trim();
       if (!text) return;
-      DataStore.saveMessage(currentUser, activeFriend.name, currentUser, text);
+      const result = DataStore.saveMessage(currentUser, activeFriend.name, text);
       const user = DataStore.getUser(currentUser);
       const updated = user.friends.find(f => f.name === activeFriend.name);
       chatInput.value = '';
       showChat(updated);
-      if (!updated.blocked) {
-        setTimeout(() => {
-          DataStore.saveMessage(currentUser, updated.name, updated.name, 'Sto rispondendo in tempo reale!');
-          const refreshed = DataStore.getUser(currentUser).friends.find(f => f.name === updated.name);
-          if (refreshed) {
-            renderMessages(refreshed);
-          }
-        }, 700);
+      if (!result.delivered) {
+        console.warn('Messaggio non consegnato: utente destinatario non trovato.');
       }
     });
 
@@ -1166,9 +1185,7 @@
         if (!currentUser) return;
         const user = DataStore.getUser(currentUser);
         user.friends.forEach(f => {
-          const current = presenceMap[f.name] || (Math.random() > 0.55 ? 'online' : 'offline');
-          const next = Math.random() > 0.7 ? (current === 'online' ? 'offline' : 'online') : current;
-          presenceMap[f.name] = f.blocked ? 'offline' : next;
+          presenceMap[f.name] = f.blocked ? 'offline' : (f.status || presenceMap[f.name] || 'online');
         });
         renderFriends();
         syncActiveChat();
