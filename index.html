@@ -452,6 +452,130 @@
 
     .tag { padding: 4px 8px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); font-size: 12px; }
 
+    .profile-summary {
+      background: linear-gradient(160deg, rgba(255,255,255,0.02), rgba(255,255,255,0.05));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 16px 50px rgba(0,0,0,0.4);
+    }
+
+    .profile-summary::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 30%, rgba(157, 107, 255, 0.12), transparent 40%),
+                  radial-gradient(circle at 80% 30%, rgba(92, 240, 255, 0.12), transparent 35%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .profile-summary .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .profile-summary .avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      background: linear-gradient(140deg, rgba(157, 107, 255, 0.2), rgba(92, 240, 255, 0.18));
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 22px;
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05), 0 10px 30px rgba(0,0,0,0.35);
+    }
+
+    .profile-summary .identity { display: flex; flex-direction: column; gap: 4px; }
+    .profile-summary .handle { color: var(--muted); font-size: 13px; }
+    .profile-summary .status { font-size: 13px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+    .profile-summary .status .dot { transform: translateY(1px); }
+
+    .profile-summary .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .pill { padding: 6px 10px; border-radius: 12px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); font-weight: 700; font-size: 12px; }
+
+    .profile-summary .menu-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: background 0.2s ease, border 0.2s ease, transform 0.2s ease;
+    }
+
+    .profile-summary .menu-btn:hover { background: rgba(92, 240, 255, 0.12); border-color: rgba(92, 240, 255, 0.45); transform: translateY(-1px); }
+
+    .profile-summary .divider { height: 1px; background: var(--border); margin: 12px 0; position: relative; z-index: 1; }
+
+    .toggle { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; }
+    .toggle input { accent-color: #9d6bff; width: 18px; height: 18px; }
+
+    .profile-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(10px);
+      display: grid;
+      place-items: center;
+      z-index: 60;
+    }
+
+    .profile-modal {
+      width: min(920px, 94vw);
+      background: rgba(14, 16, 26, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      overflow: hidden;
+      box-shadow: 0 26px 90px rgba(0,0,0,0.6);
+      position: relative;
+    }
+
+    .profile-modal .close-profile {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+    }
+
+    .profile-nav { background: rgba(19, 22, 32, 0.96); padding: 22px 18px; display: flex; flex-direction: column; gap: 10px; border-right: 1px solid var(--border); }
+    .profile-nav h4 { margin-bottom: 10px; }
+    .profile-nav button { width: 100%; justify-content: flex-start; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--text); }
+
+    .profile-body { padding: 24px; display: grid; grid-template-columns: 1.2fr 0.9fr; gap: 24px; position: relative; }
+    .profile-body .section { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 14px; padding: 16px; box-shadow: 0 16px 50px rgba(0,0,0,0.35); }
+    .profile-body .section h5 { margin-bottom: 12px; }
+    .profile-body .field { margin-bottom: 10px; color: var(--muted); }
+
+    .row { display: flex; align-items: center; gap: 8px; color: var(--muted); }
+
     /* Modal */
     .overlay {
       position: fixed;
@@ -591,6 +715,10 @@
             <label for="password">Password</label>
             <input id="password" class="input" type="password" name="password" autocomplete="current-password" required />
           </div>
+          <label class="toggle" for="stay-logged">
+            <input type="checkbox" id="stay-logged" checked />
+            <span>Rimani connesso</span>
+          </label>
           <button type="submit" class="btn" id="submit-btn">Crea account</button>
           <div class="status" id="status"></div>
         </form>
@@ -633,12 +761,27 @@
         </main>
 
         <aside class="panel side-card">
-          <h3>ADD FRIEND</h3>
-          <p>Aggiungi un amico con il suo username NOVAchat.</p>
-          <button class="btn" id="side-add">Send Friend Request</button>
-          <div class="side-list" style="margin-top: 18px;">
-            <div class="mini-entry"><span class="tag">ONLINE</span><span id="online-count">0</span></div>
-            <div class="mini-entry"><span class="tag">OFFLINE</span><span id="offline-count">0</span></div>
+          <div class="profile-summary">
+            <div class="header">
+              <div class="avatar" id="side-avatar">N</div>
+              <div class="identity">
+                <div class="friend-name" id="side-name">Nova User</div>
+                <div class="handle" id="side-handle">@utente</div>
+                <div class="status" id="side-status"><span class="dot online"></span>Online</div>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div class="side-list" style="margin: 6px 0 0 0;">
+              <div class="mini-entry"><span class="tag">ONLINE</span><span id="online-count">0</span></div>
+              <div class="mini-entry"><span class="tag">OFFLINE</span><span id="offline-count">0</span></div>
+            </div>
+            <div class="footer">
+              <span class="pill" id="member-since">Membro</span>
+              <button class="menu-btn" id="open-profile" type="button">⋯</button>
+            </div>
+          </div>
+          <div style="margin-top: 14px; display: flex; justify-content: space-between; gap: 10px; align-items: center;">
+            <button class="btn" id="side-add" style="flex:1;">Send Friend Request</button>
           </div>
         </aside>
       </div>
@@ -689,6 +832,37 @@
     </div>
   </div>
 
+  <div id="profile-overlay" class="profile-overlay hidden" role="dialog" aria-modal="true">
+    <div class="profile-modal">
+      <button class="close-profile" id="close-profile" type="button">×</button>
+      <div class="profile-nav">
+        <h4>Log out</h4>
+        <button type="button" id="logout-btn">Esci e torna al login</button>
+      </div>
+      <div class="profile-body">
+        <div class="section">
+          <h5>User Profile</h5>
+          <div class="row" style="margin-bottom: 12px;">
+            <div class="profile-avatar" id="account-avatar">N</div>
+            <div>
+              <div class="friend-name" id="account-name">Nova User</div>
+              <div class="friend-status" id="account-status"></div>
+              <div class="handle" id="account-handle">@utente</div>
+            </div>
+          </div>
+          <div class="field"><strong>About me:</strong> <span id="account-about">Sempre online su NovaChat.</span></div>
+          <div class="field"><strong>Display name:</strong> <span id="account-display"></span></div>
+          <div class="field"><strong>Username:</strong> <span id="account-username"></span></div>
+        </div>
+        <div class="section">
+          <h5>Info</h5>
+          <div class="field"><strong>Stato:</strong> <span id="account-state"></span></div>
+          <div class="field"><strong>Member Since:</strong> <span id="account-member"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     const DataStore = (() => {
       const USERS_KEY = 'novachat-users-v3';
@@ -709,7 +883,10 @@
 
       const ensureUser = (username) => {
         if (!users[username]) {
-          users[username] = { password: '', friends: [], pending: [], messages: {} };
+          users[username] = { password: '', friends: [], pending: [], messages: {}, createdAt: new Date().toISOString() };
+        }
+        if (!users[username].createdAt) {
+          users[username].createdAt = new Date().toISOString();
         }
       };
 
@@ -727,9 +904,12 @@
           if (users[username]) {
             return { ok: false, message: 'Questo username è già in uso. Scegline un altro.' };
           }
-          users[username] = { password, friends: [], pending: [], messages: {} };
+          users[username] = { password, friends: [], pending: [], messages: {}, createdAt: new Date().toISOString() };
           saveUsers(users);
           return { ok: true };
+        },
+        exists(username) {
+          return Boolean(users[username]);
         },
         login(username, password) {
           const user = users[username];
@@ -742,26 +922,37 @@
           ensureUser(username);
           return users[username];
         },
-        addPending(username, friendName) {
-          ensureUser(username);
-          const user = users[username];
-          if (user.friends.some(f => f.name.toLowerCase() === friendName.toLowerCase())) {
+        addPending(sender, friendName) {
+          ensureUser(sender);
+          if (!users[friendName]) {
+            return { ok: false, message: 'Utente non trovato.' };
+          }
+          const senderUser = users[sender];
+          const target = users[friendName];
+          if (senderUser.friends.some(f => f.name.toLowerCase() === friendName.toLowerCase()) ||
+              target.friends.some(f => f.name.toLowerCase() === sender.toLowerCase())) {
             return { ok: false, message: 'Questo utente è già tra i tuoi amici.' };
           }
-          if (user.pending.some(p => p.name.toLowerCase() === friendName.toLowerCase())) {
-            return { ok: false, message: 'Richiesta già presente.' };
+          if (target.pending.some(p => p.name.toLowerCase() === sender.toLowerCase())) {
+            return { ok: false, message: 'Richiesta già inviata.' };
           }
-          user.pending.push({ name: friendName });
+          target.pending.push({ name: sender });
           saveUsers(users);
           return { ok: true };
         },
         accept(username, friendName) {
           ensureUser(username);
+          ensureUser(friendName);
           const user = users[username];
+          const target = users[friendName];
           user.pending = user.pending.filter(p => p.name !== friendName);
-          if (!user.friends.some(f => f.name === friendName)) {
-            user.friends.push({ name: friendName, status: 'online', pinned: false, blocked: false, messages: [] });
-          }
+          const addEntry = (owner, other) => {
+            if (!owner.friends.some(f => f.name === other)) {
+              owner.friends.push({ name: other, status: 'online', pinned: false, blocked: false, messages: [] });
+            }
+          };
+          addEntry(user, friendName);
+          addEntry(target, username);
           saveUsers(users);
         },
         decline(username, friendName) {
@@ -838,6 +1029,7 @@
     const subtitle = document.getElementById('form-subtitle');
     const usernameField = document.getElementById('username');
     const passwordField = document.getElementById('password');
+    const stayLoggedToggle = document.getElementById('stay-logged');
     const splash = document.querySelector('.splash');
 
     const authView = document.getElementById('auth-view');
@@ -855,6 +1047,26 @@
     const closeModal = document.getElementById('close-modal');
     const confirmAdd = document.getElementById('confirm-add');
     const appShell = document.getElementById('app');
+
+    const sideAvatar = document.getElementById('side-avatar');
+    const sideName = document.getElementById('side-name');
+    const sideHandle = document.getElementById('side-handle');
+    const sideStatus = document.getElementById('side-status');
+    const memberSince = document.getElementById('member-since');
+    const openProfile = document.getElementById('open-profile');
+    const profileOverlay = document.getElementById('profile-overlay');
+    const closeProfile = document.getElementById('close-profile');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    const accountAvatar = document.getElementById('account-avatar');
+    const accountName = document.getElementById('account-name');
+    const accountStatus = document.getElementById('account-status');
+    const accountHandle = document.getElementById('account-handle');
+    const accountAbout = document.getElementById('account-about');
+    const accountDisplay = document.getElementById('account-display');
+    const accountUsername = document.getElementById('account-username');
+    const accountState = document.getElementById('account-state');
+    const accountMember = document.getElementById('account-member');
 
     const chatName = document.getElementById('chat-name');
     const chatStatus = document.getElementById('chat-status');
@@ -875,12 +1087,36 @@
     let presenceInterval = null;
     let chatInterval = null;
     const presenceMap = {};
+    const SESSION_KEY = 'novachat-session';
 
     function getStatus(friend) {
       if (!friend) return 'offline';
       if (friend.status) return friend.status;
       const stored = presenceMap[friend.name];
       return stored || 'offline';
+    }
+
+    function formatDate(value) {
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return 'Nuovo membro';
+      return date.toLocaleDateString('it-IT', { month: 'short', year: 'numeric' });
+    }
+
+    function persistSession(user, stay) {
+      if (stay && user) {
+        localStorage.setItem(SESSION_KEY, JSON.stringify({ user, stay: true }));
+      } else {
+        localStorage.removeItem(SESSION_KEY);
+      }
+    }
+
+    function loadSession() {
+      const raw = localStorage.getItem(SESSION_KEY);
+      try {
+        return raw ? JSON.parse(raw) : null;
+      } catch (err) {
+        return null;
+      }
     }
 
     function triggerSplash() {
@@ -925,6 +1161,7 @@
         passwordField.value = '';
         triggerSplash();
         currentUser = username;
+        persistSession(username, stayLoggedToggle.checked);
         showMain();
       }
     });
@@ -939,17 +1176,64 @@
       }
     });
 
+    function renderUserSummary() {
+      if (!currentUser) return;
+      const user = DataStore.getUser(currentUser);
+      sideAvatar.textContent = currentUser.charAt(0).toUpperCase();
+      sideName.textContent = currentUser;
+      sideHandle.textContent = '@' + currentUser.toLowerCase();
+      sideStatus.innerHTML = '<span class="dot online"></span>Online';
+      memberSince.textContent = user.createdAt ? 'Dal ' + formatDate(user.createdAt) : 'Nuovo membro';
+    }
+
+    function renderAccountPanel() {
+      if (!currentUser) return;
+      const user = DataStore.getUser(currentUser);
+      const joined = user.createdAt ? formatDate(user.createdAt) : 'Nuovo membro';
+      accountAvatar.textContent = currentUser.charAt(0).toUpperCase();
+      accountName.textContent = currentUser;
+      accountHandle.textContent = '@' + currentUser.toLowerCase();
+      accountStatus.innerHTML = '<span class="dot online"></span>Online';
+      accountDisplay.textContent = currentUser;
+      accountUsername.textContent = currentUser;
+      accountState.textContent = 'Online';
+      accountMember.textContent = joined;
+    }
+
     function showMain() {
+      if (!currentUser) return;
       authView.classList.add('hidden');
       chatView.classList.add('hidden');
       mainView.classList.remove('hidden');
+      profileOverlay.classList.add('hidden');
+      appShell.classList.remove('blurred');
       const user = DataStore.getUser(currentUser);
       user.friends.forEach(f => {
         presenceMap[f.name] = f.blocked ? 'offline' : (f.status || 'online');
       });
       startPresenceLoop();
       startChatSync();
+      renderUserSummary();
+      renderAccountPanel();
       renderFriends();
+    }
+
+    function logout() {
+      currentUser = null;
+      activeFriend = null;
+      clearInterval(presenceInterval);
+      clearInterval(chatInterval);
+      persistSession('', false);
+      appShell.classList.remove('blurred');
+      profileOverlay.classList.add('hidden');
+      modal.classList.add('hidden');
+      mainView.classList.add('hidden');
+      chatView.classList.add('hidden');
+      authView.classList.remove('hidden');
+      usernameField.value = '';
+      passwordField.value = '';
+      stayLoggedToggle.checked = false;
+      setMode('login');
     }
 
     function showChat(friend) {
@@ -1205,6 +1489,11 @@
     confirmAdd.addEventListener('click', () => {
       const name = friendInput.value.trim();
       if (!name) return;
+      if (name.toLowerCase() === currentUser.toLowerCase()) {
+        modalStatus.className = 'status error';
+        modalStatus.textContent = 'Non puoi aggiungere te stesso.';
+        return;
+      }
       const result = DataStore.addPending(currentUser, name);
       modalStatus.className = 'status ' + (result.ok ? 'success' : 'error');
       modalStatus.textContent = result.ok ? `Richiesta inviata a ${name}.` : result.message;
@@ -1224,6 +1513,40 @@
       }
     });
 
+    openProfile.addEventListener('click', () => {
+      renderAccountPanel();
+      profileOverlay.classList.remove('hidden');
+      appShell.classList.add('blurred');
+    });
+
+    closeProfile.addEventListener('click', () => {
+      profileOverlay.classList.add('hidden');
+      appShell.classList.remove('blurred');
+    });
+
+    profileOverlay.addEventListener('click', (e) => {
+      if (e.target === profileOverlay) {
+        profileOverlay.classList.add('hidden');
+        appShell.classList.remove('blurred');
+      }
+    });
+
+    logoutBtn.addEventListener('click', logout);
+
+    function restoreSession() {
+      const saved = loadSession();
+      if (saved?.user && saved.stay && DataStore.exists(saved.user)) {
+        currentUser = saved.user;
+        showMain();
+        return true;
+      }
+      if (saved?.user) {
+        usernameField.value = saved.user;
+        stayLoggedToggle.checked = Boolean(saved.stay);
+      }
+      return false;
+    }
+
     function startPresenceLoop() {
       clearInterval(presenceInterval);
       presenceInterval = setInterval(() => {
@@ -1242,7 +1565,10 @@
       chatInterval = setInterval(syncActiveChat, 1200);
     }
 
-    setMode(mode);
+    const booted = restoreSession();
+    if (!booted) {
+      setMode(mode);
+    }
   </script>
 </body>
 </html>
