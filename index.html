@@ -1,4 +1,4 @@
-@DOCTYPE html
+<!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
@@ -327,7 +327,7 @@
       color: var(--text);
       font-weight: 600;
     }
-    
+
     .filters {
       display: flex;
       gap: 10px;
@@ -358,7 +358,6 @@
       background: #ffb347;
       box-shadow: 0 0 0 2px rgba(13, 15, 23, 0.9);
     }
-
 
     .list { display: flex; flex-direction: column; gap: 10px; flex: 1; min-height: 420px; }
 
@@ -729,7 +728,7 @@
       gap: 12px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.45);
     }
-           
+
     .profile-avatar {
       width: 82px;
       height: 82px;
@@ -994,12 +993,12 @@
               <button class="btn" id="add-friend">Add Friend</button>
             </div>
           </div>
-          <div class="filters" id="filters">␊
+          <div class="filters" id="filters">
             <button data-filter="all" class="active">All <span class="filter-badge hidden" data-tab="all"></span></button>
             <button data-filter="online">Online <span class="filter-badge hidden" data-tab="online"></span></button>
             <button data-filter="pending">Pending <span class="filter-badge hidden" data-tab="pending"></span></button>
-            <button data-filter="blocked">Blocked</button>␊
-          </div>␊
+            <button data-filter="blocked">Blocked</button>
+          </div>
           <div class="list" id="friend-list"></div>
         </main>
 
@@ -1030,9 +1029,9 @@
       </div>
     </section>
 
-    <section id="chat-view" class="hidden">␊
-      <div class="chat-layout">␊
-        <div class="chat-panel">␊
+    <section id="chat-view" class="hidden">
+      <div class="chat-layout">
+        <div class="chat-panel">
           <div class="chat-header">
             <img src="Images/Logo.png" alt="Indietro a NovaChat" id="back-to-main" />
             <div>
@@ -1159,13 +1158,10 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+
     const DataStore = (() => {
-      const normalizeNameLower = (value = '') =>
-        value.trim().replace(/^@+/, '').toLowerCase();
-
-      const userRef = (username) =>
-        doc(db, 'users', normalizeNameLower(username));
-
+      const normalizeNameLower = (value = '') => value.trim().replace(/^@+/, '').toLowerCase();
+      const userRef = (username) => doc(db, 'users', normalizeNameLower(username));
       const defaultUser = () => ({
         password: '',
         friends: [],
@@ -1178,69 +1174,130 @@
         avatar: '',
         handle: ''
       });
+      const sameUser = (a, b) => normalizeNameLower(a) === normalizeNameLower(b);
+      const LOCAL_KEY = 'novachat-local-users';
+      let offline = false;
 
-      const sameUser = (a, b) =>
-        normalizeNameLower(a) === normalizeNameLower(b);
+      const loadLocal = () => {
+        try {
+          return JSON.parse(localStorage.getItem(LOCAL_KEY) || '{}');
+        } catch (err) {
+          console.warn('Impossibile leggere i dati locali', err);
+          return {};
+        }
+      };
+
+      const saveLocal = (data) => {
+        localStorage.setItem(LOCAL_KEY, JSON.stringify(data));
+      };
+
+      const readLocalUser = (key) => loadLocal()[key] || null;
+      const writeLocalUser = (key, data) => {
+        const db = loadLocal();
+        db[key] = data;
+        saveLocal(db);
+      };
+
+      function markOffline(err) {
+        if (!offline) {
+          console.warn('Backend remoto non disponibile, passo allo storage locale.', err);
+        }
+        offline = true;
+      }
+
+      async function fetchUser(key) {
+        const clean = normalizeNameLower(key);
+        if (!offline) {
+          try {
+            const snap = await getDoc(userRef(clean));
+            if (snap.exists()) {
+              const data = snap.data();
+              writeLocalUser(clean, data);
+              return data;
+            }
+            return null;
+          } catch (err) {
+            markOffline(err);
+          }
+        }
+        return readLocalUser(clean);
+      }
+
+      async function saveUser(key, data) {
+        const clean = normalizeNameLower(key);
+        if (!offline) {
+          try {
+            await setDoc(userRef(clean), data);
+            writeLocalUser(clean, data);
+            return;
+          } catch (err) {
+            markOffline(err);
+          }
+        }
+        writeLocalUser(clean, data);
+      }
+
+      async function existsUser(key) {
+        const clean = normalizeNameLower(key);
+        if (!offline) {
+          try {
+            const snap = await getDoc(userRef(clean));
+            const exists = snap.exists();
+            if (exists) writeLocalUser(clean, snap.data());
+            return exists;
+          } catch (err) {
+            markOffline(err);
+          }
+        }
+        return Boolean(readLocalUser(clean));
+      }
 
       const ensureUser = async (username) => {
-        const ref = userRef(username);
-        const snap = await getDoc(ref);
-        if (!snap.exists()) {
-          const data = defaultUser();
-          await setDoc(ref, data);
-          return data;
+        const key = normalizeNameLower(username);
+        const existing = await fetchUser(key);
+        if (existing) {
+          const merged = { ...defaultUser(), ...existing };
+          await saveUser(key, merged);
+          return merged;
         }
-        const merged = { ...defaultUser(), ...snap.data() };
-        await setDoc(ref, merged);
-        return merged;
+        const data = defaultUser();
+        await saveUser(key, data);
+        return data;
       };
 
       return {
         async register(username, password) {
           const clean = normalizeNameLower(username);
-          const ref = userRef(clean);
-          const snap = await getDoc(ref);
-          if (snap.exists()) {
+          if (await existsUser(clean)) {
             return { ok: false, message: 'Questo username è già in uso. Scegline un altro.' };
           }
           const data = {
+            ...defaultUser(),
             password,
-            friends: [],
-            pending: [],
-            messages: {},
-            createdAt: new Date().toISOString(),
-            status: 'offline',
             displayName: username,
             about: 'Sono pronto a chattare su NovaChat.',
-            avatar: '',
-            handle: username
+            handle: username,
+            status: 'offline',
+            createdAt: new Date().toISOString()
           };
-          await setDoc(ref, data);
+          await saveUser(clean, data);
           return { ok: true, user: clean };
         },
 
         async exists(username) {
-          const ref = userRef(username);
-          const snap = await getDoc(ref);
-          return snap.exists();
+          return existsUser(username);
         },
 
         async login(username, password) {
-          const ref = userRef(username);
-          const snap = await getDoc(ref);
-          if (!snap.exists()) {
-            return { ok: false, message: 'Credenziali non valide. Ritenta.' };
-          }
-          const user = snap.data();
-          if (user.password !== password) {
+          const user = await fetchUser(username);
+          if (!user || user.password !== password) {
             return { ok: false, message: 'Credenziali non valide. Ritenta.' };
           }
           return { ok: true, user: normalizeNameLower(username) };
         },
 
         async getUser(username) {
-          const data = await ensureUser(username);
-          return data;
+          return ensureUser(username);
         },
 
         async reload() {
@@ -1248,10 +1305,9 @@
         },
 
         async setStatus(username, status) {
-          const ref = userRef(username);
           const data = await ensureUser(username);
           data.status = status;
-          await setDoc(ref, data);
+          await saveUser(username, data);
         },
 
         async addPending(sender, friendName) {
@@ -1262,18 +1318,8 @@
             return { ok: false, message: 'Non puoi aggiungere te stesso.' };
           }
 
-          const senderRef = userRef(senderKey);
-          const targetRef = userRef(targetKey);
-
-          const senderSnap = await getDoc(senderRef);
-          const targetSnap = await getDoc(targetRef);
-
-          if (!targetSnap.exists()) {
-            return { ok: false, message: 'Utente non trovato.' };
-          }
-
-          const senderUser = senderSnap.exists() ? senderSnap.data() : defaultUser();
-          const targetUser = targetSnap.data();
+          const senderUser = await ensureUser(senderKey);
+          const targetUser = await ensureUser(targetKey);
 
           senderUser.friends = senderUser.friends || [];
           targetUser.friends = targetUser.friends || [];
@@ -1290,8 +1336,8 @@
 
           targetUser.pending.push({ name: senderKey });
 
-          await setDoc(senderRef, senderUser);
-          await setDoc(targetRef, targetUser);
+          await saveUser(senderKey, senderUser);
+          await saveUser(targetKey, targetUser);
 
           return { ok: true };
         },
@@ -1300,19 +1346,17 @@
           const ownerKey = normalizeNameLower(username);
           const friendKey = normalizeNameLower(friendName);
 
-          const ownerRef = userRef(ownerKey);
-          const friendRef = userRef(friendKey);
-
-          const ownerSnap = await getDoc(ownerRef);
-          const friendSnap = await getDoc(friendRef);
-
-          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
-          const friend = friendSnap.exists() ? friendSnap.data() : defaultUser();
+          const owner = await ensureUser(ownerKey);
+          const friend = await fetchUser(friendKey);
+          if (!friend) {
+            return { delivered: false };
+          }
+          const normalizedFriend = await ensureUser(friendKey);
 
           owner.pending = (owner.pending || []).filter(p => !sameUser(p.name, friendKey));
 
           owner.friends = owner.friends || [];
-          friend.friends = friend.friends || [];
+          normalizedFriend.friends = normalizedFriend.friends || [];
           const friendDisplay = friend.displayName || friendKey;
           const ownerDisplay = owner.displayName || ownerKey;
           const friendAvatar = friend.avatar || '';
@@ -1321,176 +1365,117 @@
           if (!owner.friends.some(f => sameUser(f.name, friendKey))) {
             owner.friends.push({ name: friendKey, status: friend.status || 'offline', pinned: false, blocked: false, messages: [], displayName: friendDisplay, avatar: friendAvatar, handle: friend.handle || friendDisplay });
           }
+
           if (!friend.friends.some(f => sameUser(f.name, ownerKey))) {
             friend.friends.push({ name: ownerKey, status: owner.status || 'offline', pinned: false, blocked: false, messages: [], displayName: ownerDisplay, avatar: ownerAvatar, handle: owner.handle || ownerDisplay });
           }
 
-          await setDoc(ownerRef, owner);
-          await setDoc(friendRef, friend);
+          await saveUser(ownerKey, owner);
+          await saveUser(friendKey, friend);
         },
 
         async decline(username, friendName) {
           const ownerKey = normalizeNameLower(username);
           const friendKey = normalizeNameLower(friendName);
-
-          const ownerRef = userRef(ownerKey);
-          const ownerSnap = await getDoc(ownerRef);
-          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
+          const owner = await ensureUser(ownerKey);
           owner.pending = (owner.pending || []).filter(p => !sameUser(p.name, friendKey));
-          await setDoc(ownerRef, owner);
-        },
-
-        async toggleBlock(username, friendName) {
-          const ownerKey = normalizeNameLower(username);
-          const friendKey = normalizeNameLower(friendName);
-          const ownerRef = userRef(ownerKey);
-          const ownerSnap = await getDoc(ownerRef);
-          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
-          owner.friends = owner.friends || [];
-          owner.friends = owner.friends.map(f => {
-            if (sameUser(f.name, friendKey)) {
-              return { ...f, blocked: !f.blocked };
-            }
-            return f;
-          });
-          await setDoc(ownerRef, owner);
+          await saveUser(ownerKey, owner);
         },
 
         async togglePin(username, friendName) {
           const ownerKey = normalizeNameLower(username);
           const friendKey = normalizeNameLower(friendName);
-          const ownerRef = userRef(ownerKey);
-          const ownerSnap = await getDoc(ownerRef);
-          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
+          const owner = await ensureUser(ownerKey);
+          owner.friends = (owner.friends || []).map(f => sameUser(f.name, friendKey)
+            ? { ...f, pinned: !f.pinned }
+            : f);
+          await saveUser(ownerKey, owner);
+        },
+
+        async toggleBlock(username, friendName) {
+          const ownerKey = normalizeNameLower(username);
+          const friendKey = normalizeNameLower(friendName);
+          const owner = await ensureUser(ownerKey);
+          owner.friends = (owner.friends || []).map(f => sameUser(f.name, friendKey)
+            ? { ...f, blocked: !f.blocked }
+            : f);
+          await saveUser(ownerKey, owner);
+        },
+
+        async addMessage(ownerName, friendName, message) {
+          const ownerKey = normalizeNameLower(ownerName);
+          const friendKey = normalizeNameLower(friendName);
+
+          const owner = await ensureUser(ownerKey);
+          const friendData = await fetchUser(friendKey);
+          if (!friendData) {
+            return { delivered: false };
+          }
+          const normalizedFriend = await ensureUser(friendKey);
+
           owner.friends = owner.friends || [];
-          owner.friends = owner.friends.map(f => {
-            if (sameUser(f.name, friendKey)) {
-              return { ...f, pinned: !f.pinned };
-            }
-            return f;
-          });
-          await setDoc(ownerRef, owner);
-        },
+          normalizedFriend.friends = normalizedFriend.friends || [];
 
-        async removeFriend(username, friendName) {
-          const ownerKey = normalizeNameLower(username);
-          const friendKey = normalizeNameLower(friendName);
-
-          const ownerRef = userRef(ownerKey);
-          const friendRef = userRef(friendKey);
-
-          const ownerSnap = await getDoc(ownerRef);
-          const friendSnap = await getDoc(friendRef);
-
-          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
-          const friend = friendSnap.exists() ? friendSnap.data() : defaultUser();
-
-          owner.friends = (owner.friends || []).filter(f => !sameUser(f.name, friendKey));
-          friend.friends = (friend.friends || []).filter(f => !sameUser(f.name, ownerKey));
-
-          await setDoc(ownerRef, owner);
-          await setDoc(friendRef, friend);
-        },
-
-        async clearChat(username, friendName) {
-          const ownerKey = normalizeNameLower(username);
-          const friendKey = normalizeNameLower(friendName);
-
-          const ownerRef = userRef(ownerKey);
-          const friendRef = userRef(friendKey);
-
-          const ownerSnap = await getDoc(ownerRef);
-          const friendSnap = await getDoc(friendRef);
-
-          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
-          const friend = friendSnap.exists() ? friendSnap.data() : defaultUser();
-
-          owner.friends = (owner.friends || []).map(f => sameUser(f.name, friendKey) ? { ...f, messages: [] } : f);
-          friend.friends = (friend.friends || []).map(f => sameUser(f.name, ownerKey) ? { ...f, messages: [] } : f);
-
-          await setDoc(ownerRef, owner);
-          await setDoc(friendRef, friend);
-        },
-
-        async saveMessage(sender, friendName, text) {
-          const senderKey = normalizeNameLower(sender);
-          const friendKey = normalizeNameLower(friendName);
-          const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-          const updateMessagesFor = async (ownerKey, otherKey, fromValue) => {
-            const ref = userRef(ownerKey);
-            const snap = await getDoc(ref);
-            const data = snap.exists() ? snap.data() : defaultUser();
-            data.friends = data.friends || [];
-            let entry = data.friends.find(f => sameUser(f.name, otherKey));
-            if (!entry) {
-              entry = { name: otherKey, status: 'online', pinned: false, blocked: false, messages: [], displayName: otherKey, avatar: '', unread: 0 };
-              data.friends.push(entry);
-            }
-            entry.messages = entry.messages || [];
-            entry.messages.push({ from: fromValue, text, time, seen: false });
-            entry.unread = ownerKey === fromValue ? 0 : (entry.unread || 0) + 1;
-            data.friends = data.friends.map(f => sameUser(f.name, otherKey) ? entry : f);
-            await setDoc(ref, data);
+          const now = new Date().toISOString();
+          const setMsg = (user, targetKey, role) => {
+            user.messages = user.messages || {};
+            user.messages[targetKey] = user.messages[targetKey] || [];
+            user.messages[targetKey].push({ text: message, at: now, from: role });
           };
 
-          await updateMessagesFor(senderKey, friendKey, senderKey);
-          await updateMessagesFor(friendKey, senderKey, senderKey);
+          setMsg(owner, friendKey, 'me');
+          setMsg(normalizedFriend, ownerKey, 'them');
 
+          normalizedFriend.friends = normalizedFriend.friends.map(f => sameUser(f.name, ownerKey)
+            ? { ...f, unread: (f.unread || 0) + 1 }
+            : f);
+
+          await saveUser(ownerKey, owner);
+          await saveUser(friendKey, normalizedFriend);
           return { delivered: true };
         },
 
-        async markSeen(viewer, friendName) {
-          const viewerKey = normalizeNameLower(viewer);
+        async markSeen(ownerName, friendName) {
+          const ownerKey = normalizeNameLower(ownerName);
           const friendKey = normalizeNameLower(friendName);
-
-          const viewerRef = userRef(viewerKey);
-          const viewerSnap = await getDoc(viewerRef);
-          const viewerData = viewerSnap.exists() ? viewerSnap.data() : defaultUser();
-
-          viewerData.friends = (viewerData.friends || []).map(f => {
-            if (sameUser(f.name, friendKey)) {
-              const updatedMessages = (f.messages || []).map(m => m.from === friendKey ? { ...m, seen: true } : m);
-              return { ...f, messages: updatedMessages, unread: 0 };
-            }
-            return f;
-          });
-
-          await setDoc(viewerRef, viewerData);
-
-          const friendRef = userRef(friendKey);
-          const friendSnap = await getDoc(friendRef);
-          const friendData = friendSnap.exists() ? friendSnap.data() : defaultUser();
-          friendData.friends = (friendData.friends || []).map(f => {
-            if (sameUser(f.name, viewerKey)) {
-              const updatedMessages = (f.messages || []).map(m => m.from === friendKey ? { ...m, seen: true } : m);
-              return { ...f, messages: updatedMessages };
-            }
-            return f;
-          });
-          await setDoc(friendRef, friendData);
+          const owner = await ensureUser(ownerKey);
+          owner.friends = (owner.friends || []).map(f => sameUser(f.name, friendKey)
+            ? { ...f, unread: 0 }
+            : f);
+          await saveUser(ownerKey, owner);
         },
 
-        async updateProfile(username, updates = {}) {
+        async removeFriend(ownerName, friendName) {
+          const ownerKey = normalizeNameLower(ownerName);
+          const friendKey = normalizeNameLower(friendName);
+          const owner = await ensureUser(ownerKey);
+          owner.friends = (owner.friends || []).filter(f => !sameUser(f.name, friendKey));
+          await saveUser(ownerKey, owner);
+        },
+
+        async clearChat(ownerName, friendName) {
+          const ownerKey = normalizeNameLower(ownerName);
+          const friendKey = normalizeNameLower(friendName);
+          const owner = await ensureUser(ownerKey);
+          owner.messages = owner.messages || {};
+          owner.messages[friendKey] = [];
+          await saveUser(ownerKey, owner);
+        },
+
+        async updateProfile(username, updates) {
           const key = normalizeNameLower(username);
-          const ref = userRef(key);
-          const snap = await getDoc(ref);
-          const data = snap.exists() ? snap.data() : defaultUser();
+          const data = await ensureUser(key);
           const merged = { ...data, ...updates };
-          await setDoc(ref, merged);
+          await saveUser(key, merged);
 
           if (updates.displayName || updates.avatar || updates.handle) {
             const friends = data.friends || [];
             for (const friend of friends) {
-              const friendRef = userRef(friend.name);
-              const friendSnap = await getDoc(friendRef);
-              if (friendSnap.exists()) {
-                const fd = friendSnap.data();
-                fd.friends = (fd.friends || []).map(f => sameUser(f.name, key)
-                  ? { ...f, displayName: merged.displayName, avatar: merged.avatar, handle: merged.handle }
-                  : f);
-                await setDoc(friendRef, fd);
-              }
+              const friendData = await ensureUser(friend.name);
+              friendData.friends = (friendData.friends || []).map(f => sameUser(f.name, key)
+                ? { ...f, displayName: merged.displayName, avatar: merged.avatar, handle: merged.handle }
+                : f);
+              await saveUser(friend.name, friendData);
             }
           }
 
@@ -1500,9 +1485,7 @@
         async setMute(username, friendName, minutes) {
           const ownerKey = normalizeNameLower(username);
           const friendKey = normalizeNameLower(friendName);
-          const ownerRef = userRef(ownerKey);
-          const ownerSnap = await getDoc(ownerRef);
-          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
+          const owner = await ensureUser(ownerKey);
           const until = minutes === 'forever'
             ? 'forever'
             : minutes
@@ -1511,10 +1494,11 @@
           owner.friends = (owner.friends || []).map(f => sameUser(f.name, friendKey)
             ? { ...f, mutedUntil: until }
             : f);
-          await setDoc(ownerRef, owner);
+          await saveUser(ownerKey, owner);
         }
       };
     })();
+
     const form = document.getElementById('auth-form');
     const status = document.getElementById('status');
     const switchBtn = document.getElementById('switch-btn');
@@ -1592,6 +1576,7 @@
     const presenceMap = {};
     let unreadSnapshot = {};
     const SESSION_KEY = 'novachat-session';
+
     const normalizeName = (value = '') => value.trim().replace(/^@+/, '');
 
     function getStatus(friend) {
@@ -1690,8 +1675,14 @@
       const password = passwordField.value.trim();
       if (!username || !password) return;
 
-      const action = mode === 'signup' ? DataStore.register : DataStore.login;
-      const result = await action(username, password);
+      let result = { ok: false, message: 'Qualcosa è andato storto. Riprova.' };
+      try {
+        const action = mode === 'signup' ? DataStore.register : DataStore.login;
+        result = await action(username, password);
+      } catch (err) {
+        console.error('Errore autenticazione', err);
+        result = { ok: false, message: 'Impossibile contattare il server. Controlla la connessione e riprova.' };
+      }
 
       status.className = 'status ' + (result.ok ? 'success' : 'error');
       status.textContent = result.ok
@@ -1857,7 +1848,7 @@
       if (!activeFriend || chatInput.disabled) return;
       const text = chatInput.value.trim();
       if (!text) return;
-      const result = await DataStore.saveMessage(currentUser, activeFriend.name, text);
+      const result = await DataStore.addMessage(currentUser, activeFriend.name, text);
       const user = await DataStore.getUser(currentUser);
       const updated = (user.friends || []).find(f => f.name === activeFriend.name);
       chatInput.value = '';
@@ -1893,11 +1884,11 @@
       const pendingVisible = filter === 'pending';
       const pending = user.pending || [];
 
-      if (pendingVisible) {␊
-        if (pending.length === 0) {␊
-          friendList.appendChild(makeEmpty('Nessuna richiesta in arrivo. Invia un invito da "Add Friend".'));␊
-        } else {␊
-          pending.forEach(p => {␊
+      if (pendingVisible) {
+        if (pending.length === 0) {
+          friendList.appendChild(makeEmpty('Nessuna richiesta in arrivo. Invia un invito da "Add Friend".'));
+        } else {
+          pending.forEach(p => {
             const card = document.createElement('div');
             card.className = 'friend-card';
             card.innerHTML = `
@@ -2256,4 +2247,3 @@
   </script>
 </body>
 </html>
-
