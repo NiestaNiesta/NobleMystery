@@ -889,6 +889,9 @@
         return users;
       };
 
+      const findUserKey = (name) => Object.keys(users).find(u => u.toLowerCase() === name.toLowerCase());
+      const resolveUserKey = (name) => findUserKey(name) || name;
+
       const ensureUser = (username) => {
         if (!users[username]) {
           users[username] = { password: '', friends: [], pending: [], messages: {}, createdAt: new Date().toISOString(), status: 'offline' };
@@ -902,128 +905,162 @@
       };
 
       const ensureFriendEntry = (owner, friendName) => {
-        ensureUser(owner);
-        const user = users[owner];
-        const status = users[friendName]?.status || 'offline';
-        if (!user.friends.some(f => f.name === friendName)) {
-          user.friends.push({ name: friendName, status, pinned: false, blocked: false, messages: [] });
+        const ownerKey = resolveUserKey(owner);
+        const friendKey = resolveUserKey(friendName);
+        ensureUser(ownerKey);
+        const user = users[ownerKey];
+        const status = users[friendKey]?.status || 'offline';
+        if (!user.friends.some(f => f.name.toLowerCase() === friendKey.toLowerCase())) {
+          user.friends.push({ name: friendKey, status, pinned: false, blocked: false, messages: [] });
         }
-        return user.friends.find(f => f.name === friendName);
+        return user.friends.find(f => f.name.toLowerCase() === friendKey.toLowerCase());
       };
 
       return {
         register(username, password) {
-          if (users[username]) {
+          reload();
+          const existing = findUserKey(username);
+          if (existing) {
             return { ok: false, message: 'Questo username è già in uso. Scegline un altro.' };
           }
           users[username] = { password, friends: [], pending: [], messages: {}, createdAt: new Date().toISOString(), status: 'offline' };
           saveUsers(users);
-          return { ok: true };
+          return { ok: true, user: username };
         },
         exists(username) {
-          return Boolean(users[username]);
+          reload();
+          return Boolean(findUserKey(username));
         },
         login(username, password) {
-          const user = users[username];
+          reload();
+          const key = findUserKey(username);
+          const user = key ? users[key] : null;
           if (!user || user.password !== password) {
             return { ok: false, message: 'Credenziali non valide. Ritenta.' };
           }
-          return { ok: true };
+          return { ok: true, user: key };
         },
         getUser(username) {
-          ensureUser(username);
-          return users[username];
+          reload();
+          const key = resolveUserKey(username);
+          ensureUser(key);
+          return users[key];
         },
         reload() {
           return reload();
         },
         setStatus(username, status) {
-          ensureUser(username);
-          users[username].status = status;
+          const key = resolveUserKey(username);
+          ensureUser(key);
+          users[key].status = status;
           Object.keys(users).forEach(owner => {
-            users[owner].friends = users[owner].friends.map(f => f.name === username ? { ...f, status } : f);
+            users[owner].friends = users[owner].friends.map(f => f.name.toLowerCase() === key.toLowerCase() ? { ...f, status } : f);
           });
           saveUsers(users);
         },
         addPending(sender, friendName) {
-          ensureUser(sender);
-          if (!users[friendName]) {
+          reload();
+          const senderKey = resolveUserKey(sender);
+          ensureUser(senderKey);
+          const targetKey = findUserKey(friendName);
+          if (!targetKey) {
             return { ok: false, message: 'Utente non trovato.' };
           }
-          const senderUser = users[sender];
-          const target = users[friendName];
-          if (senderUser.friends.some(f => f.name.toLowerCase() === friendName.toLowerCase()) ||
-              target.friends.some(f => f.name.toLowerCase() === sender.toLowerCase())) {
+          const senderUser = users[senderKey];
+          const target = users[targetKey];
+          if (senderUser.friends.some(f => f.name.toLowerCase() === targetKey.toLowerCase()) ||
+              target.friends.some(f => f.name.toLowerCase() === senderKey.toLowerCase())) {
             return { ok: false, message: 'Questo utente è già tra i tuoi amici.' };
           }
-          if (target.pending.some(p => p.name.toLowerCase() === sender.toLowerCase())) {
+          if (target.pending.some(p => p.name.toLowerCase() === senderKey.toLowerCase())) {
             return { ok: false, message: 'Richiesta già inviata.' };
           }
-          target.pending.push({ name: sender });
+          target.pending.push({ name: senderKey });
           saveUsers(users);
           return { ok: true };
         },
         accept(username, friendName) {
-          ensureUser(username);
-          ensureUser(friendName);
-          const user = users[username];
-          const target = users[friendName];
-          user.pending = user.pending.filter(p => p.name !== friendName);
+          reload();
+          const ownerKey = resolveUserKey(username);
+          const friendKey = resolveUserKey(friendName);
+          ensureUser(ownerKey);
+          ensureUser(friendKey);
+          const user = users[ownerKey];
+          const target = users[friendKey];
+          user.pending = user.pending.filter(p => p.name.toLowerCase() !== friendKey.toLowerCase());
           const addEntry = (owner, other) => {
             const status = users[other]?.status || 'offline';
             if (!owner.friends.some(f => f.name === other)) {
               owner.friends.push({ name: other, status, pinned: false, blocked: false, messages: [] });
             }
           };
-          addEntry(user, friendName);
-          addEntry(target, username);
+          addEntry(user, friendKey);
+          addEntry(target, ownerKey);
           saveUsers(users);
         },
         decline(username, friendName) {
-          ensureUser(username);
-          const user = users[username];
-          user.pending = user.pending.filter(p => p.name !== friendName);
+          reload();
+          const ownerKey = resolveUserKey(username);
+          const friendKey = resolveUserKey(friendName);
+          ensureUser(ownerKey);
+          const user = users[ownerKey];
+          user.pending = user.pending.filter(p => p.name.toLowerCase() !== friendKey.toLowerCase());
           saveUsers(users);
         },
         toggleBlock(username, friendName) {
-          ensureUser(username);
-          const user = users[username];
-          user.friends = user.friends.map(f => f.name === friendName ? { ...f, blocked: !f.blocked } : f);
+          reload();
+          const ownerKey = resolveUserKey(username);
+          const friendKey = resolveUserKey(friendName);
+          ensureUser(ownerKey);
+          const user = users[ownerKey];
+          user.friends = user.friends.map(f => f.name.toLowerCase() === friendKey.toLowerCase() ? { ...f, blocked: !f.blocked } : f);
           saveUsers(users);
         },
         togglePin(username, friendName) {
-          ensureUser(username);
-          const user = users[username];
-          user.friends = user.friends.map(f => f.name === friendName ? { ...f, pinned: !f.pinned } : f);
+          reload();
+          const ownerKey = resolveUserKey(username);
+          const friendKey = resolveUserKey(friendName);
+          ensureUser(ownerKey);
+          const user = users[ownerKey];
+          user.friends = user.friends.map(f => f.name.toLowerCase() === friendKey.toLowerCase() ? { ...f, pinned: !f.pinned } : f);
           saveUsers(users);
         },
         removeFriend(username, friendName) {
-          ensureUser(username);
-          users[username].friends = users[username].friends.filter(f => f.name !== friendName);
-          if (users[friendName]) {
-            users[friendName].friends = users[friendName].friends.filter(f => f.name !== username);
+          reload();
+          const ownerKey = resolveUserKey(username);
+          const friendKey = resolveUserKey(friendName);
+          ensureUser(ownerKey);
+          users[ownerKey].friends = users[ownerKey].friends.filter(f => f.name.toLowerCase() !== friendKey.toLowerCase());
+          if (users[friendKey]) {
+            users[friendKey].friends = users[friendKey].friends.filter(f => f.name.toLowerCase() !== ownerKey.toLowerCase());
           }
           saveUsers(users);
         },
         clearChat(username, friendName) {
-          ensureUser(username);
+          reload();
+          const ownerKey = resolveUserKey(username);
+          const friendKey = resolveUserKey(friendName);
+          ensureUser(ownerKey);
           const wipeMessages = (owner, target) => {
             const user = users[owner];
-            user.friends = user.friends.map(f => f.name === target ? { ...f, messages: [] } : f);
+            user.friends = user.friends.map(f => f.name.toLowerCase() === target.toLowerCase() ? { ...f, messages: [] } : f);
           };
-          wipeMessages(username, friendName);
-          if (users[friendName]) {
-            wipeMessages(friendName, username);
+          wipeMessages(ownerKey, friendKey);
+          if (users[friendKey]) {
+            wipeMessages(friendKey, ownerKey);
           }
           saveUsers(users);
         },
         saveMessage(sender, friendName, text) {
+          reload();
           const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-          ensureFriendEntry(sender, friendName);
+          const senderKey = resolveUserKey(sender);
+          const targetKey = resolveUserKey(friendName);
+          ensureFriendEntry(senderKey, targetKey);
           const appendMessage = (owner, target, fromValue) => {
             const user = users[owner];
             user.friends = user.friends.map(f => {
-              if (f.name !== target) return f;
+              if (f.name.toLowerCase() !== target.toLowerCase()) return f;
               const nextMsgs = Array.isArray(f.messages) ? f.messages.slice() : [];
               nextMsgs.push({ from: fromValue, text, time });
               const nextStatus = f.blocked ? 'offline' : (f.status || 'online');
@@ -1031,15 +1068,15 @@
             });
           };
 
-          appendMessage(sender, friendName, sender);
+          appendMessage(senderKey, targetKey, senderKey);
 
-          if (users[friendName]) {
-            ensureFriendEntry(friendName, sender);
-            appendMessage(friendName, sender, sender);
+          if (users[targetKey]) {
+            ensureFriendEntry(targetKey, senderKey);
+            appendMessage(targetKey, senderKey, senderKey);
           }
 
           saveUsers(users);
-          return { delivered: Boolean(users[friendName]) };
+          return { delivered: Boolean(users[targetKey]) };
         }
       };
     })();
@@ -1190,8 +1227,8 @@
       if (result.ok) {
         passwordField.value = '';
         triggerSplash();
-        currentUser = username;
-        persistSession(username, stayLoggedToggle.checked);
+        currentUser = result.user || username;
+        persistSession(currentUser, stayLoggedToggle.checked);
         showMain();
       }
     });
