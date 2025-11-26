@@ -484,14 +484,14 @@
       grid-template-columns: 1.2fr 280px;
       gap: 16px;
       width: min(1100px, 96vw);
-      min-height: 78vh;
+      height: 700px;
       align-items: stretch;
     }
 
     .chat-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
     .chat-header img { width: 40px; height: 40px; border-radius: 12px; cursor: pointer; }
 
-    .chat-panel { display: flex; flex-direction: column; gap: 16px; min-height: 72vh; height: 78vh; }
+    .chat-panel { display: flex; flex-direction: column; gap: 16px; height: 640px; }
 
     .messages {
       background: rgba(16, 19, 29, 0.92);
@@ -503,9 +503,17 @@
       gap: 14px;
       flex: 1;
       min-height: 0;
+      max-height: none;
       overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(157, 107, 255, 0.5) rgba(255,255,255,0.05);
       box-shadow: 0 20px 60px rgba(0,0,0,0.45);
     }
+
+    .messages::-webkit-scrollbar { width: 8px; }
+    .messages::-webkit-scrollbar-thumb { background: linear-gradient(180deg, rgba(157,107,255,0.8), rgba(92,240,255,0.6)); border-radius: 8px; }
+    .messages::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
 
     .bubble {
       max-width: 70%;
@@ -772,6 +780,26 @@
           ensureUser(username);
           const user = users[username];
           user.friends = user.friends.map(f => f.name === friendName ? { ...f, pinned: !f.pinned } : f);
+          saveUsers(users);
+        },
+        removeFriend(username, friendName) {
+          ensureUser(username);
+          users[username].friends = users[username].friends.filter(f => f.name !== friendName);
+          if (users[friendName]) {
+            users[friendName].friends = users[friendName].friends.filter(f => f.name !== username);
+          }
+          saveUsers(users);
+        },
+        clearChat(username, friendName) {
+          ensureUser(username);
+          const wipeMessages = (owner, target) => {
+            const user = users[owner];
+            user.friends = user.friends.map(f => f.name === target ? { ...f, messages: [] } : f);
+          };
+          wipeMessages(username, friendName);
+          if (users[friendName]) {
+            wipeMessages(friendName, username);
+          }
           saveUsers(users);
         },
         saveMessage(sender, friendName, text) {
@@ -1052,14 +1080,16 @@
                 <div class="friend-name">${f.name}${f.pinned ? ' 📌' : ''}</div>
                 <div class="friend-status"><span class="dot ${statusDot}"></span>${statusLabel}</div>
               </div>
-              <div class="friend-actions">
-                <button class="action-btn" type="button">⋯</button>
-                <div class="menu">
-                  <button data-action="report" data-friend="${f.name}">Segnala</button>
-                  <button data-action="block" data-friend="${f.name}">${f.blocked ? 'Sblocca' : 'Blocca'}</button>
-                  <button data-action="pin" data-friend="${f.name}">${f.pinned ? 'Rimuovi fissato' : 'Fissa'}</button>
-                </div>
-              </div>
+                  <div class="friend-actions">
+                    <button class="action-btn" type="button">⋯</button>
+                    <div class="menu">
+                      <button data-action="report" data-friend="${f.name}">Segnala</button>
+                      <button data-action="block" data-friend="${f.name}">${f.blocked ? 'Sblocca' : 'Blocca'}</button>
+                      <button data-action="pin" data-friend="${f.name}">${f.pinned ? 'Rimuovi fissato' : 'Fissa'}</button>
+                      <button data-action="remove" data-friend="${f.name}">Rimuovi amicizia</button>
+                      <button data-action="clear" data-friend="${f.name}">Cancella chat</button>
+                    </div>
+                  </div>
             `;
             friendList.appendChild(card);
           });
@@ -1123,6 +1153,21 @@
         }
         if (action === 'report') {
           alert('Segnalazione inviata per ' + friendName);
+        }
+        if (action === 'remove') {
+          DataStore.removeFriend(currentUser, friendName);
+          if (activeFriend && activeFriend.name === friendName) {
+            activeFriend = null;
+            showMain();
+          }
+        }
+        if (action === 'clear') {
+          DataStore.clearChat(currentUser, friendName);
+          if (activeFriend && activeFriend.name === friendName) {
+            const user = DataStore.getUser(currentUser);
+            const refreshed = user.friends.find(f => f.name === friendName);
+            if (refreshed) showChat(refreshed);
+          }
         }
         renderFriends();
         return;
