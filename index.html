@@ -869,6 +869,8 @@
   <script>
     const DataStore = (() => {
       const USERS_KEY = 'novachat-users-v3';
+
+      const normalizeName = (value = '') => value.trim().replace(/^@+/, '');
       const loadUsers = () => {
         try {
           const raw = localStorage.getItem(USERS_KEY);
@@ -889,7 +891,10 @@
         return users;
       };
 
-      const findUserKey = (name) => Object.keys(users).find(u => u.toLowerCase() === name.toLowerCase());
+      const findUserKey = (name) => {
+        const target = normalizeName(name);
+        return Object.keys(users).find(u => u.toLowerCase() === target.toLowerCase());
+      };
       const resolveUserKey = (name) => findUserKey(name) || name;
 
       const ensureUser = (username) => {
@@ -918,14 +923,15 @@
 
       return {
         register(username, password) {
+          const clean = normalizeName(username);
           reload();
-          const existing = findUserKey(username);
+          const existing = findUserKey(clean);
           if (existing) {
             return { ok: false, message: 'Questo username è già in uso. Scegline un altro.' };
           }
-          users[username] = { password, friends: [], pending: [], messages: {}, createdAt: new Date().toISOString(), status: 'offline' };
+          users[clean] = { password, friends: [], pending: [], messages: {}, createdAt: new Date().toISOString(), status: 'offline' };
           saveUsers(users);
-          return { ok: true, user: username };
+          return { ok: true, user: clean };
         },
         exists(username) {
           reload();
@@ -960,7 +966,7 @@
         },
         addPending(sender, friendName) {
           reload();
-          const senderKey = resolveUserKey(sender);
+          const senderKey = resolveUserKey(normalizeName(sender));
           ensureUser(senderKey);
           const targetKey = findUserKey(friendName);
           if (!targetKey) {
@@ -1210,7 +1216,7 @@
 
     form.addEventListener('submit', (event) => {
       event.preventDefault();
-      const username = usernameField.value.trim();
+      const username = normalizeName(usernameField.value);
       const password = passwordField.value.trim();
       if (!username || !password) return;
 
@@ -1560,7 +1566,7 @@
     });
 
     confirmAdd.addEventListener('click', () => {
-      const name = friendInput.value.trim();
+      const name = normalizeName(friendInput.value);
       if (!name) return;
       if (name.toLowerCase() === currentUser.toLowerCase()) {
         modalStatus.className = 'status error';
