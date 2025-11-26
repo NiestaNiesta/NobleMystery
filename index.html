@@ -5,11 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NovaChat | Accesso</title>
   <style>
-    
-    .hidden {
-  display: none !important;
-}
-
     :root {
       --bg: #0d0f17;
       --panel: rgba(20, 23, 35, 0.72);
@@ -107,314 +102,595 @@
       transform-origin: 60% 40%;
       overflow: hidden;
     }
-    @keyframes splashDrift {
-      0% { transform: scale(1) rotate(0deg); }
-      100% { transform: scale(1.15) rotate(8deg); }
+
+    .splash::after {
+      content: '';
+      position: absolute;
+      inset: 18% 12%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.16), transparent 60%);
+      filter: blur(12px);
+      opacity: 0.75;
+      animation: splashPulse 3.2s ease-in-out infinite;
     }
 
-    .splash.burst {
-      animation: splashBurst 0.5s ease forwards;
+    .splash.burst::after { animation: splashBurst 1.6s ease-out; }
+
+    @keyframes splashDrift {
+      0% { transform: scale(0.95) rotate(-2deg); opacity: 0.55; }
+      50% { transform: scale(1.05) rotate(2deg); opacity: 0.7; }
+      100% { transform: scale(0.98) rotate(-3deg); opacity: 0.6; }
+    }
+
+    @keyframes splashPulse {
+      0% { transform: scale(0.9); opacity: 0.4; }
+      50% { transform: scale(1.05); opacity: 0.75; }
+      100% { transform: scale(0.96); opacity: 0.45; }
     }
 
     @keyframes splashBurst {
-      0% { transform: scale(1) rotate(0deg); filter: blur(50px); }
-      80% { transform: scale(1.3) rotate(5deg); filter: blur(30px); opacity: 0.85; }
-      100% { transform: scale(1.15) rotate(8deg); filter: blur(40px); opacity: 0.55; }
+      0% { transform: scale(0.8); opacity: 0.2; }
+      50% { transform: scale(1.2); opacity: 0.65; }
+      100% { transform: scale(1.05); opacity: 0.1; }
     }
 
-    .login-card,
-    .main-view,
-    .chat-view {
-      background: var(--panel);
-      backdrop-filter: blur(20px) saturate(1.7);
-      border: 1px solid var(--border);
-      border-radius: var(--card-radius);
-      padding: 24px;
+    .card {
       position: relative;
-      overflow: hidden;
-      box-shadow: var(--glow);
-    }
-
-    h1 { text-align: center; font-size: 1.8rem; margin-bottom: 6px; }
-
-    p.subtitle {
-      text-align: center;
-      margin-bottom: 24px;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    form { display: flex; flex-direction: column; gap: 16px; }
-
-    label { font-size: 0.92rem; }
-
-    .input-group {
-      display: flex; flex-direction: column; gap: 6px;
-    }
-
-    .text-input {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 10px;
+      z-index: 1;
+      background: linear-gradient(160deg, var(--panel), var(--panel-strong));
       border: 1px solid var(--border);
-      background: rgba(255,255,255,0.04);
-      color: var(--text);
-      font-size: 1rem;
-      outline: none;
-      transition: 0.25s ease;
-    }
-
-    .text-input:focus {
-      border-color: var(--accent);
-      background: rgba(255,255,255,0.06);
-      box-shadow: 0 0 0 2px rgba(157,107,255,0.2);
-    }
-
-    .stay-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: -4px;
-    }
-
-    .input-checkbox {
-      width: 18px; height: 18px;
-      cursor: pointer;
-    }
-
-    button {
-      padding: 12px;
-      font-size: 1rem;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      color: #fff;
-      background: var(--accent);
-      font-weight: 600;
-      transition: background 0.25s ease, transform 0.15s ease;
-    }
-
-    button:hover { background: #8e59ff; }
-    button:active { transform: scale(0.97); }
-
-    .switch {
-      margin-top: 8px;
-      text-align: center;
-      font-size: 0.92rem;
-      color: var(--muted);
-    }
-
-    .switch button {
-      background: none;
-      color: var(--accent);
-      border: none;
-      padding: 0;
-      font-size: 0.95rem;
-      cursor: pointer;
-    }
-
-    .status {
-      font-size: 0.9rem;
-      height: 20px;
-      margin-top: -6px;
-      text-align: center;
-      transition: 0.25s ease;
-    }
-
-    .status.success { color: var(--success); }
-    .status.error { color: var(--danger); }
-
-    /* MAIN layout */
-    .main-view {
-      display: grid;
-      grid-template-columns: 260px 1fr;
-      gap: 20px;
-      min-height: 640px;
-    }
-
-    .sidebar {
-      background: var(--panel-strong);
+      box-shadow: var(--glow), 0 32px 90px rgba(0, 0, 0, 0.5);
       border-radius: var(--card-radius);
-      padding: 20px;
+      padding: 32px 30px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
-      border: 1px solid var(--border);
+      gap: 18px;
+      backdrop-filter: blur(14px) saturate(1.3);
     }
 
-    .user-card {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .avatar {
-      width: 48px; height: 48px;
-      border-radius: 14px;
-      background: linear-gradient(145deg, var(--accent), var(--accent-2));
+    .logo {
+      width: 72px;
+      height: 72px;
+      border-radius: 22px;
+      background: linear-gradient(140deg, rgba(157, 107, 255, 0.18), rgba(92, 240, 255, 0.12)),
+                  linear-gradient(160deg, #1f1b2f, #12111c);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05), 0 14px 30px rgba(0,0,0,0.35);
       display: grid;
       place-items: center;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    .user-info {
-      display: flex; flex-direction: column;
-      gap: 2px;
-    }
-
-    .username { font-size: 1.05rem; font-weight: 600; }
-    .handle { font-size: 0.9rem; color: var(--muted); }
-
-    .status-line { display: flex; align-items: center; gap: 6px; font-size: 0.9rem; }
-
-    .dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-    }
-
-    .dot.online { background: #6aff9b; }
-    .dot.offline { background: #888; }
-    .dot.blocked { background: var(--danger); }
-
-    .filters {
-      display: flex; gap: 8px;
-    }
-
-    .filters button {
-      flex: 1;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--border);
-      font-size: 0.9rem;
-      padding: 8px;
-    }
-
-    .filters button.active {
-      background: var(--accent);
-      border-color: transparent;
-    }
-
-    .friend-list {
-      flex: 1;
-      overflow-y: auto;
-      padding-right: 8px;
-      margin-top: 4px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .friend-card {
-      display: flex; align-items: center;
-      background: rgba(255,255,255,0.04);
-      border-radius: 14px;
-      padding: 12px;
-      cursor: pointer;
-      border: 1px solid var(--border);
-      transition: 0.25s ease;
+      margin-bottom: 8px;
       position: relative;
+      overflow: hidden;
     }
 
-    .friend-card:hover { background: rgba(255,255,255,0.07); }
-
-    .friend-card .friend-meta {
-      display: flex; flex-direction: column;
-      margin-left: 12px;
-      flex: 1;
-    }
-
-    .friend-card .friend-name { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
-
-    .friend-card .friend-status {
-      font-size: 0.82rem; color: var(--muted);
-      display: flex; align-items: center; gap: 6px;
-    }
-
-    /* popup menu inside friend card */
-    .friend-actions {
-      position: relative;
-      display: flex; align-items: center;
-    }
-
-    .action-btn {
-      background: rgba(255,255,255,0.05);
-      padding: 6px 10px;
-      font-size: 1.1rem;
-      border-radius: 8px;
-    }
-
-    .friend-actions .menu {
+    .logo::after {
+      content: '';
       position: absolute;
-      right: 0;
-      top: 120%;
-      display: none;
-      flex-direction: column;
-      background: var(--panel);
-      backdrop-filter: blur(16px);
-      border-radius: 10px;
-      padding: 6px;
-      border: 1px solid var(--border);
-      box-shadow: var(--glow);
-      z-index: 5;
+      inset: -30%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.08), transparent 50%);
+      mix-blend-mode: screen;
+      animation: logoSweep 6s ease-in-out infinite;
     }
 
-    .friend-actions .menu button {
-      background: none;
-      border: none;
-      text-align: left;
-      padding: 8px 10px;
-      font-size: 0.9rem;
+    .logo img {
+      width: 80%;
+      height: 80%;
+      object-fit: cover;
+      border-radius: 18px;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 10px 22px rgba(0,0,0,0.35);
+    }
+
+    @keyframes logoSweep {
+      0% { transform: translateX(-10%) translateY(-10%); opacity: 0.75; }
+      50% { transform: translateX(6%) translateY(8%); opacity: 0.9; }
+      100% { transform: translateX(-12%) translateY(-12%); opacity: 0.78; }
+    }
+
+    h1 { font-size: 26px; letter-spacing: -0.4px; }
+    .subtitle { color: var(--muted); line-height: 1.5; }
+
+    form { display: flex; flex-direction: column; gap: 12px; }
+
+    label { font-weight: 700; font-size: 14px; color: #e9ebff; letter-spacing: 0.2px; }
+
+    .input {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
       color: var(--text);
-      width: 150px;
-      border-radius: 8px;
-      transition: 0.2s ease;
+      font-weight: 600;
+      transition: border 0.18s ease, box-shadow 0.18s ease, transform 0.12s ease;
     }
 
-    .friend-actions .menu button:hover {
-      background: rgba(255,255,255,0.08);
+    .input:focus {
+      outline: none;
+      border-color: rgba(92, 240, 255, 0.5);
+      box-shadow: 0 0 0 2px rgba(92, 240, 255, 0.16), 0 12px 32px rgba(92, 240, 255, 0.14);
+      transform: translateY(-1px);
     }
 
-    .empty {
-      text-align: center;
-      padding: 36px 0;
-      color: var(--muted);
-      font-size: 0.95rem;
+    .btn {
+      cursor: pointer;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: #0d0f17;
+      font-weight: 800;
+      font-size: 15px;
+      background: linear-gradient(120deg, var(--accent), #c06bff, var(--accent-2));
+      background-size: 220% 220%;
+      animation: shimmer 6s ease-in-out infinite;
+      box-shadow: var(--glow);
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
     }
 
-    /* Main right panel */
-    .main-panel {
-      background: var(--panel-strong);
-      border-radius: var(--card-radius);
-      padding: 24px;
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 20px 50px rgba(157,107,255,0.35); }
+    .btn:active { transform: translateY(1px); }
+
+    @keyframes shimmer {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .switcher { font-size: 14px; color: var(--muted); }
+    .switcher button { background: none; border: none; color: var(--accent-2); font-weight: 700; cursor: pointer; }
+
+    .status {
+      min-height: 22px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .status.error { color: var(--danger); }
+    .status.success { color: var(--success); }
+    .status.muted { color: var(--muted); }
+
+    .helper { color: var(--muted); font-size: 13px; line-height: 1.5; text-align: center; }
+
+    .hidden { display: none !important; }
+
+    /* Main UI */
+    .app-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr 320px;
+      gap: 18px;
+      width: min(1200px, 96vw);
+      min-height: 78vh;
+      align-items: stretch;
+    }
+
+    .panel {
+      background: linear-gradient(160deg, rgba(24, 28, 41, 0.75), rgba(16, 19, 29, 0.92));
       border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      padding: 18px;
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(12px) saturate(1.1);
+    }
+
+    .main-panel {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      min-height: 72vh;
+    }
+
+    .sidebar .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .sidebar .brand img { width: 36px; height: 36px; border-radius: 12px; }
+    .sidebar .brand .name { font-weight: 800; letter-spacing: 0.2px; }
+
+    .nav { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .nav button {
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text);
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: background 0.2s ease, transform 0.12s ease, border 0.2s ease;
+    }
+
+    .nav button.active { border-color: var(--border); background: rgba(255, 255, 255, 0.04); }
+    .nav button:hover { transform: translateY(-1px); }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
     }
 
     .search {
-      display: flex; flex-direction: column; gap: 10px;
+      flex: 1;
+      display: flex;
+      gap: 8px;
     }
 
     .search input {
-      padding: 12px;
+      flex: 1;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 12px;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .filters {
+      display: flex;
+      gap: 10px;
+      margin: 12px 0 16px;
+    }
+
+    .filters button {
+      padding: 8px 12px;
       border-radius: 12px;
       border: 1px solid var(--border);
-      background: rgba(255,255,255,0.06);
-      color: var(--text);
-      font-size: 1rem;
-    }
-
-    .stats {
-      display: flex; gap: 20px;
-      font-size: 0.9rem;
+      background: rgba(255, 255, 255, 0.03);
       color: var(--muted);
+      cursor: pointer;
+      font-weight: 700;
+      transition: background 0.2s ease, color 0.2s ease;
     }
 
-</style>
-</head>
+    .filters button.active { color: var(--text); background: rgba(157, 107, 255, 0.15); border-color: rgba(157,107,255,0.5); }
 
+    .list { display: flex; flex-direction: column; gap: 10px; flex: 1; min-height: 420px; }
+
+    .friend-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: border 0.2s ease, transform 0.12s ease, background 0.2s ease;
+    }
+
+    .friend-card:hover { transform: translateY(-1px); border-color: rgba(92, 240, 255, 0.35); background: rgba(92, 240, 255, 0.04); }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(140deg, rgba(157, 107, 255, 0.2), rgba(92, 240, 255, 0.2));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .friend-meta { display: flex; flex-direction: column; gap: 4px; }
+    .friend-name { font-weight: 800; letter-spacing: 0.1px; }
+    .friend-status { color: var(--muted); font-size: 13px; display: flex; align-items: center; gap: 6px; }
+
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot.online { background: #4ce1b6; box-shadow: 0 0 0 6px rgba(76, 225, 182, 0.16); }
+    .dot.offline { background: rgba(255,255,255,0.18); }
+    .dot.blocked { background: var(--danger); box-shadow: 0 0 0 6px rgba(255,107,155,0.16); }
+
+    .friend-actions {
+      position: relative;
+      opacity: 0;
+      transition: opacity 0.12s ease;
+    }
+
+    .friend-card:hover .friend-actions { opacity: 1; }
+
+    .action-btn {
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 8px 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s ease, border 0.2s ease;
+    }
+
+    .action-btn:hover { background: rgba(92, 240, 255, 0.1); border-color: rgba(92, 240, 255, 0.45); }
+
+    .menu {
+      position: absolute;
+      right: 0;
+      top: 44px;
+      background: rgba(16, 19, 29, 0.96);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.5);
+      min-width: 150px;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .menu button {
+      border: none;
+      background: none;
+      color: var(--text);
+      padding: 10px 12px;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.2s ease;
+    }
+
+    .menu button:hover { background: rgba(255,255,255,0.05); }
+
+    .empty {
+      padding: 18px;
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .side-card h3 { margin-bottom: 8px; }
+    .side-card p { color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
+    .side-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .mini-entry { display: flex; align-items: center; gap: 10px; color: var(--muted); font-weight: 700; }
+
+    .tag { padding: 4px 8px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); font-size: 12px; }
+
+    .profile-summary {
+      background: linear-gradient(160deg, rgba(255,255,255,0.02), rgba(255,255,255,0.05));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 16px 50px rgba(0,0,0,0.4);
+    }
+
+    .profile-summary::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 30%, rgba(157, 107, 255, 0.12), transparent 40%),
+                  radial-gradient(circle at 80% 30%, rgba(92, 240, 255, 0.12), transparent 35%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .profile-summary .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .profile-summary .avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      background: linear-gradient(140deg, rgba(157, 107, 255, 0.2), rgba(92, 240, 255, 0.18));
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 22px;
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05), 0 10px 30px rgba(0,0,0,0.35);
+    }
+
+    .profile-summary .identity { display: flex; flex-direction: column; gap: 4px; }
+    .profile-summary .handle { color: var(--muted); font-size: 13px; }
+    .profile-summary .status { font-size: 13px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+    .profile-summary .status .dot { transform: translateY(1px); }
+
+    .profile-summary .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .pill { padding: 6px 10px; border-radius: 12px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); font-weight: 700; font-size: 12px; }
+
+    .profile-summary .menu-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: background 0.2s ease, border 0.2s ease, transform 0.2s ease;
+    }
+
+    .profile-summary .menu-btn:hover { background: rgba(92, 240, 255, 0.12); border-color: rgba(92, 240, 255, 0.45); transform: translateY(-1px); }
+
+    .profile-summary .divider { height: 1px; background: var(--border); margin: 12px 0; position: relative; z-index: 1; }
+
+    .toggle { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; }
+    .toggle input { accent-color: #9d6bff; width: 18px; height: 18px; }
+
+    .profile-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(10px);
+      display: grid;
+      place-items: center;
+      z-index: 60;
+    }
+
+    .profile-modal {
+      width: min(920px, 94vw);
+      background: rgba(14, 16, 26, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      overflow: hidden;
+      box-shadow: 0 26px 90px rgba(0,0,0,0.6);
+      position: relative;
+      padding-top: 8px;
+    }
+
+    .profile-modal .close-profile {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1), rgba(255,255,255,0.03));
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      width: 38px;
+      height: 38px;
+      cursor: pointer;
+      z-index: 5;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.45);
+    }
+
+    .profile-nav { background: rgba(19, 22, 32, 0.96); padding: 22px 18px; display: flex; flex-direction: column; gap: 10px; border-right: 1px solid var(--border); }
+    .profile-nav h4 { margin-bottom: 10px; }
+    .profile-nav button { width: 100%; justify-content: flex-start; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--text); }
+
+    .profile-body { padding: 24px 32px 24px 24px; display: grid; grid-template-columns: 1.2fr 0.9fr; gap: 24px; position: relative; }
+    .profile-body .section { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 14px; padding: 16px; box-shadow: 0 16px 50px rgba(0,0,0,0.35); }
+    .profile-body .section h5 { margin-bottom: 12px; }
+    .profile-body .field { margin-bottom: 10px; color: var(--muted); }
+
+    .row { display: flex; align-items: center; gap: 8px; color: var(--muted); }
+
+    /* Modal */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(8px);
+      display: grid;
+      place-items: center;
+      z-index: 50;
+    }
+
+    .modal {
+      width: min(420px, 92vw);
+      background: rgba(16, 19, 29, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 24px 70px rgba(0,0,0,0.55);
+    }
+
+    .modal h3 { margin-bottom: 10px; }
+    .modal p { color: var(--muted); margin-bottom: 12px; }
+
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 12px; }
+    .ghost { background: rgba(255,255,255,0.03); color: var(--text); border: 1px solid var(--border); }
+
+    /* Chat view */
+    .chat-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 280px;
+      gap: 16px;
+      width: min(1100px, 96vw);
+      height: 700px;
+      align-items: stretch;
+    }
+
+    .chat-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .chat-header img { width: 40px; height: 40px; border-radius: 12px; cursor: pointer; }
+
+    .chat-panel { display: flex; flex-direction: column; gap: 16px; height: 640px; }
+
+    .messages {
+      background: rgba(16, 19, 29, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      flex: 1;
+      min-height: 0;
+      max-height: none;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(157, 107, 255, 0.5) rgba(255,255,255,0.05);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+    }
+
+    .messages::-webkit-scrollbar { width: 8px; }
+    .messages::-webkit-scrollbar-thumb { background: linear-gradient(180deg, rgba(157,107,255,0.8), rgba(92,240,255,0.6)); border-radius: 8px; }
+    .messages::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
+
+    .bubble {
+      max-width: 70%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      line-height: 1.5;
+    }
+    .bubble.me { margin-left: auto; background: linear-gradient(140deg, #8e6bff, #5cf0ff); color: #0c0f18; font-weight: 700; }
+    .bubble.them { background: rgba(255,255,255,0.04); border: 1px solid var(--border); }
+
+    .timestamp { font-size: 12px; color: var(--muted); }
+
+    .chat-form { display: flex; flex-direction: column; gap: 10px; }
+    .chat-input { display: flex; gap: 10px; }
+    .chat-input input {
+      flex: 1;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+    }
+
+    .block-warning { color: var(--danger); font-weight: 800; }
+
+    .profile-card {
+      background: rgba(16, 19, 29, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+    }
+
+    .profile-avatar {
+      width: 82px;
+      height: 82px;
+      border-radius: 20px;
+      background: linear-gradient(160deg, rgba(157, 107, 255, 0.24), rgba(92, 240, 255, 0.22));
+      display: grid;
+      place-items: center;
+      font-size: 32px;
+      font-weight: 900;
+    }
+
+    .blurred { filter: blur(6px); pointer-events: none; user-select: none; }
+  </style>
+</head>
 <body>
   <div class="grain"></div>
   <div class="orb one"></div>
@@ -422,338 +698,177 @@
   <div class="orb three"></div>
 
   <div class="app-shell" id="app">
-
-    <!-- ========================= -->
-    <!--        AUTH VIEW         -->
-    <!-- ========================= -->
-
     <section id="auth-view" class="card-wrap">
       <div class="splash" aria-hidden="true"></div>
-
-      <div class="card login-card" role="main">
-        
+      <div class="card" role="main">
         <div class="logo" aria-hidden="true">
           <img src="Images/Logo.png" alt="Logo NovaChat" />
         </div>
-
-        <h1 id="form-title">NovaChat</h1>
-        <p class="subtitle" id="form-subtitle">
-          Accedi o registra il tuo profilo con username e password: nessuna email richiesta.
-        </p>
+        <div>
+          <h1 id="form-title">NovaChat</h1>
+          <p class="subtitle" id="form-subtitle">Accedi o registra il tuo profilo con username e password: nessuna email richiesta.</p>
+        </div>
 
         <form id="auth-form">
-
-          <div class="input-group">
+          <div>
             <label for="username">Username</label>
-            <input id="username" class="text-input" name="username" autocomplete="username" required />
+            <input id="username" class="input" name="username" autocomplete="username" required />
           </div>
-
-          <div class="input-group">
+          <div>
             <label for="password">Password</label>
-            <input id="password" class="text-input" type="password" name="password" autocomplete="current-password" required />
+            <input id="password" class="input" type="password" name="password" autocomplete="current-password" required />
           </div>
-
-          <label class="stay-wrap" for="stay-logged">
-            <input type="checkbox" id="stay-logged" class="input-checkbox" checked />
+          <label class="toggle" for="stay-logged">
+            <input type="checkbox" id="stay-logged" checked />
             <span>Rimani connesso</span>
           </label>
-
-          <button type="submit" id="submit-btn">Crea account</button>
+          <button type="submit" class="btn" id="submit-btn">Crea account</button>
           <div class="status" id="status"></div>
-
         </form>
 
-        <div class="switch">
+        <div class="switcher">
           <span id="switch-copy">Hai già un account?</span>
           <button id="switch-btn" type="button">Accedi</button>
         </div>
-
       </div>
     </section>
-    <!-- ========================= -->
-    <!--         MAIN VIEW        -->
-    <!-- ========================= -->
 
     <section id="main-view" class="hidden">
+      <div class="app-layout">
+        <aside class="panel sidebar">
+          <div class="brand">
+            <img src="Images/Logo.png" alt="NovaChat" />
+            <div class="name">NovaChat</div>
+          </div>
+          <ul class="nav">
+            <li><button class="active">Friends</button></li>
+            <li><button>Core Room</button></li>
+            <li><button>Messages</button></li>
+          </ul>
+        </aside>
 
-      <div class="main-view">
-
-        <!-- SIDEBAR -->
-        <aside class="sidebar">
-
-          <div class="brand user-card">
-            <img src="Images/Logo.png" alt="NovaChat" style="width:42px;height:42px;border-radius:12px;">
-            <div class="user-info">
-              <div class="username" style="font-weight:700;">NovaChat</div>
+        <main class="panel main-panel">
+          <div class="section-header">
+            <div class="search">
+              <input type="search" id="search" placeholder="Search" />
+              <button class="btn" id="add-friend">Add Friend</button>
             </div>
           </div>
-
           <div class="filters" id="filters">
             <button data-filter="all" class="active">All</button>
             <button data-filter="online">Online</button>
             <button data-filter="pending">Pending</button>
             <button data-filter="blocked">Blocked</button>
           </div>
-
-          <div class="friend-list" id="friend-list"></div>
-
-        </aside>
-
-        <!-- MAIN PANEL -->
-        <main class="main-panel">
-
-          <div class="search">
-            <input type="search" id="search" placeholder="Search">
-            <button id="add-friend">Add Friend</button>
-          </div>
-
-          <div class="stats">
-            <div>ONLINE: <span id="online-count">0</span></div>
-            <div>OFFLINE: <span id="offline-count">0</span></div>
-          </div>
-
+          <div class="list" id="friend-list"></div>
         </main>
 
-        <!-- SIDE PROFILE SUMMARY -->
-        <aside class="panel side-profile">
-
-          <div class="user-card">
-            <div class="avatar" id="side-avatar">N</div>
-            <div class="user-info">
-              <div class="username" id="side-name">Nova User</div>
-              <div class="handle" id="side-handle">@utente</div>
-              <div class="status-line" id="side-status">
-                <span class="dot online"></span> Online
+        <aside class="panel side-card">
+          <div class="profile-summary">
+            <div class="header">
+              <div class="avatar" id="side-avatar">N</div>
+              <div class="identity">
+                <div class="friend-name" id="side-name">Nova User</div>
+                <div class="handle" id="side-handle">@utente</div>
+                <div class="status" id="side-status"><span class="dot online"></span>Online</div>
               </div>
             </div>
+            <div class="divider"></div>
+            <div class="side-list" style="margin: 6px 0 0 0;">
+              <div class="mini-entry"><span class="tag">ONLINE</span><span id="online-count">0</span></div>
+              <div class="mini-entry"><span class="tag">OFFLINE</span><span id="offline-count">0</span></div>
+            </div>
+            <div class="footer">
+              <span class="pill" id="member-since">Membro</span>
+              <button class="menu-btn" id="open-profile" type="button">⋯</button>
+            </div>
           </div>
-
-          <div style="margin:10px 0;font-size:0.9rem;">
-            <strong id="member-since">Membro</strong>
+          <div style="margin-top: 14px; display: flex; justify-content: space-between; gap: 10px; align-items: center;">
+            <button class="btn" id="side-add" style="flex:1;">Send Friend Request</button>
           </div>
-
-          <button id="side-add" style="width:100%;">Send Friend Request</button>
-          <button id="open-profile" style="width:100%;margin-top:10px;">⋯ Profilo</button>
-
         </aside>
-
       </div>
-
     </section>
-    <!-- ========================= -->
-    <!--         CHAT VIEW        -->
-    <!-- ========================= -->
 
     <section id="chat-view" class="hidden">
-
       <div class="chat-layout">
-
-        <!-- CHAT AREA -->
         <div class="chat-panel">
-
-          <!-- Header Chat -->
           <div class="chat-header">
-            <img src="Images/Logo.png" id="back-to-main" style="cursor:pointer;width:40px;height:40px;border-radius:12px;">
+            <img src="Images/Logo.png" alt="Indietro a NovaChat" id="back-to-main" />
             <div>
               <div class="friend-name" id="chat-name">Chat</div>
               <div class="friend-status" id="chat-status"></div>
             </div>
           </div>
-
-          <!-- Messages -->
           <div class="messages" id="messages"></div>
-
-          <!-- Form messaggio -->
-          <form id="chat-form" class="chat-form">
-            <div id="block-banner" class="hidden" style="color:#ff6b9b;font-weight:700;">
-              Non puoi inviare messaggi all'utente
-            </div>
-
+          <form class="chat-form" id="chat-form">
+            <div id="block-banner" class="block-warning hidden">Non puoi inviare messaggi all'utente</div>
             <div class="chat-input">
-              <input type="text" id="chat-input" placeholder="Message @username" autocomplete="off">
+              <input type="text" id="chat-input" placeholder="Message @username" />
               <button type="submit" class="btn">Invia</button>
             </div>
           </form>
-
         </div>
-
-        <!-- PROFILE CARD (colonna destra) -->
         <aside class="profile-card">
-
           <div class="profile-avatar" id="profile-avatar">N</div>
-
           <div>
             <div class="friend-name" id="profile-name"></div>
             <div class="friend-status" id="profile-status"></div>
           </div>
-
           <div class="tag" id="profile-tag">Profilo</div>
           <div class="friend-status" id="profile-meta"></div>
-
         </aside>
-
       </div>
-
     </section>
-    <!-- ========================= -->
-    <!--      ADD FRIEND MODAL    -->
-    <!-- ========================= -->
+  </div>
 
-    <div id="modal" class="overlay hidden" role="dialog" aria-modal="true">
-      <div class="modal">
-
-        <h3>Aggiungi un amico</h3>
-        <p>Inserisci il nickname del tuo amico per inviare la richiesta.</p>
-
-        <input type="text" id="friend-name" class="input" placeholder="Nickname">
-        <div id="modal-status" class="status"></div>
-
-        <div class="modal-actions">
-          <button class="btn ghost" id="close-modal">Annulla</button>
-          <button class="btn" id="confirm-add">Invia richiesta</button>
-        </div>
-
+  <div id="modal" class="overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal">
+      <h3>Aggiungi un amico</h3>
+      <p>Inserisci il nickname del tuo amico per inviare la richiesta.</p>
+      <input type="text" id="friend-name" class="input" placeholder="Nickname" />
+      <div id="modal-status" class="status"></div>
+      <div class="modal-actions">
+        <button class="btn ghost" id="close-modal" type="button">Annulla</button>
+        <button class="btn" id="confirm-add" type="button">Invia richiesta</button>
       </div>
     </div>
+  </div>
 
-    <!-- ========================= -->
-    <!--     PROFILE OVERLAY       -->
-    <!-- ========================= -->
-
-    <div id="profile-overlay" class="profile-overlay hidden" role="dialog" aria-modal="true">
-
-      <div class="profile-modal">
-
-        <!-- Close button -->
-        <button id="close-profile" class="close-profile">×</button>
-
-        <!-- Left menu -->
-        <div class="profile-nav">
-
-          <h4>Personalizza</h4>
-
-          <div class="logout-card">
-            <div class="label">Log out</div>
-            <button type="button" id="logout-btn">Esci</button>
+  <div id="profile-overlay" class="profile-overlay hidden" role="dialog" aria-modal="true">
+    <div class="profile-modal">
+      <button class="close-profile" id="close-profile" type="button">×</button>
+      <div class="profile-nav">
+        <h4>Log out</h4>
+        <button type="button" id="logout-btn">Esci e torna al login</button>
+      </div>
+      <div class="profile-body">
+        <div class="section">
+          <h5>User Profile</h5>
+          <div class="row" style="margin-bottom: 12px;">
+            <div class="profile-avatar" id="account-avatar">N</div>
+            <div>
+              <div class="friend-name" id="account-name">Nova User</div>
+              <div class="friend-status" id="account-status"></div>
+              <div class="handle" id="account-handle">@utente</div>
+            </div>
           </div>
-
+          <div class="field"><strong>About me:</strong> <span id="account-about">Sempre online su NovaChat.</span></div>
+          <div class="field"><strong>Display name:</strong> <span id="account-display"></span></div>
+          <div class="field"><strong>Username:</strong> <span id="account-username"></span></div>
         </div>
-
-        <!-- Right area -->
-        <div class="profile-body">
-
-          <!-- SECTION: PROFILE -->
-          <div class="section">
-
-            <h5>User Profile</h5>
-
-            <!-- Avatar -->
-            <div class="row" style="margin-bottom: 12px;">
-              <label class="avatar-upload">
-                <div class="profile-avatar" id="account-avatar">N</div>
-                <input type="file" id="avatar-input" accept="image/*">
-              </label>
-
-              <div>
-                <div class="friend-name" id="account-name">Nova User</div>
-                <div class="friend-status" id="account-status"></div>
-                <div class="handle" id="account-handle">@utente</div>
-              </div>
-            </div>
-
-            <!-- ABOUT -->
-            <div class="field editable" data-edit="about">
-              <strong>About me:</strong>
-              <span id="account-about">Sempre online su NovaChat.</span>
-
-              <button class="edit-hint">✎</button>
-
-              <div class="inline-editor hidden" data-editor="about">
-                <input id="edit-about" type="text">
-                <button class="save" data-save="about">Salva</button>
-                <button class="cancel" data-cancel="about">Annulla</button>
-              </div>
-            </div>
-
-            <!-- DISPLAY NAME -->
-            <div class="field editable" data-edit="display">
-              <strong>Display name:</strong>
-              <span id="account-display"></span>
-
-              <button class="edit-hint">✎</button>
-
-              <div class="inline-editor hidden" data-editor="display">
-                <input id="edit-display" type="text">
-                <button class="save" data-save="display">Salva</button>
-                <button class="cancel" data-cancel="display">Annulla</button>
-              </div>
-            </div>
-
-            <!-- USERNAME -->
-            <div class="field editable" data-edit="username">
-              <strong>Username:</strong>
-              <span id="account-username"></span>
-
-              <button class="edit-hint">✎</button>
-
-              <div class="inline-editor hidden" data-editor="username">
-                <input id="edit-username" type="text">
-                <button class="save" data-save="username">Salva</button>
-                <button class="cancel" data-cancel="username">Annulla</button>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- SECTION: INFO -->
-          <div class="section">
-
-            <h5>Info</h5>
-
-            <!-- STATUS -->
-            <div class="field editable" data-edit="state">
-              <strong>Stato:</strong>
-              <span id="account-state"></span>
-
-              <button class="edit-hint">✎</button>
-
-              <div class="inline-editor hidden" data-editor="state">
-                <select id="edit-state">
-                  <option value="online">Online</option>
-                  <option value="offline">Offline</option>
-                </select>
-
-                <button class="save" data-save="state">Aggiorna</button>
-                <button class="cancel" data-cancel="state">Annulla</button>
-              </div>
-            </div>
-
-            <!-- MEMBER SINCE -->
-            <div class="field">
-              <strong>Member Since:</strong>
-              <span id="account-member"></span>
-            </div>
-
-          </div>
-
+        <div class="section">
+          <h5>Info</h5>
+          <div class="field"><strong>Stato:</strong> <span id="account-state"></span></div>
+          <div class="field"><strong>Member Since:</strong> <span id="account-member"></span></div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Toast notifications -->
-    <div class="toast-stack" id="toast-stack"></div>
   <script type="module">
-    /* ------------------------------------------------------------------
-       1. Firebase init
-    ------------------------------------------------------------------ */
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-    import {
-      getFirestore,
-      doc,
-      getDoc,
-      setDoc,
-      updateDoc
-    } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAxkmhYkXr7o3cuJL8Hr1f-4RjyTw-E7gg",
@@ -767,401 +882,361 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    /* ------------------------------------------------------------------
-       2. DataStore Firestore
-    ------------------------------------------------------------------ */
+    const DataStore = (() => {
+      const normalizeNameLower = (value = '') =>
+        value.trim().replace(/^@+/, '').toLowerCase();
 
-    const USERS_COLLECTION = "users";
-    const SESSION_KEY = "novachat-session";
+      const userRef = (username) =>
+        doc(db, 'users', normalizeNameLower(username));
 
-    const normalizeName = (value = "") =>
-      value.trim().replace(/^@+/, "").toLowerCase();
+      const defaultUser = () => ({
+        password: '',
+        friends: [],
+        pending: [],
+        messages: {},
+        createdAt: new Date().toISOString(),
+        status: 'offline'
+      });
 
-    const userRef = (username) =>
-      doc(db, USERS_COLLECTION, normalizeName(username));
+      const sameUser = (a, b) =>
+        normalizeNameLower(a) === normalizeNameLower(b);
 
-    async function safeGetUser(username) {
-      const snap = await getDoc(userRef(username));
-      if (!snap.exists()) return null;
-      const data = snap.data() || {};
-      return {
-        password: data.password || "",
-        displayName: data.displayName || normalizeName(username),
-        about: data.about || "Sempre online su NovaChat.",
-        avatar: data.avatar || "",
-        status: data.status || "offline",
-        createdAt: data.createdAt || new Date().toISOString(),
-        friends: Array.isArray(data.friends) ? data.friends : [],
-        pending: Array.isArray(data.pending) ? data.pending : [],
-        messages: data.messages || {}
-      };
-    }
-
-    const DataStore = {
-      async exists(username) {
-        const snap = await getDoc(userRef(username));
-        return snap.exists();
-      },
-
-      async register(username, password) {
-        const clean = normalizeName(username);
-        if (!clean) {
-          return { ok: false, message: "Username non valido." };
-        }
-
-        if (await this.exists(clean)) {
-          return {
-            ok: false,
-            message: "Questo username è già in uso. Scegline un altro."
-          };
-        }
-
-        const userDoc = {
-          password,
-          displayName: clean,
-          about: "Sempre online su NovaChat.",
-          avatar: "",
-          status: "offline",
-          createdAt: new Date().toISOString(),
-          friends: [],
-          pending: [],
-          messages: {}
-        };
-
-        await setDoc(userRef(clean), userDoc);
-        return { ok: true, user: clean };
-      },
-
-      async login(username, password) {
-        const clean = normalizeName(username);
-        const snap = await getDoc(userRef(clean));
+      const ensureUser = async (username) => {
+        const ref = userRef(username);
+        const snap = await getDoc(ref);
         if (!snap.exists()) {
-          return { ok: false, message: "Credenziali non valide. Ritenta." };
+          const data = defaultUser();
+          await setDoc(ref, data);
+          return data;
         }
+        return snap.data();
+      };
 
-        const data = snap.data();
-        if (data.password !== password) {
-          return { ok: false, message: "Credenziali non valide. Ritenta." };
+      return {
+        async register(username, password) {
+          const clean = normalizeNameLower(username);
+          const ref = userRef(clean);
+          const snap = await getDoc(ref);
+          if (snap.exists()) {
+            return { ok: false, message: 'Questo username è già in uso. Scegline un altro.' };
+          }
+          const data = {
+            password,
+            friends: [],
+            pending: [],
+            messages: {},
+            createdAt: new Date().toISOString(),
+            status: 'offline'
+          };
+          await setDoc(ref, data);
+          return { ok: true, user: clean };
+        },
+
+        async exists(username) {
+          const ref = userRef(username);
+          const snap = await getDoc(ref);
+          return snap.exists();
+        },
+
+        async login(username, password) {
+          const ref = userRef(username);
+          const snap = await getDoc(ref);
+          if (!snap.exists()) {
+            return { ok: false, message: 'Credenziali non valide. Ritenta.' };
+          }
+          const user = snap.data();
+          if (user.password !== password) {
+            return { ok: false, message: 'Credenziali non valide. Ritenta.' };
+          }
+          return { ok: true, user: normalizeNameLower(username) };
+        },
+
+        async getUser(username) {
+          const data = await ensureUser(username);
+          return data;
+        },
+
+        async reload() {
+          return true;
+        },
+
+        async setStatus(username, status) {
+          const ref = userRef(username);
+          const data = await ensureUser(username);
+          data.status = status;
+          await setDoc(ref, data);
+        },
+
+        async addPending(sender, friendName) {
+          const senderKey = normalizeNameLower(sender);
+          const targetKey = normalizeNameLower(friendName);
+
+          if (senderKey === targetKey) {
+            return { ok: false, message: 'Non puoi aggiungere te stesso.' };
+          }
+
+          const senderRef = userRef(senderKey);
+          const targetRef = userRef(targetKey);
+
+          const senderSnap = await getDoc(senderRef);
+          const targetSnap = await getDoc(targetRef);
+
+          if (!targetSnap.exists()) {
+            return { ok: false, message: 'Utente non trovato.' };
+          }
+
+          const senderUser = senderSnap.exists() ? senderSnap.data() : defaultUser();
+          const targetUser = targetSnap.data();
+
+          senderUser.friends = senderUser.friends || [];
+          targetUser.friends = targetUser.friends || [];
+          targetUser.pending = targetUser.pending || [];
+
+          if (senderUser.friends.some(f => sameUser(f.name, targetKey)) ||
+              targetUser.friends.some(f => sameUser(f.name, senderKey))) {
+            return { ok: false, message: 'Questo utente è già tra i tuoi amici.' };
+          }
+
+          if (targetUser.pending.some(p => sameUser(p.name, senderKey))) {
+            return { ok: false, message: 'Richiesta già inviata.' };
+          }
+
+          targetUser.pending.push({ name: senderKey });
+
+          await setDoc(senderRef, senderUser);
+          await setDoc(targetRef, targetUser);
+
+          return { ok: true };
+        },
+
+        async accept(username, friendName) {
+          const ownerKey = normalizeNameLower(username);
+          const friendKey = normalizeNameLower(friendName);
+
+          const ownerRef = userRef(ownerKey);
+          const friendRef = userRef(friendKey);
+
+          const ownerSnap = await getDoc(ownerRef);
+          const friendSnap = await getDoc(friendRef);
+
+          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
+          const friend = friendSnap.exists() ? friendSnap.data() : defaultUser();
+
+          owner.pending = (owner.pending || []).filter(p => !sameUser(p.name, friendKey));
+
+          owner.friends = owner.friends || [];
+          friend.friends = friend.friends || [];
+
+          if (!owner.friends.some(f => sameUser(f.name, friendKey))) {
+            owner.friends.push({ name: friendKey, status: friend.status || 'offline', pinned: false, blocked: false, messages: [] });
+          }
+          if (!friend.friends.some(f => sameUser(f.name, ownerKey))) {
+            friend.friends.push({ name: ownerKey, status: owner.status || 'offline', pinned: false, blocked: false, messages: [] });
+          }
+
+          await setDoc(ownerRef, owner);
+          await setDoc(friendRef, friend);
+        },
+
+        async decline(username, friendName) {
+          const ownerKey = normalizeNameLower(username);
+          const friendKey = normalizeNameLower(friendName);
+
+          const ownerRef = userRef(ownerKey);
+          const ownerSnap = await getDoc(ownerRef);
+          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
+          owner.pending = (owner.pending || []).filter(p => !sameUser(p.name, friendKey));
+          await setDoc(ownerRef, owner);
+        },
+
+        async toggleBlock(username, friendName) {
+          const ownerKey = normalizeNameLower(username);
+          const friendKey = normalizeNameLower(friendName);
+          const ownerRef = userRef(ownerKey);
+          const ownerSnap = await getDoc(ownerRef);
+          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
+          owner.friends = owner.friends || [];
+          owner.friends = owner.friends.map(f => {
+            if (sameUser(f.name, friendKey)) {
+              return { ...f, blocked: !f.blocked };
+            }
+            return f;
+          });
+          await setDoc(ownerRef, owner);
+        },
+
+        async togglePin(username, friendName) {
+          const ownerKey = normalizeNameLower(username);
+          const friendKey = normalizeNameLower(friendName);
+          const ownerRef = userRef(ownerKey);
+          const ownerSnap = await getDoc(ownerRef);
+          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
+          owner.friends = owner.friends || [];
+          owner.friends = owner.friends.map(f => {
+            if (sameUser(f.name, friendKey)) {
+              return { ...f, pinned: !f.pinned };
+            }
+            return f;
+          });
+          await setDoc(ownerRef, owner);
+        },
+
+        async removeFriend(username, friendName) {
+          const ownerKey = normalizeNameLower(username);
+          const friendKey = normalizeNameLower(friendName);
+
+          const ownerRef = userRef(ownerKey);
+          const friendRef = userRef(friendKey);
+
+          const ownerSnap = await getDoc(ownerRef);
+          const friendSnap = await getDoc(friendRef);
+
+          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
+          const friend = friendSnap.exists() ? friendSnap.data() : defaultUser();
+
+          owner.friends = (owner.friends || []).filter(f => !sameUser(f.name, friendKey));
+          friend.friends = (friend.friends || []).filter(f => !sameUser(f.name, ownerKey));
+
+          await setDoc(ownerRef, owner);
+          await setDoc(friendRef, friend);
+        },
+
+        async clearChat(username, friendName) {
+          const ownerKey = normalizeNameLower(username);
+          const friendKey = normalizeNameLower(friendName);
+
+          const ownerRef = userRef(ownerKey);
+          const friendRef = userRef(friendKey);
+
+          const ownerSnap = await getDoc(ownerRef);
+          const friendSnap = await getDoc(friendRef);
+
+          const owner = ownerSnap.exists() ? ownerSnap.data() : defaultUser();
+          const friend = friendSnap.exists() ? friendSnap.data() : defaultUser();
+
+          owner.friends = (owner.friends || []).map(f => sameUser(f.name, friendKey) ? { ...f, messages: [] } : f);
+          friend.friends = (friend.friends || []).map(f => sameUser(f.name, ownerKey) ? { ...f, messages: [] } : f);
+
+          await setDoc(ownerRef, owner);
+          await setDoc(friendRef, friend);
+        },
+
+        async saveMessage(sender, friendName, text) {
+          const senderKey = normalizeNameLower(sender);
+          const friendKey = normalizeNameLower(friendName);
+          const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+          const updateMessagesFor = async (ownerKey, otherKey, fromValue) => {
+            const ref = userRef(ownerKey);
+            const snap = await getDoc(ref);
+            const data = snap.exists() ? snap.data() : defaultUser();
+            data.friends = data.friends || [];
+            let entry = data.friends.find(f => sameUser(f.name, otherKey));
+            if (!entry) {
+              entry = { name: otherKey, status: 'online', pinned: false, blocked: false, messages: [] };
+              data.friends.push(entry);
+            }
+            entry.messages = entry.messages || [];
+            entry.messages.push({ from: fromValue, text, time });
+            data.friends = data.friends.map(f => sameUser(f.name, otherKey) ? entry : f);
+            await setDoc(ref, data);
+          };
+
+          await updateMessagesFor(senderKey, friendKey, senderKey);
+          await updateMessagesFor(friendKey, senderKey, senderKey);
+
+          return { delivered: true };
         }
+      };
+    })();
 
-        return { ok: true, user: clean };
-      },
+    const form = document.getElementById('auth-form');
+    const status = document.getElementById('status');
+    const switchBtn = document.getElementById('switch-btn');
+    const switchCopy = document.getElementById('switch-copy');
+    const submitBtn = document.getElementById('submit-btn');
+    const title = document.getElementById('form-title');
+    const subtitle = document.getElementById('form-subtitle');
+    const usernameField = document.getElementById('username');
+    const passwordField = document.getElementById('password');
+    const stayLoggedToggle = document.getElementById('stay-logged');
+    const splash = document.querySelector('.splash');
 
-      async getUser(username) {
-        return await safeGetUser(username);
-      },
+    const authView = document.getElementById('auth-view');
+    const mainView = document.getElementById('main-view');
+    const chatView = document.getElementById('chat-view');
+    const friendList = document.getElementById('friend-list');
+    const filters = document.getElementById('filters');
+    const searchInput = document.getElementById('search');
+    const onlineCount = document.getElementById('online-count');
+    const offlineCount = document.getElementById('offline-count');
+    const addFriendBtns = [document.getElementById('add-friend'), document.getElementById('side-add')];
+    const modal = document.getElementById('modal');
+    const modalStatus = document.getElementById('modal-status');
+    const friendInput = document.getElementById('friend-name');
+    const closeModal = document.getElementById('close-modal');
+    const confirmAdd = document.getElementById('confirm-add');
+    const appShell = document.getElementById('app');
 
-      async setStatus(username, status) {
-        const clean = normalizeName(username);
-        const current = await safeGetUser(clean);
-        if (!current) return;
-        await updateDoc(userRef(clean), { status });
-      },
+    const sideAvatar = document.getElementById('side-avatar');
+    const sideName = document.getElementById('side-name');
+    const sideHandle = document.getElementById('side-handle');
+    const sideStatus = document.getElementById('side-status');
+    const memberSince = document.getElementById('member-since');
+    const openProfile = document.getElementById('open-profile');
+    const profileOverlay = document.getElementById('profile-overlay');
+    const closeProfile = document.getElementById('close-profile');
+    const logoutBtn = document.getElementById('logout-btn');
 
-      async updateProfile(username, payload) {
-        const clean = normalizeName(username);
-        await updateDoc(userRef(clean), payload);
-      },
+    const accountAvatar = document.getElementById('account-avatar');
+    const accountName = document.getElementById('account-name');
+    const accountStatus = document.getElementById('account-status');
+    const accountHandle = document.getElementById('account-handle');
+    const accountAbout = document.getElementById('account-about');
+    const accountDisplay = document.getElementById('account-display');
+    const accountUsername = document.getElementById('account-username');
+    const accountState = document.getElementById('account-state');
+    const accountMember = document.getElementById('account-member');
 
-      async addPending(sender, friendName) {
-        const from = normalizeName(sender);
-        const target = normalizeName(friendName);
+    const chatName = document.getElementById('chat-name');
+    const chatStatus = document.getElementById('chat-status');
+    const messagesEl = document.getElementById('messages');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const blockBanner = document.getElementById('block-banner');
+    const profileAvatar = document.getElementById('profile-avatar');
+    const profileName = document.getElementById('profile-name');
+    const profileStatus = document.getElementById('profile-status');
+    const profileMeta = document.getElementById('profile-meta');
+    const backToMain = document.getElementById('back-to-main');
 
-        if (!target) {
-          return { ok: false, message: "Nickname non valido." };
-        }
-        if (from === target) {
-          return { ok: false, message: "Non puoi aggiungere te stesso." };
-        }
+    let mode = 'login';
+    let currentUser = null;
+    let filter = 'all';
+    let activeFriend = null;
+    let presenceInterval = null;
+    let chatInterval = null;
+    const presenceMap = {};
+    const SESSION_KEY = 'novachat-session';
 
-        const targetUser = await safeGetUser(target);
-        if (!targetUser) {
-          return { ok: false, message: "Utente non trovato." };
-        }
+    const normalizeName = (value = '') => value.trim().replace(/^@+/, '');
 
-        const alreadyFriend = targetUser.friends.some(
-          (f) => normalizeName(f.name) === from
-        );
-        if (alreadyFriend) {
-          return { ok: false, message: "Questo utente è già tra i tuoi amici." };
-        }
-
-        const alreadyPending = targetUser.pending.some(
-          (p) => normalizeName(p.name) === from
-        );
-        if (alreadyPending) {
-          return { ok: false, message: "Richiesta già inviata." };
-        }
-
-        const nextPending = [...targetUser.pending, { name: from }];
-        await updateDoc(userRef(target), { pending: nextPending });
-        return { ok: true };
-      },
-
-      async accept(username, friendName) {
-        const owner = normalizeName(username);
-        const other = normalizeName(friendName);
-
-        const ownerUser = await safeGetUser(owner);
-        const otherUser = await safeGetUser(other);
-        if (!ownerUser || !otherUser) return;
-
-        // Rimuovi dalla pending
-        const nextPending = ownerUser.pending.filter(
-          (p) => normalizeName(p.name) !== other
-        );
-
-        // Aggiungi friend per owner
-        const hasAlready = ownerUser.friends.some(
-          (f) => normalizeName(f.name) === other
-        );
-        const ownerFriends = hasAlready
-          ? ownerUser.friends
-          : [...ownerUser.friends, { name: other, blocked: false, pinned: false }];
-
-        await updateDoc(userRef(owner), {
-          pending: nextPending,
-          friends: ownerFriends
-        });
-
-        // Aggiungi friend anche all'altro
-        const otherHasOwner = otherUser.friends.some(
-          (f) => normalizeName(f.name) === owner
-        );
-        const otherFriends = otherHasOwner
-          ? otherUser.friends
-          : [...otherUser.friends, { name: owner, blocked: false, pinned: false }];
-
-        await updateDoc(userRef(other), {
-          friends: otherFriends
-        });
-      },
-
-      async decline(username, friendName) {
-        const owner = normalizeName(username);
-        const other = normalizeName(friendName);
-
-        const ownerUser = await safeGetUser(owner);
-        if (!ownerUser) return;
-
-        const nextPending = ownerUser.pending.filter(
-          (p) => normalizeName(p.name) !== other
-        );
-        await updateDoc(userRef(owner), { pending: nextPending });
-      },
-
-      async toggleBlock(username, friendName) {
-        const owner = normalizeName(username);
-        const other = normalizeName(friendName);
-
-        const ownerUser = await safeGetUser(owner);
-        if (!ownerUser) return;
-
-        const friends = ownerUser.friends.map((f) => {
-          if (normalizeName(f.name) !== other) return f;
-          return { ...f, blocked: !f.blocked };
-        });
-
-        await updateDoc(userRef(owner), { friends });
-      },
-
-      async togglePin(username, friendName) {
-        const owner = normalizeName(username);
-        const other = normalizeName(friendName);
-
-        const ownerUser = await safeGetUser(owner);
-        if (!ownerUser) return;
-
-        const friends = ownerUser.friends.map((f) => {
-          if (normalizeName(f.name) !== other) return f;
-          return { ...f, pinned: !f.pinned };
-        });
-
-        await updateDoc(userRef(owner), { friends });
-      },
-
-      async removeFriend(username, friendName) {
-        const owner = normalizeName(username);
-        const other = normalizeName(friendName);
-
-        const ownerUser = await safeGetUser(owner);
-        const otherUser = await safeGetUser(other);
-
-        if (ownerUser) {
-          const ownerFriends = ownerUser.friends.filter(
-            (f) => normalizeName(f.name) !== other
-          );
-          await updateDoc(userRef(owner), { friends: ownerFriends });
-        }
-
-        if (otherUser) {
-          const otherFriends = otherUser.friends.filter(
-            (f) => normalizeName(f.name) !== owner
-          );
-          await updateDoc(userRef(other), { friends: otherFriends });
-        }
-      },
-
-      async clearChat(username, friendName) {
-        const owner = normalizeName(username);
-        const other = normalizeName(friendName);
-
-        const ownerUser = await safeGetUser(owner);
-        if (ownerUser) {
-          const msgs = ownerUser.messages || {};
-          msgs[other] = [];
-          await updateDoc(userRef(owner), { messages: msgs });
-        }
-
-        const otherUser = await safeGetUser(other);
-        if (otherUser) {
-          const msgs2 = otherUser.messages || {};
-          msgs2[owner] = [];
-          await updateDoc(userRef(other), { messages: msgs2 });
-        }
-      },
-
-      async saveMessage(sender, friendName, text) {
-        const from = normalizeName(sender);
-        const to = normalizeName(friendName);
-
-        const senderUser = await safeGetUser(from);
-        if (!senderUser) return { delivered: false };
-
-        const time = new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit"
-        });
-
-        // Aggiorna mittente
-        const senderMessages = senderUser.messages || {};
-        const arrFrom = senderMessages[to] || [];
-        arrFrom.push({ from, text, time });
-        senderMessages[to] = arrFrom;
-        await updateDoc(userRef(from), { messages: senderMessages });
-
-        // Aggiorna destinatario, se esiste
-        const targetUser = await safeGetUser(to);
-        if (targetUser) {
-          const targetMessages = targetUser.messages || {};
-          const arrTo = targetMessages[from] || [];
-          arrTo.push({ from, text, time });
-          targetMessages[from] = arrTo;
-          await updateDoc(userRef(to), { messages: targetMessages });
-        }
-
-        return { delivered: Boolean(targetUser) };
-      }
-    };
-
-    /* ------------------------------------------------------------------
-       3. Riferimenti DOM
-    ------------------------------------------------------------------ */
-
-    const splash = document.querySelector(".splash");
-    const authView = document.getElementById("auth-view");
-    const mainView = document.getElementById("main-view");
-    const chatView = document.getElementById("chat-view");
-    const appShell = document.getElementById("app");
-
-    const form = document.getElementById("auth-form");
-    const statusEl = document.getElementById("status");
-    const switchBtn = document.getElementById("switch-btn");
-    const switchCopy = document.getElementById("switch-copy");
-    const submitBtn = document.getElementById("submit-btn");
-    const title = document.getElementById("form-title");
-    const subtitle = document.getElementById("form-subtitle");
-    const usernameField = document.getElementById("username");
-    const passwordField = document.getElementById("password");
-    const stayLoggedToggle = document.getElementById("stay-logged");
-
-    const friendList = document.getElementById("friend-list");
-    const filters = document.getElementById("filters");
-    const searchInput = document.getElementById("search");
-    const onlineCount = document.getElementById("online-count");
-    const offlineCount = document.getElementById("offline-count");
-    const addFriendBtn = document.getElementById("add-friend");
-    const sideAddBtn = document.getElementById("side-add");
-
-    const sideAvatar = document.getElementById("side-avatar");
-    const sideName = document.getElementById("side-name");
-    const sideHandle = document.getElementById("side-handle");
-    const sideStatus = document.getElementById("side-status");
-    const memberSince = document.getElementById("member-since");
-    const openProfile = document.getElementById("open-profile");
-
-    const modal = document.getElementById("modal");
-    const modalStatus = document.getElementById("modal-status");
-    const friendInput = document.getElementById("friend-name");
-    const closeModal = document.getElementById("close-modal");
-    const confirmAdd = document.getElementById("confirm-add");
-
-    const profileOverlay = document.getElementById("profile-overlay");
-    const closeProfile = document.getElementById("close-profile");
-    const logoutBtn = document.getElementById("logout-btn");
-
-    const accountAvatar = document.getElementById("account-avatar");
-    const accountName = document.getElementById("account-name");
-    const accountStatus = document.getElementById("account-status");
-    const accountHandle = document.getElementById("account-handle");
-    const accountAbout = document.getElementById("account-about");
-    const accountDisplay = document.getElementById("account-display");
-    const accountUsername = document.getElementById("account-username");
-    const accountState = document.getElementById("account-state");
-    const accountMember = document.getElementById("account-member");
-    const avatarInput = document.getElementById("avatar-input");
-    const editAbout = document.getElementById("edit-about");
-    const editDisplay = document.getElementById("edit-display");
-    const editUsername = document.getElementById("edit-username");
-    const editState = document.getElementById("edit-state");
-
-    const chatName = document.getElementById("chat-name");
-    const chatStatus = document.getElementById("chat-status");
-    const messagesEl = document.getElementById("messages");
-    const chatForm = document.getElementById("chat-form");
-    const chatInput = document.getElementById("chat-input");
-    const blockBanner = document.getElementById("block-banner");
-    const profileAvatar = document.getElementById("profile-avatar");
-    const profileName = document.getElementById("profile-name");
-    const profileStatus = document.getElementById("profile-status");
-    const profileMeta = document.getElementById("profile-meta");
-    const backToMain = document.getElementById("back-to-main");
-
-    const toastStack = document.getElementById("toast-stack");
-
-    /* ------------------------------------------------------------------
-       4. Stato UI
-    ------------------------------------------------------------------ */
-
-    let mode = "login"; // 'login' | 'signup'
-    let currentUserName = null;
-    let currentUser = null; // oggetto utente da Firestore
-    let filter = "all"; // 'all' | 'online' | 'pending' | 'blocked'
-    let activeFriend = null; // string (username)
-
-    /* ------------------------------------------------------------------
-       5. Utilità UI
-    ------------------------------------------------------------------ */
-
-    function triggerSplash() {
-      splash?.classList.remove("burst");
-      // forza reflow
-      void splash?.offsetWidth;
-      splash?.classList.add("burst");
+    function getStatus(friend) {
+      if (!friend) return 'offline';
+      const stored = presenceMap[friend.name];
+      if (stored) return stored;
+      return friend.status || 'offline';
     }
 
     function formatDate(value) {
       const date = new Date(value);
-      if (Number.isNaN(date.getTime())) return "Nuovo membro";
-      return date.toLocaleDateString("it-IT", { month: "short", year: "numeric" });
+      if (Number.isNaN(date.getTime())) return 'Nuovo membro';
+      return date.toLocaleDateString('it-IT', { month: 'short', year: 'numeric' });
     }
 
     function persistSession(user, stay) {
       if (stay && user) {
-        localStorage.setItem(
-          SESSION_KEY,
-          JSON.stringify({ user, stay: true })
-        );
+        localStorage.setItem(SESSION_KEY, JSON.stringify({ user, stay: true }));
       } else {
         localStorage.removeItem(SESSION_KEY);
       }
@@ -1171,649 +1246,482 @@
       const raw = localStorage.getItem(SESSION_KEY);
       try {
         return raw ? JSON.parse(raw) : null;
-      } catch {
+      } catch (err) {
         return null;
       }
     }
 
-    function applyAvatarElement(el, user, fallbackName = "N") {
-      if (!el) return;
-      const avatar = user?.avatar;
-      el.style.backgroundImage = avatar ? `url(${avatar})` : "none";
-      el.style.backgroundSize = "cover";
-      el.style.backgroundPosition = "center";
-      el.textContent = avatar
-        ? ""
-        : (user?.displayName?.charAt(0)?.toUpperCase() ||
-           fallbackName.charAt(0).toUpperCase());
+    function triggerSplash() {
+      splash.classList.remove('burst');
+      void splash.offsetWidth;
+      splash.classList.add('burst');
     }
 
-    function showViewAuth() {
-      authView.classList.remove("hidden");
-      mainView.classList.add("hidden");
-      chatView.classList.add("hidden");
-    }
-
-    function showViewMain() {
-      authView.classList.add("hidden");
-      chatView.classList.add("hidden");
-      mainView.classList.remove("hidden");
-    }
-
-    function showViewChat() {
-      authView.classList.add("hidden");
-      mainView.classList.add("hidden");
-      chatView.classList.remove("hidden");
-    }
-
-    function setMode(newMode) {
-      mode = newMode;
-      const isSignup = mode === "signup";
-
-      title.textContent = "NovaChat";
+    function setMode(next) {
+      mode = next;
+      const isSignup = mode === 'signup';
+      title.textContent = 'NovaChat';
       subtitle.textContent = isSignup
-        ? "Crea il tuo account per entrare nella chat. Nessuna email, solo username e password."
-        : "Accedi con il tuo username e la tua password.";
-
-      submitBtn.textContent = isSignup ? "Crea account" : "Accedi";
-      switchCopy.textContent = isSignup
-        ? "Hai già un account?"
-        : "Non hai ancora un account?";
-      switchBtn.textContent = isSignup ? "Accedi" : "Registrati";
-
-      statusEl.textContent = "";
-      statusEl.className = "status";
-
+        ? 'Crea il tuo account per entrare nella chat. Nessuna email, solo username e password.'
+        : 'Accedi con il tuo username e la tua password.';
+      submitBtn.textContent = isSignup ? 'Crea account' : 'Accedi';
+      switchCopy.textContent = isSignup ? 'Hai già un account?' : 'Non hai ancora un account?';
+      switchBtn.textContent = isSignup ? 'Accedi' : 'Registrati';
+      status.textContent = '';
+      status.className = 'status';
+      usernameField.focus();
       triggerSplash();
     }
 
-    function showStatus(ok, msg) {
-      statusEl.className = "status " + (ok ? "success" : "error");
-      statusEl.textContent = msg;
-    }
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const username = normalizeName(usernameField.value);
+      const password = passwordField.value.trim();
+      if (!username || !password) return;
 
-    function makeEmpty(text) {
-      const div = document.createElement("div");
-      div.className = "empty";
-      div.textContent = text;
-      return div;
-    }
+      const action = mode === 'signup' ? DataStore.register : DataStore.login;
+      const result = await action(username, password);
 
-    function showToast(title, text) {
-      if (!toastStack) return;
-      const toast = document.createElement("div");
-      toast.className = "toast";
-      toast.innerHTML = `
-        <div class="meta">
-          <strong>${title}</strong>
-          <span>Avviso</span>
-        </div>
-        <div>${text}</div>
-      `;
-      toastStack.appendChild(toast);
-      setTimeout(() => toast.remove(), 3000);
-    }
+      status.className = 'status ' + (result.ok ? 'success' : 'error');
+      status.textContent = result.ok
+        ? mode === 'signup'
+          ? 'Account creato con successo. Benvenuto su NovaChat!'
+          : 'Login effettuato con successo.'
+        : result.message;
 
-    /* ------------------------------------------------------------------
-       6. Rendering UI
-    ------------------------------------------------------------------ */
+      if (result.ok) {
+        passwordField.value = '';
+        triggerSplash();
+        currentUser = result.user || normalizeName(username);
+        persistSession(currentUser, stayLoggedToggle.checked);
+        await showMain();
+      }
+    });
 
-    async function refreshCurrentUser() {
-      if (!currentUserName) return;
-      currentUser = await DataStore.getUser(currentUserName);
-    }
+    switchBtn.addEventListener('click', () => {
+      setMode(mode === 'signup' ? 'login' : 'signup');
+    });
+
+    splash.addEventListener('animationend', (event) => {
+      if (event.animationName === 'splashBurst') {
+        splash.classList.remove('burst');
+      }
+    });
 
     async function renderUserSummary() {
       if (!currentUser) return;
-      applyAvatarElement(sideAvatar, currentUser, currentUserName);
-      sideName.textContent = currentUser.displayName || currentUserName;
-      sideHandle.textContent = "@" + currentUserName;
-      sideStatus.innerHTML = `
-        <span class="dot ${currentUser.status === "online" ? "online" : "offline"}"></span>
-        ${currentUser.status === "online" ? "Online" : "Offline"}
-      `;
-      memberSince.textContent = "Dal " + formatDate(currentUser.createdAt);
+      const user = await DataStore.getUser(currentUser);
+      sideAvatar.textContent = currentUser.charAt(0).toUpperCase();
+      sideName.textContent = currentUser;
+      sideHandle.textContent = '@' + currentUser.toLowerCase();
+      sideStatus.innerHTML = '<span class="dot online"></span>Online';
+      memberSince.textContent = user.createdAt ? 'Dal ' + formatDate(user.createdAt) : 'Nuovo membro';
     }
 
     async function renderAccountPanel() {
       if (!currentUser) return;
-      applyAvatarElement(accountAvatar, currentUser, currentUserName);
-      accountName.textContent = currentUser.displayName || currentUserName;
-      accountHandle.textContent = "@" + currentUserName;
-      accountStatus.innerHTML = `
-        <span class="dot ${currentUser.status === "online" ? "online" : "offline"}"></span>
-        ${currentUser.status === "online" ? "Online" : "Offline"}
-      `;
-      accountDisplay.textContent = currentUser.displayName || currentUserName;
-      accountUsername.textContent = currentUserName;
-      accountState.textContent = currentUser.status === "online" ? "Online" : "Offline";
-      accountMember.textContent = formatDate(currentUser.createdAt);
-      accountAbout.textContent = currentUser.about || "Sempre online su NovaChat.";
-
-      editAbout.value = currentUser.about || "";
-      editDisplay.value = currentUser.displayName || currentUserName;
-      editUsername.value = currentUserName;
-      editState.value = currentUser.status || "offline";
+      const user = await DataStore.getUser(currentUser);
+      const joined = user.createdAt ? formatDate(user.createdAt) : 'Nuovo membro';
+      accountAvatar.textContent = currentUser.charAt(0).toUpperCase();
+      accountName.textContent = currentUser;
+      accountHandle.textContent = '@' + currentUser.toLowerCase();
+      accountStatus.innerHTML = '<span class="dot online"></span>Online';
+      accountDisplay.textContent = currentUser;
+      accountUsername.textContent = currentUser;
+      accountState.textContent = 'Online';
+      accountMember.textContent = joined;
     }
+
+    async function showMain() {
+      if (!currentUser) return;
+      authView.classList.add('hidden');
+      chatView.classList.add('hidden');
+      mainView.classList.remove('hidden');
+      profileOverlay.classList.add('hidden');
+      appShell.classList.remove('blurred');
+      await DataStore.setStatus(currentUser, 'online');
+      startPresenceLoop();
+      startChatSync();
+      await renderUserSummary();
+      await renderAccountPanel();
+      await renderFriends();
+    }
+
+    async function logout() {
+      if (currentUser) {
+        await DataStore.setStatus(currentUser, 'offline');
+      }
+      currentUser = null;
+      activeFriend = null;
+      clearInterval(presenceInterval);
+      clearInterval(chatInterval);
+      persistSession('', false);
+      appShell.classList.remove('blurred');
+      profileOverlay.classList.add('hidden');
+      modal.classList.add('hidden');
+      mainView.classList.add('hidden');
+      chatView.classList.add('hidden');
+      authView.classList.remove('hidden');
+      usernameField.value = '';
+      passwordField.value = '';
+      stayLoggedToggle.checked = false;
+      setMode('login');
+    }
+
+    async function showChat(friend) {
+      activeFriend = friend;
+      mainView.classList.add('hidden');
+      chatView.classList.remove('hidden');
+      const statusValue = getStatus(friend) || 'offline';
+      presenceMap[friend.name] = friend.blocked ? 'offline' : 'online';
+      chatName.textContent = friend.name;
+      chatStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Blocked' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
+      profileAvatar.textContent = friend.name.charAt(0).toUpperCase();
+      profileName.textContent = friend.name;
+      profileStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Bloccato' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
+      profileMeta.textContent = friend.pinned ? 'Fissato in alto' : 'Contatto standard';
+      chatInput.placeholder = `Message @${friend.name}`;
+      renderMessages(friend);
+      const blocked = friend.blocked;
+      blockBanner.classList.toggle('hidden', !blocked);
+      chatInput.disabled = blocked;
+    }
+
+    function renderMessages(friend) {
+      messagesEl.innerHTML = '';
+      const msgs = Array.isArray(friend.messages) ? friend.messages : [];
+      if (!msgs.length) {
+        const empty = document.createElement('div');
+        empty.className = 'empty';
+        empty.textContent = 'La chat è vuota. Invia un messaggio per iniziare.';
+        messagesEl.appendChild(empty);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+        return;
+      }
+      msgs.forEach(m => {
+        const bubble = document.createElement('div');
+        bubble.className = `bubble ${m.from === currentUser ? 'me' : 'them'}`;
+        bubble.innerHTML = `<div>${m.text}</div><div class="timestamp">${m.time}</div>`;
+        messagesEl.appendChild(bubble);
+      });
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    async function syncActiveChat() {
+      if (!activeFriend || chatView.classList.contains('hidden') || !currentUser) return;
+      const user = await DataStore.getUser(currentUser);
+      const friend = (user.friends || []).find(f => f.name === activeFriend.name || normalizeName(f.name) === normalizeName(activeFriend.name));
+      if (!friend) return;
+      activeFriend = friend;
+      const statusValue = getStatus(friend);
+      chatStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Blocked' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
+      profileStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Bloccato' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
+      profileMeta.textContent = friend.pinned ? 'Fissato in alto' : 'Contatto standard';
+      blockBanner.classList.toggle('hidden', !friend.blocked);
+      chatInput.disabled = friend.blocked;
+      renderMessages(friend);
+    }
+
+    chatForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!activeFriend || chatInput.disabled) return;
+      const text = chatInput.value.trim();
+      if (!text) return;
+      const result = await DataStore.saveMessage(currentUser, activeFriend.name, text);
+      const user = await DataStore.getUser(currentUser);
+      const updated = (user.friends || []).find(f => f.name === activeFriend.name);
+      chatInput.value = '';
+      if (updated) await showChat(updated);
+      if (!result.delivered) {
+        console.warn('Messaggio non consegnato: utente destinatario non trovato.');
+      }
+    });
+
+    backToMain.addEventListener('click', () => {
+      showMain();
+    });
 
     async function renderFriends() {
       if (!currentUser) return;
-      friendList.innerHTML = "";
+      const user = await DataStore.getUser(currentUser);
+      const term = searchInput.value.trim().toLowerCase();
+      const friends = user.friends || [];
 
-      const term = (searchInput.value || "").trim().toLowerCase();
-
-      // Pending view
-      if (filter === "pending") {
-        const pending = currentUser.pending || [];
-        if (!pending.length) {
-          friendList.appendChild(
-            makeEmpty('Nessuna richiesta in arrivo. Invia un invito da "Add Friend".')
-          );
-          onlineCount.textContent = "0";
-          offlineCount.textContent = String(currentUser.friends.length);
-          return;
-        }
-
-        pending.forEach((p) => {
-          const card = document.createElement("div");
-          card.className = "friend-card";
-          const initial = (p.name || "?").charAt(0).toUpperCase();
-          card.innerHTML = `
-            <div class="avatar">${initial}</div>
-            <div class="friend-meta">
-              <div class="friend-name">${p.name}</div>
-              <div class="friend-status">
-                <span class="dot online"></span> Richiesta in arrivo
-              </div>
-            </div>
-            <div style="display:flex;gap:8px;">
-              <button class="action-btn" data-accept="${p.name}">Accetta</button>
-              <button class="action-btn" data-decline="${p.name}">Rifiuta</button>
-            </div>
-          `;
-          friendList.appendChild(card);
-        });
-
-        onlineCount.textContent = String(currentUser.friends.length);
-        offlineCount.textContent = "0";
-        return;
-      }
-
-      // Friends list
-      const friends = (currentUser.friends || [])
-        .filter((f) => {
-          if (!f) return false;
-          const n = (f.name || "").toLowerCase();
-          if (term && !n.includes(term)) return false;
-          if (filter === "blocked") return !!f.blocked;
-          if (filter === "online") {
-            // Non abbiamo presence realtime: li consideriamo tutti "offline"
-            return !f.blocked; // volendo: solo non bloccati
-          }
-          // filter === "all"
+      const filtered = friends
+        .filter(f => !term || f.name.toLowerCase().includes(term))
+        .filter(f => {
+          const statusValue = getStatus(f);
+          if (filter === 'online') return statusValue === 'online' && !f.blocked;
+          if (filter === 'pending') return false;
+          if (filter === 'blocked') return f.blocked;
           return !f.blocked;
         })
         .sort((a, b) => Number(b.pinned) - Number(a.pinned));
 
-      if (!friends.length) {
-        friendList.appendChild(
-          makeEmpty(
-            filter === "blocked"
-              ? "Non hai utenti bloccati."
-              : 'Non hai ancora amici qui. Usa "Add Friend" per iniziare.'
-          )
-        );
-        onlineCount.textContent = "0";
-        offlineCount.textContent = "0";
-        return;
+      friendList.innerHTML = '';
+
+      const pendingVisible = filter === 'pending';
+      const pending = user.pending || [];
+
+      if (pendingVisible) {
+        if (pending.length === 0) {
+          friendList.appendChild(makeEmpty('Nessuna richiesta in arrivo. Invia un invito da "Add Friend".'));
+        } else {
+          pending.forEach(p => {
+            const card = document.createElement('div');
+            card.className = 'friend-card';
+            card.innerHTML = `
+              <div class="avatar">${p.name.charAt(0).toUpperCase()}</div>
+              <div class="friend-meta">
+                <div class="friend-name">${p.name}</div>
+                <div class="friend-status"><span class="dot online"></span>Richiesta in arrivo</div>
+              </div>
+              <div class="friend-actions" style="opacity:1; display:flex; gap:6px;">
+                <button class="action-btn" data-accept="${p.name}">Accetta</button>
+                <button class="action-btn" data-decline="${p.name}">Rifiuta</button>
+              </div>
+            `;
+            friendList.appendChild(card);
+          });
+        }
+      } else {
+        if (!filtered.length) {
+          friendList.appendChild(makeEmpty('Non hai ancora amici qui. Usa "Add Friend" per iniziare.'));
+        } else {
+          filtered.forEach(f => {
+            const card = document.createElement('div');
+            card.className = 'friend-card';
+            card.dataset.friend = f.name;
+            const statusValue = getStatus(f);
+            const statusDot = f.blocked ? 'blocked' : statusValue;
+            const statusLabel = f.blocked ? 'Bloccato' : (statusValue === 'online' ? 'Online' : 'Offline');
+            card.innerHTML = `
+              <div class="avatar">${f.name.charAt(0).toUpperCase()}</div>
+              <div class="friend-meta">
+                <div class="friend-name">${f.name}${f.pinned ? ' 📌' : ''}</div>
+                <div class="friend-status"><span class="dot ${statusDot}"></span>${statusLabel}</div>
+              </div>
+              <div class="friend-actions">
+                <button class="action-btn" type="button">⋯</button>
+                <div class="menu">
+                  <button data-action="report" data-friend="${f.name}">Segnala</button>
+                  <button data-action="block" data-friend="${f.name}">${f.blocked ? 'Sblocca' : 'Blocca'}</button>
+                  <button data-action="pin" data-friend="${f.name}">${f.pinned ? 'Rimuovi fissato' : 'Fissa'}</button>
+                  <button data-action="remove" data-friend="${f.name}">Rimuovi amicizia</button>
+                  <button data-action="clear" data-friend="${f.name}">Cancella chat</button>
+                </div>
+              </div>
+            `;
+            friendList.appendChild(card);
+          });
+        }
       }
 
-      let online = 0;
-      let offline = 0;
-
-      friends.forEach((f) => {
-        const card = document.createElement("div");
-        card.className = "friend-card";
-        card.dataset.friend = f.name;
-
-        const initial = f.name.charAt(0).toUpperCase();
-        // senza presence reale, li segniamo Offline di default
-        const isBlocked = !!f.blocked;
-        const statusClass = isBlocked ? "blocked" : "offline";
-        const statusLabel = isBlocked ? "Bloccato" : "Offline";
-
-        if (!isBlocked) offline++;
-
-        card.innerHTML = `
-          <div class="avatar">${initial}</div>
-          <div class="friend-meta">
-            <div class="friend-name">${f.name}${f.pinned ? " 📌" : ""}</div>
-            <div class="friend-status">
-              <span class="dot ${statusClass}"></span>${statusLabel}
-            </div>
-          </div>
-          <div class="friend-actions">
-            <button class="action-btn" type="button">⋯</button>
-            <div class="menu">
-              <button data-action="pin" data-friend="${f.name}">
-                ${f.pinned ? "Rimuovi fissato" : "Fissa in alto"}
-              </button>
-              <button data-action="block" data-friend="${f.name}">
-                ${f.blocked ? "Sblocca" : "Blocca"}
-              </button>
-              <button data-action="remove" data-friend="${f.name}">
-                Rimuovi amicizia
-              </button>
-              <button data-action="clear" data-friend="${f.name}">
-                Cancella chat
-              </button>
-            </div>
-          </div>
-        `;
-
-        friendList.appendChild(card);
-      });
-
-      onlineCount.textContent = String(online);
-      offlineCount.textContent = String(offline);
+      onlineCount.textContent = friends.filter(f => getStatus(f) === 'online' && !f.blocked).length;
+      offlineCount.textContent = friends.filter(f => getStatus(f) !== 'online' && !f.blocked).length;
     }
 
-    async function renderMessagesForFriend(friendName) {
-      messagesEl.innerHTML = "";
-      if (!currentUser) return;
-
-      const msgsMap = currentUser.messages || {};
-      const list = msgsMap[normalizeName(friendName)] || [];
-
-      if (!list.length) {
-        messagesEl.appendChild(
-          makeEmpty("La chat è vuota. Invia un messaggio per iniziare.")
-        );
-        return;
-      }
-
-      list.forEach((m) => {
-        const bubble = document.createElement("div");
-        bubble.className = "bubble " + (normalizeName(m.from) === normalizeName(currentUserName) ? "me" : "them");
-        bubble.innerHTML = `
-          <div>${m.text}</div>
-          <div class="timestamp">${m.time || ""}</div>
-        `;
-        messagesEl.appendChild(bubble);
-      });
-
-      messagesEl.scrollTop = messagesEl.scrollHeight;
+    function makeEmpty(text) {
+      const empty = document.createElement('div');
+      empty.className = 'empty';
+      empty.textContent = text;
+      return empty;
     }
 
-    async function showChat(friendName) {
-      activeFriend = friendName;
-      await refreshCurrentUser();
-
-      const friend = (currentUser.friends || []).find(
-        (f) => normalizeName(f.name) === normalizeName(friendName)
-      );
-      if (!friend) {
-        showToast("Chat", "Utente non è più nella tua lista amici.");
+    filters.addEventListener('click', async (e) => {
+      if (e.target.dataset.filter) {
+        filter = e.target.dataset.filter;
+        [...filters.querySelectorAll('button')].forEach(btn => btn.classList.toggle('active', btn.dataset.filter === filter));
         await renderFriends();
-        showViewMain();
-        return;
-      }
-
-      showViewChat();
-
-      // intestazione
-      chatName.textContent = friend.name;
-      chatStatus.innerHTML = `
-        <span class="dot ${friend.blocked ? "blocked" : "offline"}"></span>
-        ${friend.blocked ? "Blocked" : "Offline"}
-      `;
-
-      // pannello profilo
-      const fUser = await DataStore.getUser(friend.name);
-      applyAvatarElement(profileAvatar, fUser, friend.name);
-      profileName.textContent = fUser?.displayName || friend.name;
-      profileStatus.innerHTML = `
-        <span class="dot ${friend.blocked ? "blocked" : "offline"}"></span>
-        ${friend.blocked ? "Bloccato" : "Offline"}
-      `;
-      profileMeta.textContent = friend.pinned ? "Fissato in alto" : "Contatto standard";
-
-      chatInput.placeholder = "Message @" + friend.name;
-      const blocked = !!friend.blocked;
-      blockBanner.classList.toggle("hidden", !blocked);
-      chatInput.disabled = blocked;
-
-      await refreshCurrentUser();
-      await renderMessagesForFriend(friend.name);
-    }
-
-    /* ------------------------------------------------------------------
-       7. Eventi UI
-    ------------------------------------------------------------------ */
-
-    // Auth submit
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const username = (usernameField.value || "").trim();
-      const password = (passwordField.value || "").trim();
-      if (!username || !password) return;
-
-      const action = mode === "signup" ? DataStore.register.bind(DataStore) : DataStore.login.bind(DataStore);
-      const result = await action(username, password);
-
-      showStatus(result.ok, result.ok
-        ? (mode === "signup"
-          ? "Account creato con successo. Benvenuto su NovaChat!"
-          : "Login effettuato con successo.")
-        : result.message
-      );
-
-      if (result.ok) {
-        currentUserName = result.user || normalizeName(username);
-        passwordField.value = "";
-        persistSession(currentUserName, stayLoggedToggle.checked);
-        triggerSplash();
-        await afterLogin();
       }
     });
 
-    async function afterLogin() {
-      await DataStore.setStatus(currentUserName, "online");
-      await refreshCurrentUser();
-      await renderUserSummary();
-      await renderAccountPanel();
-      await renderFriends();
-      showViewMain();
-    }
-
-    // Switch login/signup
-    switchBtn.addEventListener("click", () => {
-      setMode(mode === "signup" ? "login" : "signup");
-    });
-
-    // Splash anim end
-    splash?.addEventListener("animationend", (ev) => {
-      if (ev.animationName === "splashBurst") {
-        splash.classList.remove("burst");
-      }
-    });
-
-    // Filters
-    filters.addEventListener("click", (e) => {
-      const btn = e.target.closest("button[data-filter]");
-      if (!btn) return;
-      filter = btn.dataset.filter;
-      [...filters.querySelectorAll("button")].forEach((b) =>
-        b.classList.toggle("active", b === btn)
-      );
+    searchInput.addEventListener('input', () => {
       renderFriends();
     });
 
-    // Search
-    searchInput.addEventListener("input", () => {
-      renderFriends();
-    });
-
-    // Friend list click
-    friendList.addEventListener("click", async (e) => {
+    friendList.addEventListener('click', async (e) => {
       const accept = e.target.dataset.accept;
       const decline = e.target.dataset.decline;
+      const action = e.target.dataset.action;
+      const friendName = e.target.dataset.friend;
+      const actionBtn = e.target.closest('.action-btn');
 
-      if (accept) {
-        await DataStore.accept(currentUserName, accept);
-        await refreshCurrentUser();
-        await renderFriends();
-        showToast("Richiesta", `Hai accettato ${accept}.`);
-        return;
-      }
-
-      if (decline) {
-        await DataStore.decline(currentUserName, decline);
-        await refreshCurrentUser();
-        await renderFriends();
-        showToast("Richiesta", `Hai rifiutato ${decline}.`);
-        return;
-      }
-
-      const actionBtn = e.target.closest(".action-btn");
-      if (actionBtn && actionBtn.nextElementSibling?.classList.contains("menu")) {
+      if (actionBtn && actionBtn.nextElementSibling?.classList.contains('menu')) {
         const menu = actionBtn.nextElementSibling;
-        const open = menu.style.display === "flex";
-        document
-          .querySelectorAll(".friend-actions .menu")
-          .forEach((m) => (m.style.display = "none"));
-        menu.style.display = open ? "none" : "flex";
+        const open = menu.style.display === 'flex';
+        document.querySelectorAll('.menu').forEach(m => m.style.display = 'none');
+        menu.style.display = open ? 'none' : 'flex';
         e.stopPropagation();
         return;
       }
 
-      const action = e.target.dataset.action;
-      const friendName = e.target.dataset.friend;
-      if (action && friendName) {
-        if (action === "block") {
-          await DataStore.toggleBlock(currentUserName, friendName);
-        } else if (action === "pin") {
-          await DataStore.togglePin(currentUserName, friendName);
-        } else if (action === "remove") {
-          await DataStore.removeFriend(currentUserName, friendName);
-          if (activeFriend && normalizeName(activeFriend) === normalizeName(friendName)) {
-            activeFriend = null;
-            showViewMain();
-          }
-        } else if (action === "clear") {
-          await DataStore.clearChat(currentUserName, friendName);
-        }
-        await refreshCurrentUser();
+      if (accept) {
+        await DataStore.accept(currentUser, accept);
+        await renderFriends();
+        return;
+      }
+      if (decline) {
+        await DataStore.decline(currentUser, decline);
         await renderFriends();
         return;
       }
 
-      const card = e.target.closest(".friend-card");
-      if (!card || filter === "pending") return;
+      if (action && friendName) {
+        if (action === 'block') {
+          await DataStore.toggleBlock(currentUser, friendName);
+        }
+        if (action === 'pin') {
+          await DataStore.togglePin(currentUser, friendName);
+        }
+        if (action === 'report') {
+          alert('Segnalazione inviata per ' + friendName);
+        }
+        if (action === 'remove') {
+          await DataStore.removeFriend(currentUser, friendName);
+          if (activeFriend && activeFriend.name === friendName) {
+            activeFriend = null;
+            await showMain();
+          }
+        }
+        if (action === 'clear') {
+          await DataStore.clearChat(currentUser, friendName);
+          if (activeFriend && activeFriend.name === friendName) {
+            const user = await DataStore.getUser(currentUser);
+            const refreshed = (user.friends || []).find(f => f.name === friendName);
+            if (refreshed) await showChat(refreshed);
+          }
+        }
+        await renderFriends();
+        return;
+      }
+
+      const card = e.target.closest('.friend-card');
+      if (!card || filter === 'pending') return;
       const name = card.dataset.friend;
       if (!name) return;
-
-      await showChat(name);
+      const user = await DataStore.getUser(currentUser);
+      const friend = (user.friends || []).find(f => f.name === name);
+      if (friend) {
+        await showChat(friend);
+      }
     });
 
-    friendList.addEventListener("mouseleave", () => {
-      document
-        .querySelectorAll(".friend-actions .menu")
-        .forEach((m) => (m.style.display = "none"));
+    friendList.addEventListener('mouseleave', () => {
+      document.querySelectorAll('.menu').forEach(m => m.style.display = 'none');
     });
 
-    // Add friend (main & side)
-    function openAddFriendModal() {
-      modal.classList.remove("hidden");
-      appShell.classList.add("blurred");
-      modalStatus.textContent = "";
-      modalStatus.className = "status";
-      friendInput.value = "";
+    addFriendBtns.forEach(btn => btn.addEventListener('click', () => {
+      modal.classList.remove('hidden');
+      appShell.classList.add('blurred');
+      modalStatus.textContent = '';
+      modalStatus.className = 'status';
+      friendInput.value = '';
       friendInput.focus();
-    }
+    }));
 
-    addFriendBtn.addEventListener("click", openAddFriendModal);
-    sideAddBtn.addEventListener("click", openAddFriendModal);
-
-    closeModal.addEventListener("click", () => {
-      modal.classList.add("hidden");
-      appShell.classList.remove("blurred");
+    closeModal.addEventListener('click', () => {
+      modal.classList.add('hidden');
+      appShell.classList.remove('blurred');
     });
 
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) {
-        modal.classList.add("hidden");
-        appShell.classList.remove("blurred");
-      }
-    });
-
-    confirmAdd.addEventListener("click", async () => {
-      const name = normalizeName(friendInput.value || "");
+    confirmAdd.addEventListener('click', async () => {
+      const name = normalizeName(friendInput.value);
       if (!name) return;
-      const result = await DataStore.addPending(currentUserName, name);
-      modalStatus.className = "status " + (result.ok ? "success" : "error");
-      modalStatus.textContent = result.ok
-        ? `Richiesta inviata a ${name}.`
-        : result.message;
+      if (!currentUser) return;
+      const result = await DataStore.addPending(currentUser, name);
+      modalStatus.className = 'status ' + (result.ok ? 'success' : 'error');
+      modalStatus.textContent = result.ok ? `Richiesta inviata a ${name}.` : result.message;
       if (result.ok) {
-        setTimeout(() => {
-          modal.classList.add("hidden");
-          appShell.classList.remove("blurred");
-        }, 700);
-      }
-    });
-
-    // Profile overlay
-    openProfile.addEventListener("click", async () => {
-      await refreshCurrentUser();
-      await renderAccountPanel();
-      profileOverlay.classList.remove("hidden");
-      appShell.classList.add("blurred");
-    });
-
-    closeProfile.addEventListener("click", () => {
-      profileOverlay.classList.add("hidden");
-      appShell.classList.remove("blurred");
-    });
-
-    profileOverlay.addEventListener("click", (e) => {
-      if (e.target === profileOverlay) {
-        profileOverlay.classList.add("hidden");
-        appShell.classList.remove("blurred");
-      }
-    });
-
-    // Logout
-    logoutBtn.addEventListener("click", async () => {
-      if (currentUserName) {
-        await DataStore.setStatus(currentUserName, "offline");
-      }
-      currentUserName = null;
-      currentUser = null;
-      persistSession("", false);
-      showViewAuth();
-      usernameField.value = "";
-      passwordField.value = "";
-      stayLoggedToggle.checked = false;
-      setMode("login");
-      appShell.classList.remove("blurred");
-      profileOverlay.classList.add("hidden");
-      modal.classList.add("hidden");
-    });
-
-    // Avatar upload
-    avatarInput.addEventListener("change", (e) => {
-      const file = e.target.files?.[0];
-      if (!file || !currentUserName) return;
-      const reader = new FileReader();
-      reader.onload = async () => {
-        await DataStore.updateProfile(currentUserName, { avatar: reader.result });
-        await refreshCurrentUser();
-        await renderUserSummary();
-        await renderAccountPanel();
-      };
-      reader.readAsDataURL(file);
-    });
-
-    // Inline editor (about, display, username, state)
-    function toggleEditor(field, open) {
-      const editor = document.querySelector(
-        `.inline-editor[data-editor="${field}"]`
-      );
-      if (!editor) return;
-      editor.classList.toggle("hidden", !open);
-      if (open) {
-        const input = editor.querySelector("input,select");
-        input && input.focus();
-      }
-    }
-
-    document.querySelectorAll(".edit-hint").forEach((btn) => {
-      const field = btn.closest(".editable")?.dataset.edit;
-      if (!field) return;
-      btn.addEventListener("click", () => toggleEditor(field, true));
-    });
-
-    document.querySelectorAll(".cancel").forEach((btn) => {
-      const field = btn.dataset.cancel;
-      btn.addEventListener("click", () => toggleEditor(field, false));
-    });
-
-    document.querySelectorAll(".save").forEach((btn) => {
-      const field = btn.dataset.save;
-      btn.addEventListener("click", async () => {
-        if (!currentUserName) return;
-        if (field === "about") {
-          await DataStore.updateProfile(currentUserName, {
-            about: editAbout.value.trim()
-          });
-        } else if (field === "display") {
-          const value = editDisplay.value.trim() || currentUserName;
-          await DataStore.updateProfile(currentUserName, {
-            displayName: value
-          });
-        } else if (field === "username") {
-          alert("Cambio username non ancora supportato in questa versione.");
-        } else if (field === "state") {
-          await DataStore.setStatus(currentUserName, editState.value);
-        }
-        await refreshCurrentUser();
-        await renderUserSummary();
-        await renderAccountPanel();
         await renderFriends();
-        toggleEditor(field, false);
-      });
+        setTimeout(() => {
+          modal.classList.add('hidden');
+          appShell.classList.remove('blurred');
+        }, 600);
+      }
     });
 
-    // Chat form submit
-    chatForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      if (!activeFriend) return;
-      if (chatInput.disabled) return;
-      const text = (chatInput.value || "").trim();
-      if (!text) return;
-
-      await DataStore.saveMessage(currentUserName, activeFriend, text);
-      chatInput.value = "";
-      await refreshCurrentUser();
-      await renderMessagesForFriend(activeFriend);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.add('hidden');
+        appShell.classList.remove('blurred');
+      }
     });
 
-    backToMain.addEventListener("click", async () => {
-      activeFriend = null;
-      await refreshCurrentUser();
-      await renderFriends();
-      showViewMain();
+    openProfile.addEventListener('click', async () => {
+      await renderAccountPanel();
+      profileOverlay.classList.remove('hidden');
+      appShell.classList.add('blurred');
     });
 
-    /* ------------------------------------------------------------------
-       8. Bootstrap
-    ------------------------------------------------------------------ */
+    closeProfile.addEventListener('click', () => {
+      profileOverlay.classList.add('hidden');
+      appShell.classList.remove('blurred');
+    });
+
+    profileOverlay.addEventListener('click', (e) => {
+      if (e.target === profileOverlay) {
+        profileOverlay.classList.add('hidden');
+        appShell.classList.remove('blurred');
+      }
+    });
+
+    logoutBtn.addEventListener('click', () => {
+      logout();
+    });
 
     async function restoreSession() {
       const saved = loadSession();
-      if (saved?.user && saved.stay) {
-        const exists = await DataStore.exists(saved.user);
-        if (exists) {
-          currentUserName = saved.user;
-          await afterLogin();
-          return;
-        }
+      if (saved?.user && saved.stay && await DataStore.exists(saved.user)) {
+        currentUser = saved.user;
+        await showMain();
+        return true;
       }
-      setMode(mode);
-      showViewAuth();
+      if (saved?.user) {
+        usernameField.value = saved.user;
+        stayLoggedToggle.checked = Boolean(saved.stay);
+      }
+      return false;
     }
 
-    window.addEventListener("beforeunload", async () => {
-      if (currentUserName) {
-        await DataStore.setStatus(currentUserName, "offline");
+    function startPresenceLoop() {
+      clearInterval(presenceInterval);
+      presenceInterval = setInterval(async () => {
+        if (!currentUser) return;
+        await renderFriends();
+        await syncActiveChat();
+      }, 3200);
+    }
+
+    function startChatSync() {
+      clearInterval(chatInterval);
+      chatInterval = setInterval(syncActiveChat, 1200);
+    }
+
+    async function handleStorageSync() {
+      if (!currentUser) return;
+      await renderUserSummary();
+      await renderAccountPanel();
+      await renderFriends();
+      await syncActiveChat();
+    }
+
+    window.addEventListener('storage', () => {
+      handleStorageSync();
+    });
+
+    window.addEventListener('beforeunload', async () => {
+      if (currentUser) {
+        await DataStore.setStatus(currentUser, 'offline');
       }
     });
 
-    // Avvio
-    restoreSession();
+    (async () => {
+      const booted = await restoreSession();
+      if (!booted) {
+        setMode(mode);
+      }
+    })();
   </script>
 </body>
 </html>
-
