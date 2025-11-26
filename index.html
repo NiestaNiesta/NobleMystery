@@ -255,6 +255,8 @@
       grid-template-columns: 220px 1fr 320px;
       gap: 18px;
       width: min(1200px, 96vw);
+      min-height: 78vh;
+      align-items: stretch;
     }
 
     .panel {
@@ -264,6 +266,12 @@
       padding: 18px;
       box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
       backdrop-filter: blur(12px) saturate(1.1);
+    }
+
+    .main-panel {
+      display: flex;
+      flex-direction: column;
+      min-height: 72vh;
     }
 
     .sidebar .brand {
@@ -339,7 +347,7 @@
 
     .filters button.active { color: var(--text); background: rgba(157, 107, 255, 0.15); border-color: rgba(157,107,255,0.5); }
 
-    .list { display: flex; flex-direction: column; gap: 10px; }
+    .list { display: flex; flex-direction: column; gap: 10px; flex: 1; min-height: 420px; }
 
     .friend-card {
       position: relative;
@@ -473,15 +481,17 @@
     /* Chat view */
     .chat-layout {
       display: grid;
-      grid-template-columns: 320px 1fr;
+      grid-template-columns: 1.2fr 280px;
       gap: 16px;
       width: min(1100px, 96vw);
+      min-height: 78vh;
+      align-items: stretch;
     }
 
     .chat-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
     .chat-header img { width: 40px; height: 40px; border-radius: 12px; cursor: pointer; }
 
-    .chat-panel { display: flex; flex-direction: column; gap: 16px; }
+    .chat-panel { display: flex; flex-direction: column; gap: 16px; min-height: 72vh; }
 
     .messages {
       background: rgba(16, 19, 29, 0.92);
@@ -491,7 +501,7 @@
       display: flex;
       flex-direction: column;
       gap: 14px;
-      min-height: 360px;
+      min-height: 420px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.45);
     }
 
@@ -596,7 +606,7 @@
           </ul>
         </aside>
 
-        <main class="panel">
+        <main class="panel main-panel">
           <div class="section-header">
             <div class="search">
               <input type="search" id="search" placeholder="Search" />
@@ -810,6 +820,15 @@
     let currentUser = null;
     let filter = 'all';
     let activeFriend = null;
+    let presenceInterval = null;
+    let chatInterval = null;
+    const presenceMap = {};
+
+    function getStatus(friend) {
+      if (!friend) return 'offline';
+      const stored = presenceMap[friend.name];
+      return stored || friend.status || 'offline';
+    }
 
     function triggerSplash() {
       splash.classList.remove('burst');
@@ -871,6 +890,14 @@
       authView.classList.add('hidden');
       chatView.classList.add('hidden');
       mainView.classList.remove('hidden');
+      const user = DataStore.getUser(currentUser);
+      user.friends.forEach(f => {
+        if (!presenceMap[f.name]) {
+          presenceMap[f.name] = Math.random() > 0.45 ? 'online' : 'offline';
+        }
+      });
+      startPresenceLoop();
+      startChatSync();
       renderFriends();
     }
 
@@ -878,11 +905,13 @@
       activeFriend = friend;
       mainView.classList.add('hidden');
       chatView.classList.remove('hidden');
+      const statusValue = getStatus(friend) || 'offline';
+      presenceMap[friend.name] = friend.blocked ? 'offline' : 'online';
       chatName.textContent = friend.name;
-      chatStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : friend.status || 'offline'}"></span>${friend.blocked ? 'Blocked' : (friend.status || 'Offline')}`;
+      chatStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Blocked' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
       profileAvatar.textContent = friend.name.charAt(0).toUpperCase();
       profileName.textContent = friend.name;
-      profileStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : friend.status || 'offline'}"></span>${friend.blocked ? 'Bloccato' : (friend.status === 'online' ? 'Online' : 'Offline')}`;
+      profileStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Bloccato' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
       profileMeta.textContent = friend.pinned ? 'Fissato in alto' : 'Contatto standard';
       chatInput.placeholder = `Message @${friend.name}`;
       renderMessages(friend);
@@ -909,6 +938,21 @@
       });
     }
 
+    function syncActiveChat() {
+      if (!activeFriend || chatView.classList.contains('hidden')) return;
+      const user = DataStore.getUser(currentUser);
+      const friend = user.friends.find(f => f.name === activeFriend.name);
+      if (!friend) return;
+      activeFriend = friend;
+      const statusValue = getStatus(friend);
+      chatStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Blocked' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
+      profileStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Bloccato' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
+      profileMeta.textContent = friend.pinned ? 'Fissato in alto' : 'Contatto standard';
+      blockBanner.classList.toggle('hidden', !friend.blocked);
+      chatInput.disabled = friend.blocked;
+      renderMessages(friend);
+    }
+
     chatForm.addEventListener('submit', (e) => {
       e.preventDefault();
       if (!activeFriend || chatInput.disabled) return;
@@ -919,6 +963,15 @@
       const updated = user.friends.find(f => f.name === activeFriend.name);
       chatInput.value = '';
       showChat(updated);
+      if (!updated.blocked) {
+        setTimeout(() => {
+          DataStore.saveMessage(currentUser, updated.name, updated.name, 'Sto rispondendo in tempo reale!');
+          const refreshed = DataStore.getUser(currentUser).friends.find(f => f.name === updated.name);
+          if (refreshed) {
+            renderMessages(refreshed);
+          }
+        }, 700);
+      }
     });
 
     backToMain.addEventListener('click', showMain);
@@ -929,7 +982,8 @@
       const filtered = user.friends
         .filter(f => !term || f.name.toLowerCase().includes(term))
         .filter(f => {
-          if (filter === 'online') return f.status === 'online' && !f.blocked;
+          const statusValue = getStatus(f);
+          if (filter === 'online') return statusValue === 'online' && !f.blocked;
           if (filter === 'pending') return false;
           if (filter === 'blocked') return f.blocked;
           return !f.blocked;
@@ -970,8 +1024,9 @@
             const card = document.createElement('div');
             card.className = 'friend-card';
             card.dataset.friend = f.name;
-            const statusDot = f.blocked ? 'blocked' : (f.status || 'offline');
-            const statusLabel = f.blocked ? 'Bloccato' : (f.status === 'online' ? 'Online' : 'Offline');
+            const statusValue = getStatus(f);
+            const statusDot = f.blocked ? 'blocked' : statusValue;
+            const statusLabel = f.blocked ? 'Bloccato' : (statusValue === 'online' ? 'Online' : 'Offline');
             card.innerHTML = `
               <div class="avatar">${f.name.charAt(0).toUpperCase()}</div>
               <div class="friend-meta">
@@ -992,8 +1047,8 @@
         }
       }
 
-      onlineCount.textContent = user.friends.filter(f => f.status === 'online' && !f.blocked).length;
-      offlineCount.textContent = user.friends.filter(f => f.status !== 'online' && !f.blocked).length;
+      onlineCount.textContent = user.friends.filter(f => getStatus(f) === 'online' && !f.blocked).length;
+      offlineCount.textContent = user.friends.filter(f => getStatus(f) !== 'online' && !f.blocked).length;
     }
 
     function makeEmpty(text) {
@@ -1104,6 +1159,26 @@
         appShell.classList.remove('blurred');
       }
     });
+
+    function startPresenceLoop() {
+      clearInterval(presenceInterval);
+      presenceInterval = setInterval(() => {
+        if (!currentUser) return;
+        const user = DataStore.getUser(currentUser);
+        user.friends.forEach(f => {
+          const current = presenceMap[f.name] || (Math.random() > 0.55 ? 'online' : 'offline');
+          const next = Math.random() > 0.7 ? (current === 'online' ? 'offline' : 'online') : current;
+          presenceMap[f.name] = f.blocked ? 'offline' : next;
+        });
+        renderFriends();
+        syncActiveChat();
+      }, 3200);
+    }
+
+    function startChatSync() {
+      clearInterval(chatInterval);
+      chatInterval = setInterval(syncActiveChat, 1200);
+    }
 
     setMode(mode);
   </script>
