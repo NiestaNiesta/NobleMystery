@@ -17,6 +17,7 @@
       --success: #8df7c5;
       --border: rgba(255, 255, 255, 0.06);
       --glow: 0 16px 40px rgba(111, 111, 255, 0.35);
+      --card-radius: 20px;
     }
 
     * {
@@ -72,10 +73,21 @@
       to { transform: translateY(16px) scale(1.05); }
     }
 
-    .card-wrap {
+    .app-shell {
       position: relative;
-      width: min(440px, 96vw);
+      width: min(1200px, 96vw);
+      animation: intro 0.9s ease forwards;
+      opacity: 0;
+      transform: translateY(16px) scale(0.98);
     }
+
+    @keyframes intro {
+      0% { opacity: 0; transform: translateY(18px) scale(0.97); filter: blur(6px); }
+      60% { opacity: 1; transform: translateY(-4px) scale(1.005); filter: blur(0); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .card-wrap { width: min(440px, 96vw); margin: 0 auto; }
 
     .splash {
       position: absolute;
@@ -102,9 +114,7 @@
       animation: splashPulse 3.2s ease-in-out infinite;
     }
 
-    .splash.burst::after {
-      animation: splashBurst 1.6s ease-out;
-    }
+    .splash.burst::after { animation: splashBurst 1.6s ease-out; }
 
     @keyframes splashDrift {
       0% { transform: scale(0.95) rotate(-2deg); opacity: 0.55; }
@@ -130,7 +140,7 @@
       background: linear-gradient(160deg, var(--panel), var(--panel-strong));
       border: 1px solid var(--border);
       box-shadow: var(--glow), 0 32px 90px rgba(0, 0, 0, 0.5);
-      border-radius: 20px;
+      border-radius: var(--card-radius);
       padding: 32px 30px;
       display: flex;
       flex-direction: column;
@@ -236,6 +246,302 @@
     .status.muted { color: var(--muted); }
 
     .helper { color: var(--muted); font-size: 13px; line-height: 1.5; text-align: center; }
+
+    .hidden { display: none !important; }
+
+    /* Main UI */
+    .app-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr 320px;
+      gap: 18px;
+      width: min(1200px, 96vw);
+    }
+
+    .panel {
+      background: linear-gradient(160deg, rgba(24, 28, 41, 0.75), rgba(16, 19, 29, 0.92));
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      padding: 18px;
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(12px) saturate(1.1);
+    }
+
+    .sidebar .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .sidebar .brand img { width: 36px; height: 36px; border-radius: 12px; }
+    .sidebar .brand .name { font-weight: 800; letter-spacing: 0.2px; }
+
+    .nav { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .nav button {
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text);
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: background 0.2s ease, transform 0.12s ease, border 0.2s ease;
+    }
+
+    .nav button.active { border-color: var(--border); background: rgba(255, 255, 255, 0.04); }
+    .nav button:hover { transform: translateY(-1px); }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .search {
+      flex: 1;
+      display: flex;
+      gap: 8px;
+    }
+
+    .search input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 12px;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .filters {
+      display: flex;
+      gap: 10px;
+      margin: 12px 0 16px;
+    }
+
+    .filters button {
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--muted);
+      cursor: pointer;
+      font-weight: 700;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .filters button.active { color: var(--text); background: rgba(157, 107, 255, 0.15); border-color: rgba(157,107,255,0.5); }
+
+    .list { display: flex; flex-direction: column; gap: 10px; }
+
+    .friend-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: border 0.2s ease, transform 0.12s ease, background 0.2s ease;
+    }
+
+    .friend-card:hover { transform: translateY(-1px); border-color: rgba(92, 240, 255, 0.35); background: rgba(92, 240, 255, 0.04); }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(140deg, rgba(157, 107, 255, 0.2), rgba(92, 240, 255, 0.2));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .friend-meta { display: flex; flex-direction: column; gap: 4px; }
+    .friend-name { font-weight: 800; letter-spacing: 0.1px; }
+    .friend-status { color: var(--muted); font-size: 13px; display: flex; align-items: center; gap: 6px; }
+
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot.online { background: #4ce1b6; box-shadow: 0 0 0 6px rgba(76, 225, 182, 0.16); }
+    .dot.offline { background: rgba(255,255,255,0.18); }
+    .dot.blocked { background: var(--danger); box-shadow: 0 0 0 6px rgba(255,107,155,0.16); }
+
+    .friend-actions {
+      position: relative;
+      opacity: 0;
+      transition: opacity 0.12s ease;
+    }
+
+    .friend-card:hover .friend-actions { opacity: 1; }
+
+    .action-btn {
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 8px 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s ease, border 0.2s ease;
+    }
+
+    .action-btn:hover { background: rgba(92, 240, 255, 0.1); border-color: rgba(92, 240, 255, 0.45); }
+
+    .menu {
+      position: absolute;
+      right: 0;
+      top: 44px;
+      background: rgba(16, 19, 29, 0.96);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.5);
+      min-width: 150px;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .menu button {
+      border: none;
+      background: none;
+      color: var(--text);
+      padding: 10px 12px;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.2s ease;
+    }
+
+    .menu button:hover { background: rgba(255,255,255,0.05); }
+
+    .empty {
+      padding: 18px;
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .side-card h3 { margin-bottom: 8px; }
+    .side-card p { color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
+    .side-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .mini-entry { display: flex; align-items: center; gap: 10px; color: var(--muted); font-weight: 700; }
+
+    .tag { padding: 4px 8px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); font-size: 12px; }
+
+    /* Modal */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(8px);
+      display: grid;
+      place-items: center;
+      z-index: 50;
+    }
+
+    .modal {
+      width: min(420px, 92vw);
+      background: rgba(16, 19, 29, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 24px 70px rgba(0,0,0,0.55);
+    }
+
+    .modal h3 { margin-bottom: 10px; }
+    .modal p { color: var(--muted); margin-bottom: 12px; }
+
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 12px; }
+    .ghost { background: rgba(255,255,255,0.03); color: var(--text); border: 1px solid var(--border); }
+
+    /* Chat view */
+    .chat-layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 16px;
+      width: min(1100px, 96vw);
+    }
+
+    .chat-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .chat-header img { width: 40px; height: 40px; border-radius: 12px; cursor: pointer; }
+
+    .chat-panel { display: flex; flex-direction: column; gap: 16px; }
+
+    .messages {
+      background: rgba(16, 19, 29, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 360px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+    }
+
+    .bubble {
+      max-width: 70%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      line-height: 1.5;
+    }
+    .bubble.me { margin-left: auto; background: linear-gradient(140deg, #8e6bff, #5cf0ff); color: #0c0f18; font-weight: 700; }
+    .bubble.them { background: rgba(255,255,255,0.04); border: 1px solid var(--border); }
+
+    .timestamp { font-size: 12px; color: var(--muted); }
+
+    .chat-form { display: flex; flex-direction: column; gap: 10px; }
+    .chat-input { display: flex; gap: 10px; }
+    .chat-input input {
+      flex: 1;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+    }
+
+    .block-warning { color: var(--danger); font-weight: 800; }
+
+    .profile-card {
+      background: rgba(16, 19, 29, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+    }
+
+    .profile-avatar {
+      width: 82px;
+      height: 82px;
+      border-radius: 20px;
+      background: linear-gradient(160deg, rgba(157, 107, 255, 0.24), rgba(92, 240, 255, 0.22));
+      display: grid;
+      place-items: center;
+      font-size: 32px;
+      font-weight: 900;
+    }
+
+    .blurred { filter: blur(6px); pointer-events: none; user-select: none; }
   </style>
 </head>
 <body>
@@ -244,40 +550,128 @@
   <div class="orb two"></div>
   <div class="orb three"></div>
 
-  <div class="card-wrap">
-    <div class="splash" aria-hidden="true"></div>
-    <div class="card" role="main">
-      <div class="logo" aria-hidden="true">
-        <img src="Images/Logo.png" alt="Logo NovaChat" />
-      </div>
-      <div>
-        <h1 id="form-title">NovaChat</h1>
-        <p class="subtitle" id="form-subtitle">Accedi o registra il tuo profilo con username e password: nessuna email richiesta.</p>
-      </div>
-
-      <form id="auth-form">
-        <div>
-          <label for="username">Username</label>
-          <input id="username" class="input" name="username" autocomplete="username" required />
+  <div class="app-shell" id="app">
+    <section id="auth-view" class="card-wrap">
+      <div class="splash" aria-hidden="true"></div>
+      <div class="card" role="main">
+        <div class="logo" aria-hidden="true">
+          <img src="Images/Logo.png" alt="Logo NovaChat" />
         </div>
         <div>
-          <label for="password">Password</label>
-          <input id="password" class="input" type="password" name="password" autocomplete="current-password" required />
+          <h1 id="form-title">NovaChat</h1>
+          <p class="subtitle" id="form-subtitle">Accedi o registra il tuo profilo con username e password: nessuna email richiesta.</p>
         </div>
-        <button type="submit" class="btn" id="submit-btn">Crea account</button>
-        <div class="status" id="status"></div>
-      </form>
 
-      <div class="switcher">
-        <span id="switch-copy">Hai già un account?</span>
-        <button id="switch-btn" type="button">Accedi</button>
+        <form id="auth-form">
+          <div>
+            <label for="username">Username</label>
+            <input id="username" class="input" name="username" autocomplete="username" required />
+          </div>
+          <div>
+            <label for="password">Password</label>
+            <input id="password" class="input" type="password" name="password" autocomplete="current-password" required />
+          </div>
+          <button type="submit" class="btn" id="submit-btn">Crea account</button>
+          <div class="status" id="status"></div>
+        </form>
+
+        <div class="switcher">
+          <span id="switch-copy">Hai già un account?</span>
+          <button id="switch-btn" type="button">Accedi</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="main-view" class="hidden">
+      <div class="app-layout">
+        <aside class="panel sidebar">
+          <div class="brand">
+            <img src="Images/Logo.png" alt="NovaChat" />
+            <div class="name">NovaChat</div>
+          </div>
+          <ul class="nav">
+            <li><button class="active">Friends</button></li>
+            <li><button>Core Room</button></li>
+            <li><button>Messages</button></li>
+          </ul>
+        </aside>
+
+        <main class="panel">
+          <div class="section-header">
+            <div class="search">
+              <input type="search" id="search" placeholder="Search" />
+              <button class="btn" id="add-friend">Add Friend</button>
+            </div>
+          </div>
+          <div class="filters" id="filters">
+            <button data-filter="all" class="active">All</button>
+            <button data-filter="online">Online</button>
+            <button data-filter="pending">Pending</button>
+            <button data-filter="blocked">Blocked</button>
+          </div>
+          <div class="list" id="friend-list"></div>
+        </main>
+
+        <aside class="panel side-card">
+          <h3>ADD FRIEND</h3>
+          <p>Aggiungi un amico con il suo username NOVAchat.</p>
+          <button class="btn" id="side-add">Send Friend Request</button>
+          <div class="side-list" style="margin-top: 18px;">
+            <div class="mini-entry"><span class="tag">ONLINE</span><span id="online-count">0</span></div>
+            <div class="mini-entry"><span class="tag">OFFLINE</span><span id="offline-count">0</span></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="chat-view" class="hidden">
+      <div class="chat-layout">
+        <div class="chat-panel">
+          <div class="chat-header">
+            <img src="Images/Logo.png" alt="Indietro a NovaChat" id="back-to-main" />
+            <div>
+              <div class="friend-name" id="chat-name">Chat</div>
+              <div class="friend-status" id="chat-status"></div>
+            </div>
+          </div>
+          <div class="messages" id="messages"></div>
+          <form class="chat-form" id="chat-form">
+            <div id="block-banner" class="block-warning hidden">Non puoi inviare messaggi all'utente</div>
+            <div class="chat-input">
+              <input type="text" id="chat-input" placeholder="Message @username" />
+              <button type="submit" class="btn">Invia</button>
+            </div>
+          </form>
+        </div>
+        <aside class="profile-card">
+          <div class="profile-avatar" id="profile-avatar">N</div>
+          <div>
+            <div class="friend-name" id="profile-name"></div>
+            <div class="friend-status" id="profile-status"></div>
+          </div>
+          <div class="tag" id="profile-tag">Profilo</div>
+          <div class="friend-status" id="profile-meta"></div>
+        </aside>
+      </div>
+    </section>
+  </div>
+
+  <div id="modal" class="overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal">
+      <h3>Aggiungi un amico</h3>
+      <p>Inserisci il nickname del tuo amico per inviare la richiesta.</p>
+      <input type="text" id="friend-name" class="input" placeholder="Nickname" />
+      <div id="modal-status" class="status"></div>
+      <div class="modal-actions">
+        <button class="btn ghost" id="close-modal" type="button">Annulla</button>
+        <button class="btn" id="confirm-add" type="button">Invia richiesta</button>
       </div>
     </div>
   </div>
 
   <script>
     const DataStore = (() => {
-      const USERS_KEY = 'novachat-users-v2';
+      const USERS_KEY = 'novachat-users-v3';
       const loadUsers = () => {
         try {
           const raw = localStorage.getItem(USERS_KEY);
@@ -293,12 +687,18 @@
       const saveUsers = (users) => localStorage.setItem(USERS_KEY, JSON.stringify(users));
       let users = loadUsers();
 
+      const ensureUser = (username) => {
+        if (!users[username]) {
+          users[username] = { password: '', friends: [], pending: [], messages: {} };
+        }
+      };
+
       return {
         register(username, password) {
           if (users[username]) {
             return { ok: false, message: 'Questo username è già in uso. Scegline un altro.' };
           }
-          users[username] = { password };
+          users[username] = { password, friends: [], pending: [], messages: {} };
           saveUsers(users);
           return { ok: true };
         },
@@ -309,6 +709,61 @@
           }
           return { ok: true };
         },
+        getUser(username) {
+          ensureUser(username);
+          return users[username];
+        },
+        addPending(username, friendName) {
+          ensureUser(username);
+          const user = users[username];
+          if (user.friends.some(f => f.name.toLowerCase() === friendName.toLowerCase())) {
+            return { ok: false, message: 'Questo utente è già tra i tuoi amici.' };
+          }
+          if (user.pending.some(p => p.name.toLowerCase() === friendName.toLowerCase())) {
+            return { ok: false, message: 'Richiesta già presente.' };
+          }
+          user.pending.push({ name: friendName });
+          saveUsers(users);
+          return { ok: true };
+        },
+        accept(username, friendName) {
+          ensureUser(username);
+          const user = users[username];
+          user.pending = user.pending.filter(p => p.name !== friendName);
+          if (!user.friends.some(f => f.name === friendName)) {
+            user.friends.push({ name: friendName, status: 'offline', pinned: false, blocked: false, messages: [] });
+          }
+          saveUsers(users);
+        },
+        decline(username, friendName) {
+          ensureUser(username);
+          const user = users[username];
+          user.pending = user.pending.filter(p => p.name !== friendName);
+          saveUsers(users);
+        },
+        toggleBlock(username, friendName) {
+          ensureUser(username);
+          const user = users[username];
+          user.friends = user.friends.map(f => f.name === friendName ? { ...f, blocked: !f.blocked } : f);
+          saveUsers(users);
+        },
+        togglePin(username, friendName) {
+          ensureUser(username);
+          const user = users[username];
+          user.friends = user.friends.map(f => f.name === friendName ? { ...f, pinned: !f.pinned } : f);
+          saveUsers(users);
+        },
+        saveMessage(username, friendName, from, text) {
+          ensureUser(username);
+          const user = users[username];
+          user.friends = user.friends.map(f => {
+            if (f.name !== friendName) return f;
+            const nextMsgs = Array.isArray(f.messages) ? f.messages.slice() : [];
+            nextMsgs.push({ from, text, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
+            return { ...f, messages: nextMsgs };
+          });
+          saveUsers(users);
+        }
       };
     })();
 
@@ -323,7 +778,38 @@
     const passwordField = document.getElementById('password');
     const splash = document.querySelector('.splash');
 
+    const authView = document.getElementById('auth-view');
+    const mainView = document.getElementById('main-view');
+    const chatView = document.getElementById('chat-view');
+    const friendList = document.getElementById('friend-list');
+    const filters = document.getElementById('filters');
+    const searchInput = document.getElementById('search');
+    const onlineCount = document.getElementById('online-count');
+    const offlineCount = document.getElementById('offline-count');
+    const addFriendBtns = [document.getElementById('add-friend'), document.getElementById('side-add')];
+    const modal = document.getElementById('modal');
+    const modalStatus = document.getElementById('modal-status');
+    const friendInput = document.getElementById('friend-name');
+    const closeModal = document.getElementById('close-modal');
+    const confirmAdd = document.getElementById('confirm-add');
+    const appShell = document.getElementById('app');
+
+    const chatName = document.getElementById('chat-name');
+    const chatStatus = document.getElementById('chat-status');
+    const messagesEl = document.getElementById('messages');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const blockBanner = document.getElementById('block-banner');
+    const profileAvatar = document.getElementById('profile-avatar');
+    const profileName = document.getElementById('profile-name');
+    const profileStatus = document.getElementById('profile-status');
+    const profileMeta = document.getElementById('profile-meta');
+    const backToMain = document.getElementById('back-to-main');
+
     let mode = 'login';
+    let currentUser = null;
+    let filter = 'all';
+    let activeFriend = null;
 
     function triggerSplash() {
       splash.classList.remove('burst');
@@ -344,8 +830,6 @@
       status.textContent = '';
       status.className = 'status';
       usernameField.focus();
-
-      // 🔥 Trigger animazione splash all'avvio
       triggerSplash();
     }
 
@@ -368,6 +852,8 @@
       if (result.ok) {
         passwordField.value = '';
         triggerSplash();
+        currentUser = username;
+        showMain();
       }
     });
 
@@ -378,6 +864,244 @@
     splash.addEventListener('animationend', (event) => {
       if (event.animationName === 'splashBurst') {
         splash.classList.remove('burst');
+      }
+    });
+
+    function showMain() {
+      authView.classList.add('hidden');
+      chatView.classList.add('hidden');
+      mainView.classList.remove('hidden');
+      renderFriends();
+    }
+
+    function showChat(friend) {
+      activeFriend = friend;
+      mainView.classList.add('hidden');
+      chatView.classList.remove('hidden');
+      chatName.textContent = friend.name;
+      chatStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : friend.status || 'offline'}"></span>${friend.blocked ? 'Blocked' : (friend.status || 'Offline')}`;
+      profileAvatar.textContent = friend.name.charAt(0).toUpperCase();
+      profileName.textContent = friend.name;
+      profileStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : friend.status || 'offline'}"></span>${friend.blocked ? 'Bloccato' : (friend.status === 'online' ? 'Online' : 'Offline')}`;
+      profileMeta.textContent = friend.pinned ? 'Fissato in alto' : 'Contatto standard';
+      chatInput.placeholder = `Message @${friend.name}`;
+      renderMessages(friend);
+      const blocked = friend.blocked;
+      blockBanner.classList.toggle('hidden', !blocked);
+      chatInput.disabled = blocked;
+    }
+
+    function renderMessages(friend) {
+      messagesEl.innerHTML = '';
+      const msgs = Array.isArray(friend.messages) ? friend.messages : [];
+      if (!msgs.length) {
+        const empty = document.createElement('div');
+        empty.className = 'empty';
+        empty.textContent = 'La chat è vuota. Invia un messaggio per iniziare.';
+        messagesEl.appendChild(empty);
+        return;
+      }
+      msgs.forEach(m => {
+        const bubble = document.createElement('div');
+        bubble.className = `bubble ${m.from === currentUser ? 'me' : 'them'}`;
+        bubble.innerHTML = `<div>${m.text}</div><div class="timestamp">${m.time}</div>`;
+        messagesEl.appendChild(bubble);
+      });
+    }
+
+    chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!activeFriend || chatInput.disabled) return;
+      const text = chatInput.value.trim();
+      if (!text) return;
+      DataStore.saveMessage(currentUser, activeFriend.name, currentUser, text);
+      const user = DataStore.getUser(currentUser);
+      const updated = user.friends.find(f => f.name === activeFriend.name);
+      chatInput.value = '';
+      showChat(updated);
+    });
+
+    backToMain.addEventListener('click', showMain);
+
+    function renderFriends() {
+      const user = DataStore.getUser(currentUser);
+      const term = searchInput.value.trim().toLowerCase();
+      const filtered = user.friends
+        .filter(f => !term || f.name.toLowerCase().includes(term))
+        .filter(f => {
+          if (filter === 'online') return f.status === 'online' && !f.blocked;
+          if (filter === 'pending') return false;
+          if (filter === 'blocked') return f.blocked;
+          return !f.blocked;
+        })
+        .sort((a, b) => Number(b.pinned) - Number(a.pinned));
+
+      friendList.innerHTML = '';
+
+      const pendingVisible = filter === 'pending';
+
+      if (pendingVisible) {
+        const emptyPending = user.pending.length === 0;
+        if (emptyPending) {
+          friendList.appendChild(makeEmpty('Nessuna richiesta in arrivo. Invia un invito da "Add Friend".'));
+        } else {
+          user.pending.forEach(p => {
+            const card = document.createElement('div');
+            card.className = 'friend-card';
+            card.innerHTML = `
+              <div class="avatar">${p.name.charAt(0).toUpperCase()}</div>
+              <div class="friend-meta">
+                <div class="friend-name">${p.name}</div>
+                <div class="friend-status"><span class="dot online"></span>Richiesta in arrivo</div>
+              </div>
+              <div class="friend-actions" style="opacity:1; display:flex; gap:6px;">
+                <button class="action-btn" data-accept="${p.name}">Accetta</button>
+                <button class="action-btn" data-decline="${p.name}">Rifiuta</button>
+              </div>
+            `;
+            friendList.appendChild(card);
+          });
+        }
+      } else {
+        if (!filtered.length) {
+          friendList.appendChild(makeEmpty('Non hai ancora amici qui. Usa "Add Friend" per iniziare.'));
+        } else {
+          filtered.forEach(f => {
+            const card = document.createElement('div');
+            card.className = 'friend-card';
+            card.dataset.friend = f.name;
+            const statusDot = f.blocked ? 'blocked' : (f.status || 'offline');
+            const statusLabel = f.blocked ? 'Bloccato' : (f.status === 'online' ? 'Online' : 'Offline');
+            card.innerHTML = `
+              <div class="avatar">${f.name.charAt(0).toUpperCase()}</div>
+              <div class="friend-meta">
+                <div class="friend-name">${f.name}${f.pinned ? ' 📌' : ''}</div>
+                <div class="friend-status"><span class="dot ${statusDot}"></span>${statusLabel}</div>
+              </div>
+              <div class="friend-actions">
+                <button class="action-btn" type="button">⋯</button>
+                <div class="menu">
+                  <button data-action="report" data-friend="${f.name}">Segnala</button>
+                  <button data-action="block" data-friend="${f.name}">${f.blocked ? 'Sblocca' : 'Blocca'}</button>
+                  <button data-action="pin" data-friend="${f.name}">${f.pinned ? 'Rimuovi fissato' : 'Fissa'}</button>
+                </div>
+              </div>
+            `;
+            friendList.appendChild(card);
+          });
+        }
+      }
+
+      onlineCount.textContent = user.friends.filter(f => f.status === 'online' && !f.blocked).length;
+      offlineCount.textContent = user.friends.filter(f => f.status !== 'online' && !f.blocked).length;
+    }
+
+    function makeEmpty(text) {
+      const empty = document.createElement('div');
+      empty.className = 'empty';
+      empty.textContent = text;
+      return empty;
+    }
+
+    filters.addEventListener('click', (e) => {
+      if (e.target.dataset.filter) {
+        filter = e.target.dataset.filter;
+        [...filters.querySelectorAll('button')].forEach(btn => btn.classList.toggle('active', btn.dataset.filter === filter));
+        renderFriends();
+      }
+    });
+
+    searchInput.addEventListener('input', renderFriends);
+
+    friendList.addEventListener('click', (e) => {
+      const accept = e.target.dataset.accept;
+      const decline = e.target.dataset.decline;
+      const action = e.target.dataset.action;
+      const friendName = e.target.dataset.friend;
+      const actionBtn = e.target.closest('.action-btn');
+
+      if (actionBtn && actionBtn.nextElementSibling?.classList.contains('menu')) {
+        const menu = actionBtn.nextElementSibling;
+        const open = menu.style.display === 'flex';
+        document.querySelectorAll('.menu').forEach(m => m.style.display = 'none');
+        menu.style.display = open ? 'none' : 'flex';
+        e.stopPropagation();
+        return;
+      }
+
+      if (accept) {
+        DataStore.accept(currentUser, accept);
+        renderFriends();
+        return;
+      }
+      if (decline) {
+        DataStore.decline(currentUser, decline);
+        renderFriends();
+        return;
+      }
+
+      if (action && friendName) {
+        if (action === 'block') {
+          DataStore.toggleBlock(currentUser, friendName);
+        }
+        if (action === 'pin') {
+          DataStore.togglePin(currentUser, friendName);
+        }
+        if (action === 'report') {
+          alert('Segnalazione inviata per ' + friendName);
+        }
+        renderFriends();
+        return;
+      }
+
+      const card = e.target.closest('.friend-card');
+      if (!card || filter === 'pending') return;
+      const name = card.dataset.friend;
+      if (!name) return;
+      const user = DataStore.getUser(currentUser);
+      const friend = user.friends.find(f => f.name === name);
+      if (friend) {
+        showChat(friend);
+      }
+    });
+
+    friendList.addEventListener('mouseleave', () => {
+      document.querySelectorAll('.menu').forEach(m => m.style.display = 'none');
+    });
+
+    addFriendBtns.forEach(btn => btn.addEventListener('click', () => {
+      modal.classList.remove('hidden');
+      appShell.classList.add('blurred');
+      modalStatus.textContent = '';
+      modalStatus.className = 'status';
+      friendInput.value = '';
+      friendInput.focus();
+    }));
+
+    closeModal.addEventListener('click', () => {
+      modal.classList.add('hidden');
+      appShell.classList.remove('blurred');
+    });
+
+    confirmAdd.addEventListener('click', () => {
+      const name = friendInput.value.trim();
+      if (!name) return;
+      const result = DataStore.addPending(currentUser, name);
+      modalStatus.className = 'status ' + (result.ok ? 'success' : 'error');
+      modalStatus.textContent = result.ok ? `Richiesta inviata a ${name}.` : result.message;
+      if (result.ok) {
+        renderFriends();
+        setTimeout(() => {
+          modal.classList.add('hidden');
+          appShell.classList.remove('blurred');
+        }, 600);
+      }
+    });
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.add('hidden');
+        appShell.classList.remove('blurred');
       }
     });
 
