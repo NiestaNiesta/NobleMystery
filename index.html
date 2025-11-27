@@ -386,6 +386,2243 @@
       place-items: center;
       font-weight: 800;
       color: var(--text);
+      overflow: visible;
+      position: relative;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 12px;
+    }
+
+    .friend-meta { display: flex; flex-direction: column; gap: 4px; }
+    .friend-name { font-weight: 800; letter-spacing: 0.1px; }
+    .friend-status { color: var(--muted); font-size: 13px; display: flex; align-items: center; gap: 6px; }
+
+    .unread-badge {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      background: #ffb347;
+      color: #0d0f17;
+      padding: 4px 7px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+      border: 2px solid var(--panel-strong);
+    }
+
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot.online { background: #4ce1b6; box-shadow: 0 0 0 6px rgba(76, 225, 182, 0.16); }
+    .dot.offline { background: rgba(255,255,255,0.18); }
+    .dot.blocked { background: var(--danger); box-shadow: 0 0 0 6px rgba(255,107,155,0.16); }
+
+    .friend-actions {
+      position: relative;
+      opacity: 0;
+      transition: opacity 0.12s ease;
+    }
+
+    .friend-card:hover .friend-actions { opacity: 1; }
+
+    .action-btn {
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 8px 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s ease, border 0.2s ease;
+    }
+
+    .action-btn:hover { background: rgba(92, 240, 255, 0.1); border-color: rgba(92, 240, 255, 0.45); }
+
+    .menu {
+      position: absolute;
+      right: 0;
+      top: 44px;
+      background: rgba(16, 19, 29, 0.96);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.5);
+      min-width: 150px;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .menu .submenu {
+      position: absolute;
+      left: 100%;
+      top: 0;
+      background: rgba(16, 19, 29, 0.96);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.5);
+      display: none;
+      flex-direction: column;
+      min-width: 180px;
+    }
+
+    .menu button {
+      border: none;
+      background: none;
+      color: var(--text);
+      padding: 10px 12px;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.2s ease;
+    }
+
+    .menu button:hover { background: rgba(255,255,255,0.05); }
+
+    .menu button.with-sub:hover + .submenu,
+    .menu .submenu:hover {
+      display: flex;
+    }
+
+    .empty {
+      padding: 18px;
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .side-card h3 { margin-bottom: 8px; }
+    .side-card p { color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
+    .side-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .mini-entry { display: flex; align-items: center; gap: 10px; color: var(--muted); font-weight: 700; }
+
+    .tag { padding: 4px 8px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); font-size: 12px; }
+
+    .profile-summary {
+      background: linear-gradient(160deg, rgba(255,255,255,0.02), rgba(255,255,255,0.05));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 16px 50px rgba(0,0,0,0.4);
+    }
+
+    .profile-summary::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 30%, rgba(157, 107, 255, 0.12), transparent 40%),
+                  radial-gradient(circle at 80% 30%, rgba(92, 240, 255, 0.12), transparent 35%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .profile-summary .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .profile-summary .avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      background: linear-gradient(140deg, rgba(157, 107, 255, 0.2), rgba(92, 240, 255, 0.18));
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 22px;
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05), 0 10px 30px rgba(0,0,0,0.35);
+    }
+
+    .profile-summary .identity { display: flex; flex-direction: column; gap: 4px; }
+    .profile-summary .handle { color: var(--muted); font-size: 13px; }
+    .profile-summary .status { font-size: 13px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+    .profile-summary .status .dot { transform: translateY(1px); }
+
+    .profile-summary .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .pill { padding: 6px 10px; border-radius: 12px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); font-weight: 700; font-size: 12px; }
+
+    .profile-summary .menu-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: background 0.2s ease, border 0.2s ease, transform 0.2s ease;
+    }
+
+    .profile-summary .menu-btn:hover { background: rgba(92, 240, 255, 0.12); border-color: rgba(92, 240, 255, 0.45); transform: translateY(-1px); }
+
+    .profile-summary .divider { height: 1px; background: var(--border); margin: 12px 0; position: relative; z-index: 1; }
+
+    .toggle { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; }
+    .toggle input { accent-color: #9d6bff; width: 18px; height: 18px; }
+
+    .profile-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(10px);
+      display: grid;
+      place-items: center;
+      z-index: 60;
+    }
+
+    .profile-modal {
+      width: min(920px, 94vw);
+      background: rgba(14, 16, 26, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      overflow: hidden;
+      box-shadow: 0 26px 90px rgba(0,0,0,0.6);
+      position: relative;
+      padding-top: 8px;
+    }
+
+    .profile-modal .close-profile {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1), rgba(255,255,255,0.03));
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      width: 38px;
+      height: 38px;
+      cursor: pointer;
+      z-index: 5;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.45);
+    }
+
+    .profile-nav { background: rgba(19, 22, 32, 0.96); padding: 22px 18px; display: flex; flex-direction: column; gap: 10px; border-right: 1px solid var(--border); }
+    .profile-nav h4 { margin-bottom: 10px; }
+    .profile-nav button { width: 100%; justify-content: flex-start; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--text); }
+
+    .profile-body { padding: 24px 32px 24px 24px; display: grid; grid-template-columns: 1.2fr 0.9fr; gap: 24px; position: relative; }
+    .profile-body .section { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 14px; padding: 16px; box-shadow: 0 16px 50px rgba(0,0,0,0.35); }
+    .profile-body .section h5 { margin-bottom: 12px; }
+    .profile-body .field { margin-bottom: 10px; color: var(--muted); }
+
+    .row { display: flex; align-items: center; gap: 8px; color: var(--muted); }
+
+    /* Modal */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(8px);
+      display: grid;
+      place-items: center;
+      z-index: 50;
+    }
+
+    .modal {
+      width: min(420px, 92vw);
+      background: rgba(16, 19, 29, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 24px 70px rgba(0,0,0,0.55);
+    }
+
+    .modal h3 { margin-bottom: 10px; }
+    .modal p { color: var(--muted); margin-bottom: 12px; }
+
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 12px; }
+    .ghost { background: rgba(255,255,255,0.03); color: var(--text); border: 1px solid var(--border); }
+
+    /* Chat view */
+    .chat-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 280px;
+      gap: 16px;
+      width: min(1100px, 96vw);
+      height: 700px;
+      align-items: stretch;
+    }
+
+    .chat-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .chat-header img { width: 40px; height: 40px; border-radius: 12px; cursor: pointer; }
+
+    .chat-panel { display: flex; flex-direction: column; gap: 16px; height: 640px; }
+
+    .messages {
+      background: rgba(16, 19, 29, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      flex: 1;
+      min-height: 0;
+      max-height: none;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(157, 107, 255, 0.5) rgba(255,255,255,0.05);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+    }
+
+    .messages::-webkit-scrollbar { width: 8px; }
+    .messages::-webkit-scrollbar-thumb { background: linear-gradient(180deg, rgba(157,107,255,0.8), rgba(92,240,255,0.6)); border-radius: 8px; }
+    .messages::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
+
+    .bubble {
+      max-width: 70%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      line-height: 1.5;
+    }
+    .bubble.me { margin-left: auto; background: linear-gradient(140deg, #8e6bff, #5cf0ff); color: #0c0f18; font-weight: 700; }
+    .bubble.them { background: rgba(255,255,255,0.04); border: 1px solid var(--border); }
+
+    .timestamp { font-size: 12px; color: var(--muted); }
+
+    .chat-form { display: flex; flex-direction: column; gap: 10px; }
+    .chat-input { display: flex; gap: 10px; }
+    .chat-input input {
+      flex: 1;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+    }
+
+    .block-warning { color: var(--danger); font-weight: 800; }
+
+    .profile-card {
+      background: rgba(16, 19, 29, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+    }
+
+    .profile-avatar {
+      width: 82px;
+      height: 82px;
+      border-radius: 20px;
+      background: linear-gradient(160deg, rgba(157, 107, 255, 0.24), rgba(92, 240, 255, 0.22));
+      display: grid;
+      place-items: center;
+      font-size: 32px;
+      font-weight: 900;
+    }
+
+    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .blurred { filter: blur(6px); pointer-events: none; user-select: none; }
+
+    /* Profile modal */
+    .profile-modal {
+      position: relative;
+      background: rgba(16, 19, 29, 0.96);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px;
+      width: min(880px, 94vw);
+      box-shadow: 0 30px 90px rgba(0,0,0,0.6);
+    }
+
+    .profile-header {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .avatar-interactive {
+      position: relative;
+      width: 96px;
+      height: 96px;
+      border-radius: 24px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+    }
+
+    .avatar-interactive .profile-avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      filter: none;
+      transition: filter 0.2s ease, transform 0.2s ease;
+    }
+
+    .avatar-interactive:hover .profile-avatar {
+      filter: blur(3px);
+      transform: scale(1.02);
+    }
+
+    .avatar-interactive::after {
+      content: 'Cambia';
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: var(--text);
+      font-weight: 800;
+      background: linear-gradient(180deg, rgba(13,15,23,0), rgba(13,15,23,0.65));
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+    }
+
+    .avatar-interactive:hover::after { opacity: 1; }
+
+    .profile-details { display: flex; flex-direction: column; gap: 6px; }
+    .profile-details .handle { color: var(--muted); }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .info-card {
+      position: relative;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 14px 16px;
+      min-height: 110px;
+      overflow: hidden;
+    }
+
+    .info-card:hover { border-color: rgba(92, 240, 255, 0.35); }
+
+    .info-card .label { color: var(--muted); font-weight: 700; font-size: 13px; margin-bottom: 6px; }
+    .info-card .value { font-weight: 800; line-height: 1.5; }
+
+    .edit-chip {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      border: 1px solid var(--border);
+      background: rgba(92, 240, 255, 0.08);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-weight: 700;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+
+    .info-card:hover .edit-chip { opacity: 1; }
+
+    .edit-panel {
+      margin-top: 10px;
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .edit-panel.active { display: flex; }
+
+    .edit-panel textarea,
+    .edit-panel input,
+    .edit-panel select {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      color: var(--text);
+      font-weight: 700;
+      resize: vertical;
+    }
+
+    .edit-panel button {
+      align-self: flex-start;
+      border: none;
+      background: linear-gradient(120deg, var(--accent), var(--accent-2));
+      color: #0d0f17;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+    }
+
+    .logout-card {
+      margin-top: 16px;
+      border: 1px solid rgba(255, 107, 155, 0.4);
+      background: linear-gradient(120deg, rgba(255, 107, 155, 0.12), rgba(255,255,255,0.02));
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logout-card button {
+      width: 100%;
+      border: none;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-weight: 900;
+      color: #0d0f17;
+      background: linear-gradient(120deg, #ff6b6b, #ff4d79);
+      cursor: pointer;
+      box-shadow: 0 20px 40px rgba(255, 107, 107, 0.25);
+    }
+
+    .toast-container {
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 40;
+    }
+
+    .toast {
+      background: rgba(16, 19, 29, 0.95);
+      color: var(--text);
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.45);
+      cursor: pointer;
+      min-width: 220px;
+    }
+
+    .toast strong { display: block; margin-bottom: 4px; }
+
+    .timestamp { display: flex; gap: 6px; align-items: center; }
+    .checks { font-size: 12px; color: var(--muted); }
+    .checks.seen { color: #7de2c3; }
+  </style>
+</head>
+<body>
+  <div class="grain"></div>
+  <div class="orb one"></div>
+  <div class="orb two"></div>
+  <div class="orb three"></div>
+
+  <div class="app-shell" id="app">
+    <section id="auth-view" class="card-wrap">
+      <div class="splash" aria-hidden="true"></div>
+      <div class="card" role="main">
+        <div class="logo" aria-hidden="true">
+          <img src="Images/Logo.png" alt="Logo NovaChat" />
+        </div>
+        <div>
+          <h1 id="form-title">NovaChat</h1>
+          <p class="subtitle" id="form-subtitle">Accedi o registra il tuo profilo con username e password: nessuna email richiesta.</p>
+        </div>
+
+        <form id="auth-form">
+          <div>
+            <label for="username">Username</label>
+            <input id="username" class="input" name="username" autocomplete="username" required />
+          </div>
+          <div>
+            <label for="password">Password</label>
+            <input id="password" class="input" type="password" name="password" autocomplete="current-password" required />
+          </div>
+          <label class="toggle" for="stay-logged">
+            <input type="checkbox" id="stay-logged" checked />
+            <span>Rimani connesso</span>
+          </label>
+          <button type="submit" class="btn" id="submit-btn">Crea account</button>
+          <div class="status" id="status"></div>
+        </form>
+
+        <div class="switcher">
+          <span id="switch-copy">Hai già un account?</span>
+          <button id="switch-btn" type="button">Accedi</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="main-view" class="hidden">
+      <div class="app-layout">
+        <aside class="panel sidebar">
+          <div class="brand">
+            <img src="Images/Logo.png" alt="NovaChat" />
+            <div class="name">NovaChat</div>
+          </div>
+          <ul class="nav">
+            <li><button class="active">Friends</button></li>
+            <li><button>Core Room</button></li>
+            <li><button>Messages</button></li>
+          </ul>
+        </aside>
+
+        <main class="panel main-panel">
+          <div class="section-header">
+            <div class="search">
+              <input type="search" id="search" placeholder="Search" />
+              <button class="btn" id="add-friend">Add Friend</button>
+            </div>
+          </div>
+          <div class="filters" id="filters">
+            <button data-filter="all" class="active">All <span class="filter-badge hidden" data-tab="all"></span></button>
+            <button data-filter="online">Online <span class="filter-badge hidden" data-tab="online"></span></button>
+            <button data-filter="pending">Pending <span class="filter-badge hidden" data-tab="pending"></span></button>
+            <button data-filter="blocked">Blocked</button>
+          </div>
+          <div class="list" id="friend-list"></div>
+        </main>
+
+        <aside class="panel side-card">
+          <div class="profile-summary">
+            <div class="header">
+              <div class="avatar" id="side-avatar">N</div>
+              <div class="identity">
+                <div class="friend-name" id="side-name">Nova User</div>
+                <div class="handle" id="side-handle">@utente</div>
+                <div class="status" id="side-status"><span class="dot online"></span>Online</div>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div class="side-list" style="margin: 6px 0 0 0;">
+              <div class="mini-entry"><span class="tag">ONLINE</span><span id="online-count">0</span></div>
+              <div class="mini-entry"><span class="tag">OFFLINE</span><span id="offline-count">0</span></div>
+            </div>
+            <div class="footer">
+              <span class="pill" id="member-since">Membro</span>
+              <button class="menu-btn" id="open-profile" type="button">⋯</button>
+            </div>
+          </div>
+          <div style="margin-top: 14px; display: flex; justify-content: space-between; gap: 10px; align-items: center;">
+            <button class="btn" id="side-add" style="flex:1;">Send Friend Request</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="chat-view" class="hidden">
+      <div class="chat-layout">
+        <div class="chat-panel">
+          <div class="chat-header">
+            <img src="Images/Logo.png" alt="Indietro a NovaChat" id="back-to-main" />
+            <div>
+              <div class="friend-name" id="chat-name">Chat</div>
+              <div class="friend-status" id="chat-status"></div>
+            </div>
+          </div>
+          <div class="messages" id="messages"></div>
+          <form class="chat-form" id="chat-form">
+            <div id="block-banner" class="block-warning hidden">Non puoi inviare messaggi all'utente</div>
+            <div class="chat-input">
+              <input type="text" id="chat-input" placeholder="Message @username" />
+              <button type="submit" class="btn">Invia</button>
+            </div>
+          </form>
+        </div>
+        <aside class="profile-card">
+          <div class="profile-avatar" id="profile-avatar">N</div>
+          <div>
+            <div class="friend-name" id="profile-name"></div>
+            <div class="friend-status" id="profile-status"></div>
+          </div>
+          <div class="tag" id="profile-tag">Profilo</div>
+          <div class="friend-status" id="profile-meta"></div>
+        </aside>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <div id="modal" class="overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal">
+      <h3>Aggiungi un amico</h3>
+      <p>Inserisci il nickname del tuo amico per inviare la richiesta.</p>
+      <input type="text" id="friend-name" class="input" placeholder="Nickname" />
+      <div id="modal-status" class="status"></div>
+      <div class="modal-actions">
+        <button class="btn ghost" id="close-modal" type="button">Annulla</button>
+        <button class="btn" id="confirm-add" type="button">Invia richiesta</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="profile-overlay" class="profile-overlay hidden" role="dialog" aria-modal="true">
+    <div class="profile-modal">
+      <button class="close-profile" id="close-profile" type="button">×</button>
+      <div class="profile-header">
+        <div class="avatar-interactive" id="avatar-trigger">
+          <div class="profile-avatar" id="account-avatar">N</div>
+        </div>
+        <div class="profile-details">
+          <div class="friend-name" id="account-name">Nova User</div>
+          <div class="handle" id="account-handle">@utente</div>
+          <div class="friend-status" id="account-status"></div>
+          <div class="friend-status" id="account-member"></div>
+        </div>
+      </div>
+      <input type="file" id="avatar-input" accept="image/*" class="hidden" />
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="label">Display Name</div>
+          <div class="value" id="account-display"></div>
+          <button class="edit-chip" data-edit="display">Modifica</button>
+          <div class="edit-panel" id="display-panel">
+            <input id="display-input" placeholder="Il tuo display name" />
+            <button type="button" data-save="display">Salva</button>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="label">About me</div>
+          <div class="value" id="account-about">Sempre online su NovaChat.</div>
+          <button class="edit-chip" data-edit="about">Modifica</button>
+          <div class="edit-panel" id="about-panel">
+            <textarea id="about-input" rows="3" placeholder="Parla di te"></textarea>
+            <button type="button" data-save="about">Salva</button>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="label">Username</div>
+          <div class="value" id="account-username"></div>
+          <button class="edit-chip" data-edit="username">Modifica</button>
+          <div class="edit-panel" id="username-panel">
+            <input id="username-input" placeholder="Soprannome unico" />
+            <button type="button" data-save="username">Salva</button>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="label">Stato</div>
+          <div class="value" id="account-state"></div>
+          <button class="edit-chip" data-edit="status">Cambia</button>
+          <div class="edit-panel" id="status-panel">
+            <select id="status-select">
+              <option value="online">Online</option>
+              <option value="offline">Offline</option>
+            </select>
+            <button type="button" data-save="status">Aggiorna</button>
+          </div>
+        </div>
+      </div>
+      <div class="logout-card">
+        <div>
+          <div class="friend-name">Disconnettiti</div>
+          <div class="friend-status" style="color: rgba(255,255,255,0.7);">Chiudi la sessione e torna al login.</div>
+        </div>
+        <button type="button" id="logout-btn">Esci</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAxkmhYkXr7o3cuJL8Hr1f-4RjyTw-E7gg",
+      authDomain: "novachat-c6eec.firebaseapp.com",
+      projectId: "novachat-c6eec",
+      storageBucket: "novachat-c6eec.firebasestorage.app",
+      messagingSenderId: "953037847978",
+      appId: "1:953037847978:web:779169b73da088b4bb7fd3"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+
+    const DataStore = (() => {
+      const normalizeNameLower = (value = '') => value.trim().replace(/^@+/, '').toLowerCase();
+      const userRef = (username) => doc(db, 'users', normalizeNameLower(username));
+      const defaultUser = () => ({
+        password: '',
+        friends: [],
+        pending: [],
+        messages: {},
+        createdAt: new Date().toISOString(),
+        status: 'offline',
+        displayName: 'Nova User',
+        about: 'Sempre online su NovaChat.',
+        avatar: '',
+        handle: ''
+      });
+      const sameUser = (a, b) => normalizeNameLower(a) === normalizeNameLower(b);
+      const LOCAL_KEY = 'novachat-local-users';
+      let offline = false;
+
+      const loadLocal = () => {
+        try {
+          return JSON.parse(localStorage.getItem(LOCAL_KEY) || '{}');
+        } catch (err) {
+          console.warn('Impossibile leggere i dati locali', err);
+          return {};
+        }
+      };
+
+      const saveLocal = (data) => {
+        localStorage.setItem(LOCAL_KEY, JSON.stringify(data));
+      };
+
+      const readLocalUser = (key) => loadLocal()[key] || null;
+      const writeLocalUser = (key, data) => {
+        const db = loadLocal();
+        db[key] = data;
+        saveLocal(db);
+      };
+
+      function markOffline(err) {
+        if (!offline) {
+          console.warn('Backend remoto non disponibile, passo allo storage locale.', err);
+        }
+        offline = true;
+      }
+
+      async function fetchUser(key) {
+        const clean = normalizeNameLower(key);
+        if (!offline) {
+          try {
+            const snap = await getDoc(userRef(clean));
+            if (snap.exists()) {
+              const data = snap.data();
+              writeLocalUser(clean, data);
+              return data;
+            }
+            return null;
+          } catch (err) {
+            markOffline(err);
+          }
+        }
+        return readLocalUser(clean);
+      }
+
+      async function saveUser(key, data) {
+        const clean = normalizeNameLower(key);
+        if (!offline) {
+          try {
+            await setDoc(userRef(clean), data);
+            writeLocalUser(clean, data);
+            return;
+          } catch (err) {
+            markOffline(err);
+          }
+        }
+        writeLocalUser(clean, data);
+      }
+
+      async function existsUser(key) {
+        const clean = normalizeNameLower(key);
+        if (!offline) {
+          try {
+            const snap = await getDoc(userRef(clean));
+            const exists = snap.exists();
+            if (exists) writeLocalUser(clean, snap.data());
+            return exists;
+          } catch (err) {
+            markOffline(err);
+          }
+        }
+        return Boolean(readLocalUser(clean));
+      }
+
+      const ensureUser = async (username) => {
+        const key = normalizeNameLower(username);
+        const existing = await fetchUser(key);
+        if (existing) {
+          const merged = { ...defaultUser(), ...existing };
+          await saveUser(key, merged);
+          return merged;
+        }
+        const data = defaultUser();
+        await saveUser(key, data);
+        return data;
+      };
+
+      return {
+        async register(username, password) {
+          const clean = normalizeNameLower(username);
+          if (await existsUser(clean)) {
+            return { ok: false, message: 'Questo username è già in uso. Scegline un altro.' };
+          }
+          const data = {
+            ...defaultUser(),
+            password,
+            displayName: username,
+            about: 'Sono pronto a chattare su NovaChat.',
+            handle: username,
+            status: 'offline',
+            createdAt: new Date().toISOString()
+          };
+          await saveUser(clean, data);
+          return { ok: true, user: clean };
+        },
+
+        async exists(username) {
+          return existsUser(username);
+        },
+
+        async login(username, password) {
+          const user = await fetchUser(username);
+          if (!user || user.password !== password) {
+            return { ok: false, message: 'Credenziali non valide. Ritenta.' };
+          }
+          return { ok: true, user: normalizeNameLower(username) };
+        },
+
+        async getUser(username) {
+          return ensureUser(username);
+        },
+
+        async reload() {
+          return true;
+        },
+
+        async setStatus(username, status) {
+          const data = await ensureUser(username);
+          data.status = status;
+          await saveUser(username, data);
+        },
+
+        async addPending(sender, friendName) {
+          const senderKey = normalizeNameLower(sender);
+          const targetKey = normalizeNameLower(friendName);
+
+          if (senderKey === targetKey) {
+            return { ok: false, message: 'Non puoi aggiungere te stesso.' };
+          }
+
+          const senderUser = await ensureUser(senderKey);
+          const targetUser = await ensureUser(targetKey);
+
+          senderUser.friends = senderUser.friends || [];
+          targetUser.friends = targetUser.friends || [];
+          targetUser.pending = targetUser.pending || [];
+
+          if (senderUser.friends.some(f => sameUser(f.name, targetKey)) ||
+              targetUser.friends.some(f => sameUser(f.name, senderKey))) {
+            return { ok: false, message: 'Questo utente è già tra i tuoi amici.' };
+          }
+
+          if (targetUser.pending.some(p => sameUser(p.name, senderKey))) {
+            return { ok: false, message: 'Richiesta già inviata.' };
+          }
+
+          targetUser.pending.push({ name: senderKey });
+
+          await saveUser(senderKey, senderUser);
+          await saveUser(targetKey, targetUser);
+
+          return { ok: true };
+        },
+
+        async accept(username, friendName) {
+          const ownerKey = normalizeNameLower(username);
+          const friendKey = normalizeNameLower(friendName);
+
+          const owner = await ensureUser(ownerKey);
+          const friend = await fetchUser(friendKey);
+          if (!friend) {
+            return { delivered: false };
+          }
+          const normalizedFriend = await ensureUser(friendKey);
+
+          owner.pending = (owner.pending || []).filter(p => !sameUser(p.name, friendKey));
+
+          owner.friends = owner.friends || [];
+          normalizedFriend.friends = normalizedFriend.friends || [];
+          const friendDisplay = friend.displayName || friendKey;
+          const ownerDisplay = owner.displayName || ownerKey;
+          const friendAvatar = friend.avatar || '';
+          const ownerAvatar = owner.avatar || '';
+
+          if (!owner.friends.some(f => sameUser(f.name, friendKey))) {
+            owner.friends.push({ name: friendKey, status: friend.status || 'offline', pinned: false, blocked: false, messages: [], displayName: friendDisplay, avatar: friendAvatar, handle: friend.handle || friendDisplay });
+          }
+
+          if (!friend.friends.some(f => sameUser(f.name, ownerKey))) {
+            friend.friends.push({ name: ownerKey, status: owner.status || 'offline', pinned: false, blocked: false, messages: [], displayName: ownerDisplay, avatar: ownerAvatar, handle: owner.handle || ownerDisplay });
+          }
+
+          await saveUser(ownerKey, owner);
+          await saveUser(friendKey, friend);
+        },
+
+        async decline(username, friendName) {
+          const ownerKey = normalizeNameLower(username);
+          const friendKey = normalizeNameLower(friendName);
+          const owner = await ensureUser(ownerKey);
+          owner.pending = (owner.pending || []).filter(p => !sameUser(p.name, friendKey));
+          await saveUser(ownerKey, owner);
+        },
+
+        async togglePin(username, friendName) {
+          const ownerKey = normalizeNameLower(username);
+          const friendKey = normalizeNameLower(friendName);
+          const owner = await ensureUser(ownerKey);
+          owner.friends = (owner.friends || []).map(f => sameUser(f.name, friendKey)
+            ? { ...f, pinned: !f.pinned }
+            : f);
+          await saveUser(ownerKey, owner);
+        },
+
+        async toggleBlock(username, friendName) {
+          const ownerKey = normalizeNameLower(username);
+          const friendKey = normalizeNameLower(friendName);
+          const owner = await ensureUser(ownerKey);
+          owner.friends = (owner.friends || []).map(f => sameUser(f.name, friendKey)
+            ? { ...f, blocked: !f.blocked }
+            : f);
+          await saveUser(ownerKey, owner);
+        },
+
+        async addMessage(ownerName, friendName, message) {
+          const ownerKey = normalizeNameLower(ownerName);
+          const friendKey = normalizeNameLower(friendName);
+
+          const owner = await ensureUser(ownerKey);
+          const friendData = await fetchUser(friendKey);
+          if (!friendData) {
+            return { delivered: false };
+          }
+          const normalizedFriend = await ensureUser(friendKey);
+
+          owner.friends = owner.friends || [];
+          normalizedFriend.friends = normalizedFriend.friends || [];
+
+          const now = new Date().toISOString();
+          const setMsg = (user, targetKey, role) => {
+            user.messages = user.messages || {};
+            user.messages[targetKey] = user.messages[targetKey] || [];
+            user.messages[targetKey].push({ text: message, at: now, from: role, seen: false });
+          };
+
+          setMsg(owner, friendKey, 'me');
+          setMsg(normalizedFriend, ownerKey, 'them');
+
+          normalizedFriend.friends = normalizedFriend.friends.map(f => sameUser(f.name, ownerKey)
+            ? { ...f, unread: (f.unread || 0) + 1 }
+            : f);
+
+          await saveUser(ownerKey, owner);
+          await saveUser(friendKey, normalizedFriend);
+          return { delivered: true };
+        },
+
+        async markSeen(ownerName, friendName) {
+          const ownerKey = normalizeNameLower(ownerName);
+          const friendKey = normalizeNameLower(friendName);
+          const owner = await ensureUser(ownerKey);
+          const friend = await ensureUser(friendKey);
+
+          owner.friends = (owner.friends || []).map(f => sameUser(f.name, friendKey)
+            ? { ...f, unread: 0 }
+            : f);
+
+          if (friend.messages && friend.messages[ownerKey]) {
+            friend.messages[ownerKey] = friend.messages[ownerKey].map(m => m.from === 'me'
+              ? { ...m, seen: true }
+              : m);
+            await saveUser(friendKey, friend);
+          }
+
+          await saveUser(ownerKey, owner);
+        },
+
+        async removeFriend(ownerName, friendName) {
+          const ownerKey = normalizeNameLower(ownerName);
+          const friendKey = normalizeNameLower(friendName);
+          const owner = await ensureUser(ownerKey);
+          owner.friends = (owner.friends || []).filter(f => !sameUser(f.name, friendKey));
+          await saveUser(ownerKey, owner);
+        },
+
+        async clearChat(ownerName, friendName) {
+          const ownerKey = normalizeNameLower(ownerName);
+          const friendKey = normalizeNameLower(friendName);
+          const owner = await ensureUser(ownerKey);
+          owner.messages = owner.messages || {};
+          owner.messages[friendKey] = [];
+          await saveUser(ownerKey, owner);
+        },
+
+        async updateProfile(username, updates) {
+          const key = normalizeNameLower(username);
+          const data = await ensureUser(key);
+          const merged = { ...data, ...updates };
+          await saveUser(key, merged);
+
+          if (updates.displayName || updates.avatar || updates.handle) {
+            const friends = data.friends || [];
+            for (const friend of friends) {
+              const friendData = await ensureUser(friend.name);
+              friendData.friends = (friendData.friends || []).map(f => sameUser(f.name, key)
+                ? { ...f, displayName: merged.displayName, avatar: merged.avatar, handle: merged.handle }
+                : f);
+              await saveUser(friend.name, friendData);
+            }
+          }
+
+          return merged;
+        },
+
+        async setMute(username, friendName, minutes) {
+          const ownerKey = normalizeNameLower(username);
+          const friendKey = normalizeNameLower(friendName);
+          const owner = await ensureUser(ownerKey);
+          const until = minutes === 'forever'
+            ? 'forever'
+            : minutes
+              ? new Date(Date.now() + minutes * 60 * 1000).toISOString()
+              : null;
+          owner.friends = (owner.friends || []).map(f => sameUser(f.name, friendKey)
+            ? { ...f, mutedUntil: until }
+            : f);
+          await saveUser(ownerKey, owner);
+        }
+      };
+    })();
+
+    const form = document.getElementById('auth-form');
+    const status = document.getElementById('status');
+    const switchBtn = document.getElementById('switch-btn');
+    const switchCopy = document.getElementById('switch-copy');
+    const submitBtn = document.getElementById('submit-btn');
+    const title = document.getElementById('form-title');
+    const subtitle = document.getElementById('form-subtitle');
+    const usernameField = document.getElementById('username');
+    const passwordField = document.getElementById('password');
+    const stayLoggedToggle = document.getElementById('stay-logged');
+    const splash = document.querySelector('.splash');
+
+    const authView = document.getElementById('auth-view');
+    const mainView = document.getElementById('main-view');
+    const chatView = document.getElementById('chat-view');
+    const friendList = document.getElementById('friend-list');
+    const filters = document.getElementById('filters');
+    const searchInput = document.getElementById('search');
+    const onlineCount = document.getElementById('online-count');
+    const offlineCount = document.getElementById('offline-count');
+    const addFriendBtns = [document.getElementById('add-friend'), document.getElementById('side-add')];
+    const modal = document.getElementById('modal');
+    const modalStatus = document.getElementById('modal-status');
+    const friendInput = document.getElementById('friend-name');
+    const closeModal = document.getElementById('close-modal');
+    const confirmAdd = document.getElementById('confirm-add');
+    const appShell = document.getElementById('app');
+
+    const sideAvatar = document.getElementById('side-avatar');
+    const sideName = document.getElementById('side-name');
+    const sideHandle = document.getElementById('side-handle');
+    const sideStatus = document.getElementById('side-status');
+    const memberSince = document.getElementById('member-since');
+    const openProfile = document.getElementById('open-profile');
+    const profileOverlay = document.getElementById('profile-overlay');
+    const closeProfile = document.getElementById('close-profile');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    const accountAvatar = document.getElementById('account-avatar');
+    const accountName = document.getElementById('account-name');
+    const accountStatus = document.getElementById('account-status');
+    const accountHandle = document.getElementById('account-handle');
+    const accountAbout = document.getElementById('account-about');
+    const accountDisplay = document.getElementById('account-display');
+    const accountUsername = document.getElementById('account-username');
+    const accountState = document.getElementById('account-state');
+    const accountMember = document.getElementById('account-member');
+    const displayInput = document.getElementById('display-input');
+    const aboutInput = document.getElementById('about-input');
+    const usernameInputEdit = document.getElementById('username-input');
+    const statusSelect = document.getElementById('status-select');
+    const toastContainer = document.getElementById('toast-container');
+    const filterBadges = document.querySelectorAll('.filter-badge');
+    const avatarInput = document.getElementById('avatar-input');
+    const avatarTrigger = document.getElementById('avatar-trigger');
+
+    const chatName = document.getElementById('chat-name');
+    const chatStatus = document.getElementById('chat-status');
+    const messagesEl = document.getElementById('messages');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const blockBanner = document.getElementById('block-banner');
+    const profileAvatar = document.getElementById('profile-avatar');
+    const profileName = document.getElementById('profile-name');
+    const profileStatus = document.getElementById('profile-status');
+    const profileMeta = document.getElementById('profile-meta');
+    const backToMain = document.getElementById('back-to-main');
+
+    let mode = 'login';
+    let currentUser = null;
+    let filter = 'all';
+    let activeFriend = null;
+    let presenceInterval = null;
+    let chatInterval = null;
+    const presenceMap = {};
+    let unreadSnapshot = {};
+    const SESSION_KEY = 'novachat-session';
+
+    const normalizeName = (value = '') => value.trim().replace(/^@+/, '');
+    const normalizeKey = (value = '') => normalizeName(value).toLowerCase();
+
+    function getStatus(friend) {
+      if (!friend) return 'offline';
+      const stored = presenceMap[friend.name];
+      if (stored) return stored;
+      return friend.status || 'offline';
+    }
+
+    function formatDate(value) {
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return 'Nuovo membro';
+      return date.toLocaleDateString('it-IT', { month: 'short', year: 'numeric' });
+    }
+
+    function formatTime(value) {
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return '';
+      return date.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function setAvatarContent(el, avatar, fallback = '') {
+      if (!el) return;
+      if (avatar) {
+        el.innerHTML = `<img src="${avatar}" alt="Avatar" />`;
+      } else {
+        el.innerHTML = fallback ? fallback.charAt(0).toUpperCase() : '';
+      }
+    }
+
+    function isMuted(friend) {
+      if (!friend || !friend.mutedUntil) return false;
+      if (friend.mutedUntil === 'forever') return true;
+      const until = new Date(friend.mutedUntil).getTime();
+      return Number.isFinite(until) && until > Date.now();
+    }
+
+    function toggleBadge(tab, active) {
+      const badge = [...filterBadges].find(b => b.dataset.tab === tab);
+      if (badge) badge.classList.toggle('hidden', !active);
+    }
+
+    function showToast(friend, display, count = 1) {
+      if (!toastContainer || !currentUser) return;
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `<strong>${display}</strong><div>${count} nuovo messaggio</div>`;
+      toast.addEventListener('click', async () => {
+        const user = await DataStore.getUser(currentUser);
+        const target = (user.friends || []).find(f => f.name === friend);
+        if (target) {
+          await showChat(target);
+        }
+        toast.remove();
+      });
+      toastContainer.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    function persistSession(user, stay) {
+      if (stay && user) {
+        localStorage.setItem(SESSION_KEY, JSON.stringify({ user, stay: true }));
+      } else {
+        localStorage.removeItem(SESSION_KEY);
+      }
+    }
+
+    function loadSession() {
+      const raw = localStorage.getItem(SESSION_KEY);
+      try {
+        return raw ? JSON.parse(raw) : null;
+      } catch (err) {
+        return null;
+      }
+    }
+
+    function triggerSplash() {
+      splash.classList.remove('burst');
+      void splash.offsetWidth;
+      splash.classList.add('burst');
+    }
+
+    function setMode(next) {
+      mode = next;
+      const isSignup = mode === 'signup';
+      title.textContent = 'NovaChat';
+      subtitle.textContent = isSignup
+        ? 'Crea il tuo account per entrare nella chat. Nessuna email, solo username e password.'
+        : 'Accedi con il tuo username e la tua password.';
+      submitBtn.textContent = isSignup ? 'Crea account' : 'Accedi';
+      switchCopy.textContent = isSignup ? 'Hai già un account?' : 'Non hai ancora un account?';
+      switchBtn.textContent = isSignup ? 'Accedi' : 'Registrati';
+      status.textContent = '';
+      status.className = 'status';
+      usernameField.focus();
+      triggerSplash();
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const username = normalizeName(usernameField.value);
+      const password = passwordField.value.trim();
+      if (!username || !password) return;
+
+      let result = { ok: false, message: 'Qualcosa è andato storto. Riprova.' };
+      try {
+        const action = mode === 'signup' ? DataStore.register : DataStore.login;
+        result = await action(username, password);
+      } catch (err) {
+        console.error('Errore autenticazione', err);
+        result = { ok: false, message: 'Impossibile contattare il server. Controlla la connessione e riprova.' };
+      }
+
+      status.className = 'status ' + (result.ok ? 'success' : 'error');
+      status.textContent = result.ok
+        ? mode === 'signup'
+          ? 'Account creato con successo. Benvenuto su NovaChat!'
+          : 'Login effettuato con successo.'
+        : result.message;
+
+      if (result.ok) {
+        passwordField.value = '';
+        triggerSplash();
+        currentUser = result.user || normalizeName(username);
+        persistSession(currentUser, stayLoggedToggle.checked);
+        await showMain();
+      }
+    });
+
+    switchBtn.addEventListener('click', () => {
+      setMode(mode === 'signup' ? 'login' : 'signup');
+    });
+
+    splash.addEventListener('animationend', (event) => {
+      if (event.animationName === 'splashBurst') {
+        splash.classList.remove('burst');
+      }
+    });
+
+    async function renderUserSummary() {
+      if (!currentUser) return;
+      const user = await DataStore.getUser(currentUser);
+      const display = user.displayName || currentUser;
+      const handle = user.handle || currentUser;
+      setAvatarContent(sideAvatar, user.avatar, display);
+      sideName.textContent = display;
+      sideHandle.textContent = '@' + handle.toLowerCase();
+      const statusValue = user.status || 'online';
+      sideStatus.innerHTML = `<span class="dot ${statusValue === 'online' ? 'online' : 'offline'}"></span>${statusValue === 'online' ? 'Online' : 'Offline'}`;
+      memberSince.textContent = user.createdAt ? 'Dal ' + formatDate(user.createdAt) : 'Nuovo membro';
+    }
+
+    async function renderAccountPanel() {
+      if (!currentUser) return;
+      const user = await DataStore.getUser(currentUser);
+      const joined = user.createdAt ? formatDate(user.createdAt) : 'Nuovo membro';
+      const display = user.displayName || currentUser;
+      setAvatarContent(accountAvatar, user.avatar, display);
+      accountName.textContent = display;
+      accountHandle.textContent = '@' + (user.handle || currentUser).toLowerCase();
+      accountStatus.innerHTML = `<span class="dot ${user.status === 'online' ? 'online' : 'offline'}"></span>${user.status === 'online' ? 'Online' : 'Offline'}`;
+      accountDisplay.textContent = display;
+      accountUsername.textContent = user.handle || currentUser;
+      accountState.textContent = user.status === 'online' ? 'Online' : 'Offline';
+      accountAbout.textContent = user.about || 'Racconta qualcosa di te.';
+      accountMember.textContent = joined;
+      displayInput.value = display;
+      aboutInput.value = user.about || '';
+      usernameInputEdit.value = user.handle || currentUser;
+      statusSelect.value = user.status || 'online';
+    }
+
+    async function showMain() {
+      if (!currentUser) return;
+      authView.classList.add('hidden');
+      chatView.classList.add('hidden');
+      mainView.classList.remove('hidden');
+      profileOverlay.classList.add('hidden');
+      appShell.classList.remove('blurred');
+      unreadSnapshot = {};
+      const profile = await DataStore.getUser(currentUser);
+      await DataStore.setStatus(currentUser, profile.status || 'online');
+      startPresenceLoop();
+      startChatSync();
+      await renderUserSummary();
+      await renderAccountPanel();
+      await renderFriends();
+    }
+
+    async function logout() {
+      if (currentUser) {
+        await DataStore.setStatus(currentUser, 'offline');
+      }
+      currentUser = null;
+      activeFriend = null;
+      clearInterval(presenceInterval);
+      clearInterval(chatInterval);
+      persistSession('', false);
+      appShell.classList.remove('blurred');
+      profileOverlay.classList.add('hidden');
+      modal.classList.add('hidden');
+      mainView.classList.add('hidden');
+      chatView.classList.add('hidden');
+      authView.classList.remove('hidden');
+      usernameField.value = '';
+      passwordField.value = '';
+      stayLoggedToggle.checked = false;
+      setMode('login');
+    }
+
+    async function showChat(friend) {
+      activeFriend = friend;
+      mainView.classList.add('hidden');
+      chatView.classList.remove('hidden');
+      const statusValue = getStatus(friend) || 'offline';
+      presenceMap[friend.name] = friend.blocked ? 'offline' : 'online';
+      const display = friend.displayName || friend.name;
+      chatName.textContent = display;
+      chatStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Blocked' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
+      setAvatarContent(profileAvatar, friend.avatar, display);
+      profileName.textContent = display;
+      profileStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Bloccato' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
+      profileMeta.textContent = friend.pinned ? 'Fissato in alto' : isMuted(friend) ? 'Silenziato' : 'Contatto standard';
+      chatInput.placeholder = `Message @${friend.name}`;
+      const user = await DataStore.getUser(currentUser);
+      const thread = (user.messages || {})[normalizeKey(friend.name)] || [];
+      renderMessages(friend, thread);
+      await DataStore.markSeen(currentUser, friend.name);
+      activeFriend.unread = 0;
+      unreadSnapshot[friend.name] = 0;
+      const blocked = friend.blocked;
+      blockBanner.classList.toggle('hidden', !blocked);
+      chatInput.disabled = blocked;
+    }
+
+    function renderMessages(friend, thread = []) {
+      messagesEl.innerHTML = '';
+      const msgs = Array.isArray(thread) ? thread : [];
+      if (!msgs.length) {
+        const empty = document.createElement('div');
+        empty.className = 'empty';
+        empty.textContent = 'La chat è vuota. Invia un messaggio per iniziare.';
+        messagesEl.appendChild(empty);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+        return;
+      }
+      msgs.forEach(m => {
+        const bubble = document.createElement('div');
+        const isMine = m.from === 'me' || normalizeName(m.from) === normalizeName(currentUser);
+        bubble.className = `bubble ${isMine ? 'me' : 'them'}`;
+        const checks = isMine ? `<span class="checks ${m.seen ? 'seen' : ''}">✓✓</span>` : '';
+        const stamp = formatTime(m.at || m.time);
+        bubble.innerHTML = `<div>${m.text}</div><div class="timestamp">${stamp}${checks}</div>`;
+        messagesEl.appendChild(bubble);
+      });
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    async function syncActiveChat() {
+      if (!activeFriend || chatView.classList.contains('hidden') || !currentUser) return;
+      const user = await DataStore.getUser(currentUser);
+      const friend = (user.friends || []).find(f => f.name === activeFriend.name || normalizeName(f.name) === normalizeName(activeFriend.name));
+      if (!friend) return;
+      activeFriend = friend;
+      const statusValue = getStatus(friend);
+      chatStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Blocked' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
+      profileStatus.innerHTML = `<span class="dot ${friend.blocked ? 'blocked' : statusValue}"></span>${friend.blocked ? 'Bloccato' : (statusValue === 'online' ? 'Online' : 'Offline')}`;
+      profileMeta.textContent = friend.pinned ? 'Fissato in alto' : isMuted(friend) ? 'Silenziato' : 'Contatto standard';
+      blockBanner.classList.toggle('hidden', !friend.blocked);
+      chatInput.disabled = friend.blocked;
+      const thread = (user.messages || {})[normalizeKey(friend.name)] || [];
+      renderMessages(friend, thread);
+      await DataStore.markSeen(currentUser, friend.name);
+      activeFriend.unread = 0;
+      unreadSnapshot[friend.name] = 0;
+    }
+
+    chatForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!activeFriend || chatInput.disabled) return;
+      const text = chatInput.value.trim();
+      if (!text) return;
+      const result = await DataStore.addMessage(currentUser, activeFriend.name, text);
+      const user = await DataStore.getUser(currentUser);
+      const updated = (user.friends || []).find(f => f.name === activeFriend.name);
+      chatInput.value = '';
+      if (updated) await showChat(updated);
+      if (!result.delivered) {
+        console.warn('Messaggio non consegnato: utente destinatario non trovato.');
+      }
+    });
+
+    backToMain.addEventListener('click', () => {
+      showMain();
+    });
+
+    async function renderFriends() {
+      if (!currentUser) return;
+      const user = await DataStore.getUser(currentUser);
+      const term = searchInput.value.trim().toLowerCase();
+      const friends = user.friends || [];
+
+      const filtered = friends
+        .filter(f => !term || f.name.toLowerCase().includes(term))
+        .filter(f => {
+          const statusValue = getStatus(f);
+          if (filter === 'online') return statusValue === 'online' && !f.blocked;
+          if (filter === 'pending') return false;
+          if (filter === 'blocked') return f.blocked;
+          return !f.blocked;
+        })
+        .sort((a, b) => Number(b.pinned) - Number(a.pinned));
+
+      friendList.innerHTML = '';
+
+      const pendingVisible = filter === 'pending';
+      const pending = user.pending || [];
+
+      if (pendingVisible) {
+        if (pending.length === 0) {
+          friendList.appendChild(makeEmpty('Nessuna richiesta in arrivo. Invia un invito da "Add Friend".'));
+        } else {
+          pending.forEach(p => {
+            const card = document.createElement('div');
+            card.className = 'friend-card';
+            card.innerHTML = `
+              <div class="avatar">${p.name.charAt(0).toUpperCase()}</div>
+              <div class="friend-meta">
+                <div class="friend-name">${p.name}</div>
+                <div class="friend-status"><span class="dot online"></span>Richiesta in arrivo</div>
+              </div>
+              <div class="friend-actions" style="opacity:1; display:flex; gap:6px;">
+                <button class="action-btn" data-accept="${p.name}">Accetta</button>
+                <button class="action-btn" data-decline="${p.name}">Rifiuta</button>
+              </div>
+            `;
+            friendList.appendChild(card);
+          });
+        }
+      } else {
+        if (!filtered.length) {
+          friendList.appendChild(makeEmpty('Non hai ancora amici qui. Usa "Add Friend" per iniziare.'));
+        } else {
+          filtered.forEach(f => {
+            const card = document.createElement('div');
+            card.className = 'friend-card';
+            card.dataset.friend = f.name;
+            const statusValue = getStatus(f);
+            const statusDot = f.blocked ? 'blocked' : statusValue;
+            const statusLabel = f.blocked ? 'Bloccato' : (statusValue === 'online' ? 'Online' : 'Offline');
+            const display = f.displayName || f.name;
+            const unread = f.unread || 0;
+            const muted = isMuted(f);
+            card.innerHTML = `
+              <div class="avatar">${f.avatar ? `<img src="${f.avatar}" alt="${display}" />` : display.charAt(0).toUpperCase()}${unread ? `<div class="unread-badge">${unread}</div>` : ''}</div>
+              <div class="friend-meta">
+                <div class="friend-name">${display}${f.pinned ? ' 📌' : ''}</div>
+                <div class="friend-status"><span class="dot ${statusDot}"></span>${statusLabel}${muted ? ' • Silenziato' : ''}</div>
+              </div>
+              <div class="friend-actions">
+                <button class="action-btn" type="button">⋯</button>
+                <div class="menu">
+                  <button data-action="report" data-friend="${f.name}">Segnala</button>
+                  <button data-action="block" data-friend="${f.name}">${f.blocked ? 'Sblocca' : 'Blocca'}</button>
+                  <button data-action="pin" data-friend="${f.name}">${f.pinned ? 'Rimuovi fissato' : 'Fissa'}</button>
+                  <button class="with-sub" data-action="mute" data-friend="${f.name}">Silenzia ▸</button>
+                  <div class="submenu">
+                    <button data-mute="10" data-friend="${f.name}">10 min</button>
+                    <button data-mute="30" data-friend="${f.name}">30 min</button>
+                    <button data-mute="60" data-friend="${f.name}">1h</button>
+                    <button data-mute="180" data-friend="${f.name}">3h</button>
+                    <button data-mute="forever" data-friend="${f.name}">Fino a riattivazione</button>
+                    <button data-mute="0" data-friend="${f.name}">Riattiva notifiche</button>
+                  </div>
+                  <button data-action="remove" data-friend="${f.name}">Rimuovi amicizia</button>
+                  <button data-action="clear" data-friend="${f.name}">Cancella chat</button>
+                </div>
+              </div>
+            `;
+            friendList.appendChild(card);
+          });
+        }
+      }
+
+      onlineCount.textContent = friends.filter(f => getStatus(f) === 'online' && !f.blocked).length;
+      offlineCount.textContent = friends.filter(f => getStatus(f) !== 'online' && !f.blocked).length;
+
+      const unreadTotal = friends.reduce((sum, f) => sum + (f.unread || 0), 0);
+      const onlineUnread = friends.some(f => getStatus(f) === 'online' && (f.unread || 0) > 0);
+      toggleBadge('all', unreadTotal > 0);
+      toggleBadge('online', onlineUnread);
+      toggleBadge('pending', (pending.length || 0) > 0);
+
+      const firstLoad = Object.keys(unreadSnapshot).length === 0;
+      friends.forEach(f => {
+        const prev = unreadSnapshot[f.name] || 0;
+        if (!firstLoad && (f.unread || 0) > prev && !isMuted(f) && f.name !== activeFriend?.name) {
+          showToast(f.name, f.displayName || f.name, (f.unread || 0) - prev);
+        }
+        unreadSnapshot[f.name] = f.unread || 0;
+      });
+    }
+
+    function makeEmpty(text) {
+      const empty = document.createElement('div');
+      empty.className = 'empty';
+      empty.textContent = text;
+      return empty;
+    }
+
+    filters.addEventListener('click', async (e) => {
+      if (e.target.dataset.filter) {
+        filter = e.target.dataset.filter;
+        [...filters.querySelectorAll('button')].forEach(btn => btn.classList.toggle('active', btn.dataset.filter === filter));
+        await renderFriends();
+      }
+    });
+
+    searchInput.addEventListener('input', () => {
+      renderFriends();
+    });
+
+    friendList.addEventListener('click', async (e) => {
+      const accept = e.target.dataset.accept;
+      const decline = e.target.dataset.decline;
+      const action = e.target.dataset.action;
+      const friendName = e.target.dataset.friend;
+      const muteValue = e.target.dataset.mute;
+      const actionBtn = e.target.closest('.action-btn');
+
+      if (actionBtn && actionBtn.nextElementSibling?.classList.contains('menu')) {
+        const menu = actionBtn.nextElementSibling;
+        const open = menu.style.display === 'flex';
+        document.querySelectorAll('.menu').forEach(m => m.style.display = 'none');
+        menu.style.display = open ? 'none' : 'flex';
+        e.stopPropagation();
+        return;
+      }
+
+      if (accept) {
+        await DataStore.accept(currentUser, accept);
+        await renderFriends();
+        return;
+      }
+      if (decline) {
+        await DataStore.decline(currentUser, decline);
+        await renderFriends();
+        return;
+      }
+
+      if (action && friendName) {
+        if (action === 'mute') return;
+        if (action === 'block') {
+          await DataStore.toggleBlock(currentUser, friendName);
+        }
+        if (action === 'pin') {
+          await DataStore.togglePin(currentUser, friendName);
+        }
+        if (action === 'report') {
+          alert('Segnalazione inviata per ' + friendName);
+        }
+        if (action === 'remove') {
+          await DataStore.removeFriend(currentUser, friendName);
+          if (activeFriend && activeFriend.name === friendName) {
+            activeFriend = null;
+            await showMain();
+          }
+        }
+        if (action === 'clear') {
+          await DataStore.clearChat(currentUser, friendName);
+          if (activeFriend && activeFriend.name === friendName) {
+            const user = await DataStore.getUser(currentUser);
+            const refreshed = (user.friends || []).find(f => f.name === friendName);
+            if (refreshed) await showChat(refreshed);
+          }
+        }
+        await renderFriends();
+        return;
+      }
+
+      if (muteValue !== undefined && friendName) {
+        const value = muteValue === 'forever' ? 'forever' : Number(muteValue || 0) || null;
+        await DataStore.setMute(currentUser, friendName, value === null ? null : value === 'forever' ? 'forever' : value);
+        await renderFriends();
+        return;
+      }
+
+      const card = e.target.closest('.friend-card');
+      if (!card || filter === 'pending') return;
+      const name = card.dataset.friend;
+      if (!name) return;
+      const user = await DataStore.getUser(currentUser);
+      const friend = (user.friends || []).find(f => f.name === name);
+      if (friend) {
+        await showChat(friend);
+      }
+    });
+
+    friendList.addEventListener('mouseleave', () => {
+      document.querySelectorAll('.menu').forEach(m => m.style.display = 'none');
+    });
+
+    addFriendBtns.forEach(btn => btn.addEventListener('click', () => {
+      modal.classList.remove('hidden');
+      appShell.classList.add('blurred');
+      modalStatus.textContent = '';
+      modalStatus.className = 'status';
+      friendInput.value = '';
+      friendInput.focus();
+    }));
+
+    closeModal.addEventListener('click', () => {
+      modal.classList.add('hidden');
+      appShell.classList.remove('blurred');
+    });
+
+    confirmAdd.addEventListener('click', async () => {
+      const name = normalizeName(friendInput.value);
+      if (!name) return;
+      if (!currentUser) return;
+      const result = await DataStore.addPending(currentUser, name);
+      modalStatus.className = 'status ' + (result.ok ? 'success' : 'error');
+      modalStatus.textContent = result.ok ? `Richiesta inviata a ${name}.` : result.message;
+      if (result.ok) {
+        await renderFriends();
+        setTimeout(() => {
+          modal.classList.add('hidden');
+          appShell.classList.remove('blurred');
+        }, 600);
+      }
+    });
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.add('hidden');
+        appShell.classList.remove('blurred');
+      }
+    });
+
+    function closeAllEditors() {
+      document.querySelectorAll('.edit-panel').forEach(panel => panel.classList.remove('active'));
+    }
+
+    document.querySelectorAll('.edit-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        closeAllEditors();
+        const target = btn.dataset.edit;
+        const panel = document.getElementById(`${target}-panel`);
+        panel?.classList.add('active');
+      });
+    });
+
+    async function handleProfileSave(target) {
+      if (!currentUser) return;
+      if (target === 'display') {
+        const value = displayInput.value.trim() || currentUser;
+        await DataStore.updateProfile(currentUser, { displayName: value });
+      }
+      if (target === 'about') {
+        await DataStore.updateProfile(currentUser, { about: aboutInput.value.trim() || 'Sempre online su NovaChat.' });
+      }
+      if (target === 'username') {
+        const handle = usernameInputEdit.value.trim() || currentUser;
+        await DataStore.updateProfile(currentUser, { handle });
+      }
+      if (target === 'status') {
+        await DataStore.setStatus(currentUser, statusSelect.value);
+      }
+      closeAllEditors();
+      await renderUserSummary();
+      await renderAccountPanel();
+      await renderFriends();
+    }
+
+    document.querySelectorAll('[data-save]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const target = btn.dataset.save;
+        await handleProfileSave(target);
+      });
+    });
+
+    openProfile.addEventListener('click', async () => {
+      await renderAccountPanel();
+      closeAllEditors();
+      profileOverlay.classList.remove('hidden');
+      appShell.classList.add('blurred');
+    });
+
+    closeProfile.addEventListener('click', () => {
+      profileOverlay.classList.add('hidden');
+      appShell.classList.remove('blurred');
+      closeAllEditors();
+    });
+
+    profileOverlay.addEventListener('click', (e) => {
+      if (e.target === profileOverlay) {
+        profileOverlay.classList.add('hidden');
+        appShell.classList.remove('blurred');
+        closeAllEditors();
+      }
+    });
+
+    logoutBtn.addEventListener('click', () => {
+      logout();
+    });
+
+    avatarTrigger.addEventListener('click', () => {
+      avatarInput.click();
+    });
+
+    avatarInput.addEventListener('change', async (event) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const dataUrl = e.target?.result;
+        if (typeof dataUrl === 'string') {
+          await DataStore.updateProfile(currentUser, { avatar: dataUrl });
+          await renderAccountPanel();
+          await renderUserSummary();
+          await renderFriends();
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+
+    async function restoreSession() {
+      const saved = loadSession();
+      if (saved?.user && saved.stay && await DataStore.exists(saved.user)) {
+        currentUser = saved.user;
+        await showMain();
+        return true;
+      }
+      if (saved?.user) {
+        usernameField.value = saved.user;
+        stayLoggedToggle.checked = Boolean(saved.stay);
+      }
+      return false;
+    }
+
+    function startPresenceLoop() {
+      clearInterval(presenceInterval);
+      presenceInterval = setInterval(async () => {
+        if (!currentUser) return;
+        await renderFriends();
+        await syncActiveChat();
+      }, 3200);
+    }
+
+    function startChatSync() {
+      clearInterval(chatInterval);
+      chatInterval = setInterval(syncActiveChat, 1200);
+    }
+
+    async function handleStorageSync() {
+      if (!currentUser) return;
+      await renderUserSummary();
+      await renderAccountPanel();
+      await renderFriends();
+      await syncActiveChat();
+    }
+
+    window.addEventListener('storage', () => {
+      handleStorageSync();
+    });
+
+    window.addEventListener('beforeunload', async () => {
+      if (currentUser) {
+        await DataStore.setStatus(currentUser, 'offline');
+      }
+    });
+
+    (async () => {
+      const booted = await restoreSession();
+      if (!booted) {
+        setMode(mode);
+      }
+    })();
+  </script>
+</body>
+</html>
+
+      display: grid;
+      place-items: center;
+      padding: 32px 16px;
+      overflow: hidden;
+      position: relative;
+      isolation: isolate;
+    }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      opacity: 0.26;
+      pointer-events: none;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/></filter><rect width="160" height="160" filter="url(%23n)" opacity="0.55"/></svg>');
+      mix-blend-mode: soft-light;
+      z-index: -1;
+    }
+
+    .orb {
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: 0.55;
+      z-index: -1;
+      animation: float 12s ease-in-out infinite alternate;
+    }
+
+    .orb.one { background: rgba(157, 107, 255, 0.4); top: -60px; left: -40px; animation-delay: 0.5s; }
+    .orb.two { background: rgba(92, 240, 255, 0.4); top: 40%; right: -120px; animation-duration: 14s; }
+    .orb.three { background: rgba(255, 107, 155, 0.38); bottom: -80px; left: 18%; animation-duration: 16s; }
+
+    @keyframes float {
+      from { transform: translateY(-12px) scale(1); }
+      to { transform: translateY(16px) scale(1.05); }
+    }
+
+    .app-shell {
+      position: relative;
+      width: min(1200px, 96vw);
+      animation: intro 0.9s ease forwards;
+      opacity: 0;
+      transform: translateY(16px) scale(0.98);
+    }
+
+    @keyframes intro {
+      0% { opacity: 0; transform: translateY(18px) scale(0.97); filter: blur(6px); }
+      60% { opacity: 1; transform: translateY(-4px) scale(1.005); filter: blur(0); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .card-wrap { width: min(440px, 96vw); margin: 0 auto; }
+
+    .splash {
+      position: absolute;
+      inset: -30%;
+      background: radial-gradient(circle at 50% 40%, rgba(157, 107, 255, 0.35), transparent 45%),
+                  radial-gradient(circle at 40% 60%, rgba(92, 240, 255, 0.3), transparent 48%),
+                  radial-gradient(circle at 65% 70%, rgba(255, 107, 155, 0.32), transparent 48%);
+      filter: blur(50px) saturate(1.3);
+      opacity: 0.55;
+      z-index: 0;
+      animation: splashDrift 9s ease-in-out infinite;
+      transform-origin: 60% 40%;
+      overflow: hidden;
+    }
+
+    .splash::after {
+      content: '';
+      position: absolute;
+      inset: 18% 12%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.16), transparent 60%);
+      filter: blur(12px);
+      opacity: 0.75;
+      animation: splashPulse 3.2s ease-in-out infinite;
+    }
+
+    .splash.burst::after { animation: splashBurst 1.6s ease-out; }
+
+    @keyframes splashDrift {
+      0% { transform: scale(0.95) rotate(-2deg); opacity: 0.55; }
+      50% { transform: scale(1.05) rotate(2deg); opacity: 0.7; }
+      100% { transform: scale(0.98) rotate(-3deg); opacity: 0.6; }
+    }
+
+    @keyframes splashPulse {
+      0% { transform: scale(0.9); opacity: 0.4; }
+      50% { transform: scale(1.05); opacity: 0.75; }
+      100% { transform: scale(0.96); opacity: 0.45; }
+    }
+
+    @keyframes splashBurst {
+      0% { transform: scale(0.8); opacity: 0.2; }
+      50% { transform: scale(1.2); opacity: 0.65; }
+      100% { transform: scale(1.05); opacity: 0.1; }
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      background: linear-gradient(160deg, var(--panel), var(--panel-strong));
+      border: 1px solid var(--border);
+      box-shadow: var(--glow), 0 32px 90px rgba(0, 0, 0, 0.5);
+      border-radius: var(--card-radius);
+      padding: 32px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      backdrop-filter: blur(14px) saturate(1.3);
+    }
+
+    .logo {
+      width: 72px;
+      height: 72px;
+      border-radius: 22px;
+      background: linear-gradient(140deg, rgba(157, 107, 255, 0.18), rgba(92, 240, 255, 0.12)),
+                  linear-gradient(160deg, #1f1b2f, #12111c);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05), 0 14px 30px rgba(0,0,0,0.35);
+      display: grid;
+      place-items: center;
+      margin-bottom: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo::after {
+      content: '';
+      position: absolute;
+      inset: -30%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.08), transparent 50%);
+      mix-blend-mode: screen;
+      animation: logoSweep 6s ease-in-out infinite;
+    }
+
+    .logo img {
+      width: 80%;
+      height: 80%;
+      object-fit: cover;
+      border-radius: 18px;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 10px 22px rgba(0,0,0,0.35);
+    }
+
+    @keyframes logoSweep {
+      0% { transform: translateX(-10%) translateY(-10%); opacity: 0.75; }
+      50% { transform: translateX(6%) translateY(8%); opacity: 0.9; }
+      100% { transform: translateX(-12%) translateY(-12%); opacity: 0.78; }
+    }
+
+    h1 { font-size: 26px; letter-spacing: -0.4px; }
+    .subtitle { color: var(--muted); line-height: 1.5; }
+
+    form { display: flex; flex-direction: column; gap: 12px; }
+
+    label { font-weight: 700; font-size: 14px; color: #e9ebff; letter-spacing: 0.2px; }
+
+    .input {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: var(--text);
+      font-weight: 600;
+      transition: border 0.18s ease, box-shadow 0.18s ease, transform 0.12s ease;
+    }
+
+    .input:focus {
+      outline: none;
+      border-color: rgba(92, 240, 255, 0.5);
+      box-shadow: 0 0 0 2px rgba(92, 240, 255, 0.16), 0 12px 32px rgba(92, 240, 255, 0.14);
+      transform: translateY(-1px);
+    }
+
+    .btn {
+      cursor: pointer;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: #0d0f17;
+      font-weight: 800;
+      font-size: 15px;
+      background: linear-gradient(120deg, var(--accent), #c06bff, var(--accent-2));
+      background-size: 220% 220%;
+      animation: shimmer 6s ease-in-out infinite;
+      box-shadow: var(--glow);
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 20px 50px rgba(157,107,255,0.35); }
+    .btn:active { transform: translateY(1px); }
+
+    @keyframes shimmer {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .switcher { font-size: 14px; color: var(--muted); }
+    .switcher button { background: none; border: none; color: var(--accent-2); font-weight: 700; cursor: pointer; }
+
+    .status {
+      min-height: 22px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .status.error { color: var(--danger); }
+    .status.success { color: var(--success); }
+    .status.muted { color: var(--muted); }
+
+    .helper { color: var(--muted); font-size: 13px; line-height: 1.5; text-align: center; }
+
+    .hidden { display: none !important; }
+
+    /* Main UI */
+    .app-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr 320px;
+      gap: 18px;
+      width: min(1200px, 96vw);
+      min-height: 78vh;
+      align-items: stretch;
+    }
+
+    .panel {
+      background: linear-gradient(160deg, rgba(24, 28, 41, 0.75), rgba(16, 19, 29, 0.92));
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      padding: 18px;
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(12px) saturate(1.1);
+    }
+
+    .main-panel {
+      display: flex;
+      flex-direction: column;
+      min-height: 72vh;
+    }
+
+    .sidebar .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .sidebar .brand img { width: 36px; height: 36px; border-radius: 12px; }
+    .sidebar .brand .name { font-weight: 800; letter-spacing: 0.2px; }
+
+    .nav { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .nav button {
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text);
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: background 0.2s ease, transform 0.12s ease, border 0.2s ease;
+    }
+
+    .nav button.active { border-color: var(--border); background: rgba(255, 255, 255, 0.04); }
+    .nav button:hover { transform: translateY(-1px); }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .search {
+      flex: 1;
+      display: flex;
+      gap: 8px;
+    }
+
+    .search input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 12px;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .filters {
+      display: flex;
+      gap: 10px;
+      margin: 12px 0 16px;
+    }
+
+    .filters button {
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--muted);
+      cursor: pointer;
+      font-weight: 700;
+      transition: background 0.2s ease, color 0.2s ease;
+      position: relative;
+    }
+
+    .filters button.active { color: var(--text); background: rgba(157, 107, 255, 0.15); border-color: rgba(157,107,255,0.5); }
+
+    .filter-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ffb347;
+      box-shadow: 0 0 0 2px rgba(13, 15, 23, 0.9);
+    }
+
+    .list { display: flex; flex-direction: column; gap: 10px; flex: 1; min-height: 420px; }
+
+    .friend-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: border 0.2s ease, transform 0.12s ease, background 0.2s ease;
+    }
+
+    .friend-card:hover { transform: translateY(-1px); border-color: rgba(92, 240, 255, 0.35); background: rgba(92, 240, 255, 0.04); }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(140deg, rgba(157, 107, 255, 0.2), rgba(92, 240, 255, 0.2));
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: var(--text);
       overflow: hidden;
       position: relative;
     }
@@ -2247,3 +4484,4 @@
   </script>
 </body>
 </html>
+
